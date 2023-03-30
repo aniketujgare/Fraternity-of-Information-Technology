@@ -1,6 +1,6 @@
 # fraternity_of_information_technology
 
-A new Flutter project.
+An Official FIT Application of Department of Information Technology, DBATU, Lonere
 
 ## Getting Started
 
