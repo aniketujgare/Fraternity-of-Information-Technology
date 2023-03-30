@@ -1,0 +1,147 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
+
+import '../../../constants.dart';
+
+class FitDropDownMenu extends StatefulWidget {
+  final List<String> items;
+  final String label;
+  final IconData icon;
+  const FitDropDownMenu(
+      {super.key,
+      required this.items,
+      required this.label,
+      required this.icon});
+
+  @override
+  State<FitDropDownMenu> createState() => _FitDropDownMenuState();
+}
+
+class _FitDropDownMenuState extends State<FitDropDownMenu> {
+  String? selectedValue;
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        enableFeedback: true,
+        selectedItemBuilder: (context) {
+          return [
+            for (int i = 0; i < widget.items.length; i++)
+              Row(
+                children: [
+                  Icon(
+                    widget.icon,
+                    size: 22,
+                    color: const Color(0xffADB6C1),
+                  ),
+                  const SizedBox(
+                    width: 11,
+                  ),
+                  Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.items[i],
+                        style: const TextStyle(
+                          fontSize: 16,
+                          // fontWeight: FontWeight.bold,
+                          color: Color(0xff6a87f3),
+                        ),
+                        // overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                ],
+              ),
+          ];
+        },
+        isExpanded: true,
+        hint: Row(
+          children: [
+            Icon(
+              widget.icon,
+              size: 22,
+              color: const Color(0xffADB6C1),
+            ),
+            const SizedBox(
+              width: 9,
+            ),
+            Expanded(
+              child: Text(
+                widget.label,
+                style: const TextStyle(
+                  color: Color(0xffADB6C1),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        items: widget.items
+            .map((item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        onChanged: (value) {
+          setState(() {
+            selectedValue = value as String;
+          });
+        },
+        buttonStyleData: ButtonStyleData(
+          height: 60,
+          width: (kWidth(context) * 0.5) - 40,
+          padding: const EdgeInsets.only(left: 14, right: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: const Color(0xffECEFF5),
+            ),
+            color: const Color(0xffF7F8F9),
+          ),
+          elevation: 0,
+        ),
+        iconStyleData: const IconStyleData(
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            size: 20,
+          ),
+          iconSize: 14,
+          iconEnabledColor: Color(0xffADB6C1),
+          iconDisabledColor: Color(0xff6a87f3),
+        ),
+        dropdownStyleData: DropdownStyleData(
+          maxHeight: 200,
+          width: 200,
+          padding: null,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: const Color(0xff6a87f3),
+          ),
+          elevation: 8,
+          offset: const Offset(-20, 0),
+          scrollbarTheme: ScrollbarThemeData(
+            radius: const Radius.circular(40),
+            thickness: MaterialStateProperty.all<double>(4),
+            thumbVisibility: MaterialStateProperty.all<bool>(true),
+          ),
+        ),
+        menuItemStyleData: const MenuItemStyleData(
+          height: 40,
+          padding: EdgeInsets.only(left: 14, right: 14),
+        ),
+      ),
+    );
+  }
+}
