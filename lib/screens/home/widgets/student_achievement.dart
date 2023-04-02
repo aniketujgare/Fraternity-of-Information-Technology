@@ -120,13 +120,7 @@ class StudentAchievement extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 28, right: 28, top: 8),
-                    child: Divider(
-                      color: Colors.white,
-                      thickness: 1,
-                    ),
-                  ),
+                  SizedBox(height: 18),
                   ListView.separated(
                     itemCount: 3,
                     physics: const NeverScrollableScrollPhysics(),
@@ -144,22 +138,22 @@ class StudentAchievement extends StatelessWidget {
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.only(left: 28, right: 28),
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 28, right: 28),
                         child: Divider(
-                          color: Colors.white,
+                          color: Colors.white.withOpacity(0.5),
                           thickness: 1,
                         ),
                       );
                     },
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 28, right: 28),
-                    child: Divider(
-                      color: Colors.white,
-                      thickness: 1,
-                    ),
-                  ),
+                  // const Padding(
+                  //   padding: EdgeInsets.only(left: 28, right: 28),
+                  //   child: Divider(
+                  //     color: Colors.white,
+                  //     thickness: 1,
+                  //   ),
+                  // ),
                 ],
               ),
             ],

@@ -30,22 +30,22 @@ class UpdateAccountView extends StatelessWidget {
                 ),
                 const FitTextFormField(
                   label: 'First Name',
-                  icon: Icons.people_alt_outlined,
+                  icon: Icons.person_outline,
                   topPad: 70,
                 ),
                 const FitTextFormField(
                   label: 'Last Name',
-                  icon: Icons.people_alt_outlined,
+                  icon: Icons.person_outline,
                   topPad: 25,
                 ),
                 const FitTextFormField(
                   label: 'Email',
-                  icon: Icons.email,
+                  icon: Icons.alternate_email,
                   topPad: 25,
                 ),
                 const FitTextFormField(
                   label: 'PRN',
-                  icon: Icons.contact_page,
+                  icon: Icons.format_indent_decrease,
                   topPad: 25,
                   botPad: 25,
                 ),

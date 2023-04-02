@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fraternity_of_information_technology/utils/app_router.dart';
-import 'bloc/auth_bloc/auth_bloc.dart';
-import 'screens/authentication/authentication_view.dart';
 import 'utils/constants.dart';
 
 void main() {
@@ -28,8 +24,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
         fontFamily: 'Outfit',
-        // scaffoldBackgroundColor: Colors.white,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: Colors.transparent,
             type: BottomNavigationBarType.fixed),
         colorScheme: ColorScheme.fromSwatch().copyWith(

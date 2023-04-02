@@ -25,8 +25,8 @@ class AuthenticationView extends StatelessWidget {
           listener: (context, state) async {
             if (state is AuthSucessState) {
               await Future.delayed(const Duration(seconds: 2));
-              print('here');
-              Navigator.of(context).pushReplacementNamed('/home');
+              Navigator.of(context)
+                  .pushReplacementNamed(ScreenName.fitUiNavigator);
             }
           },
           builder: (context, state) {
