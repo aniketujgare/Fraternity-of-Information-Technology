@@ -157,7 +157,7 @@ class EventWinnersCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 42,
                                 width: 42,
                                 child: Image.asset(

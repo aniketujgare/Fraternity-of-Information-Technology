@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fraternity_of_information_technology/screens/fit_committee/widgets/member_card.dart';
-import 'package:fraternity_of_information_technology/screens/fit_committee/widgets/social_link_button.dart';
-import 'package:fraternity_of_information_technology/utils/constants.dart';
+
+import '../../utils/constants.dart';
+import 'widgets/member_card.dart';
 
 class FitCommitteeView extends StatelessWidget {
   const FitCommitteeView({super.key});
@@ -36,7 +35,7 @@ class FitCommitteeView extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: 10,
                         itemBuilder: ((context, index) {
-                          return MemberCard(
+                          return const MemberCard(
                             profilePic:
                                 'https://wallpapers.com/images/featured-full/kaneki-xsv5e4ut8mxmqae9.jpg',
                             position: 'President',

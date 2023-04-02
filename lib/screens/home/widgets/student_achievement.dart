@@ -120,7 +120,7 @@ class StudentAchievement extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 18),
+                  const SizedBox(height: 18),
                   ListView.separated(
                     itemCount: 3,
                     physics: const NeverScrollableScrollPhysics(),

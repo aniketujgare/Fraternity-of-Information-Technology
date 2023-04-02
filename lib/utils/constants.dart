@@ -27,4 +27,5 @@ class ScreenName {
   static const home = '/home';
   static const notificationView = '/notificationView';
   static const fitUiNavigator = '/FITUINavigator';
+  static const fitCommittee = '/fitCommittee';
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fraternity_of_information_technology/screens/user_profile/widgets/profile_card.dart';
-import 'package:fraternity_of_information_technology/utils/constants.dart';
-import 'package:fraternity_of_information_technology/widgets/fit_button.dart';
 
-import '../update_account/update_account_view.dart';
+import '../../utils/constants.dart';
+import '../../widgets/fit_button.dart';
+import 'widgets/profile_card.dart';
 
 class UserProfileView extends StatefulWidget {
   const UserProfileView({super.key});

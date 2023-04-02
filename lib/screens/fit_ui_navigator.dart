@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/app_navigator_cubit/app_navigator_cubit.dart';
 import '../widgets/fit_app_bar.dart';
 import 'home/home_view.dart';
-import 'update_account/update_account_view.dart';
+import 'user_profile/user_profile_view.dart';
 
 class FITUINavigator extends StatelessWidget {
   const FITUINavigator({super.key});
@@ -43,5 +43,5 @@ var screenList = [
   const HomeView(),
   const Center(child: Text('News')),
   const Center(child: Text('Image Gallery')),
-  const UpdateAccountView(),
+  const UserProfileView(),
 ];
