@@ -20,3 +20,11 @@ bool isPortrait(BuildContext context) {
 
 double kWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double kHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
+class ScreenName {
+  static const authentication = '/';
+  static const updateAccount = '/updateAccount';
+  static const home = '/home';
+  static const notificationView = '/notificationView';
+  static const fitUiNavigator = '/FITUINavigator';
+}

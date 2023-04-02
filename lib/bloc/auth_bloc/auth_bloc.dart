@@ -8,11 +8,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(UnAuthState()) {
     on<SendOTP>((event, emit) async {
       emit(LoadingAuthState());
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       emit(SendOTPState());
     });
 
     on<YouRAllSet>((event, emit) async {
+      emit(LoadingAuthState());
       await Future.delayed(const Duration(seconds: 1));
       emit(AuthSucessState());
     });
