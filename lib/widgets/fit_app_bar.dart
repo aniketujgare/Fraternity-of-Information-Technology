@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fraternity_of_information_technology/bloc/app_navigator_cubit/app_navigator_cubit.dart';
+import 'package:fraternity_of_information_technology/utils/constants.dart';
 
 class FITBottomNavBar extends StatelessWidget {
   const FITBottomNavBar({super.key});
@@ -14,7 +15,6 @@ class FITBottomNavBar extends StatelessWidget {
         right: 15,
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 15),
         width: double.infinity,
         height: 55,
         decoration: BoxDecoration(
@@ -29,44 +29,57 @@ class FITBottomNavBar extends StatelessWidget {
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            GestureDetector(
-              child: SvgPicture.asset(
-                'assets/images/home_icon.svg',
-              ),
-              onTap: () {
-                context.read<AppNavigatorCubit>().gotoPageAtIndex(0);
-              },
+            buildNavBarItems(
+              index: 0,
+              context: context,
+              svgIcon: 'assets/images/home_icon.svg',
             ),
-            GestureDetector(
-              child: SvgPicture.asset(
-                'assets/images/notepad_icon.svg',
-              ),
-              onTap: () {
-                context.read<AppNavigatorCubit>().gotoPageAtIndex(1);
-              },
+            buildNavBarItems(
+              index: 1,
+              context: context,
+              svgIcon: 'assets/images/notepad_icon.svg',
             ),
-            GestureDetector(
-              child: SvgPicture.asset(
-                'assets/images/gallery_icon.svg',
-              ),
-              onTap: () {
-                context.read<AppNavigatorCubit>().gotoPageAtIndex(2);
-              },
+            buildNavBarItems(
+              index: 2,
+              context: context,
+              svgIcon: 'assets/images/gallery_icon.svg',
             ),
-            GestureDetector(
-              child: SvgPicture.asset(
-                'assets/images/profile_icon.svg',
-              ),
-              onTap: () {
-                context.read<AppNavigatorCubit>().gotoPageAtIndex(3);
-              },
+            buildNavBarItems(
+              index: 3,
+              context: context,
+              svgIcon: 'assets/images/profile_icon.svg',
             ),
           ],
         ),
       ),
+    );
+  }
+
+  buildNavBarItems({
+    required BuildContext context,
+    required String svgIcon,
+    required int index,
+  }) {
+    return BlocBuilder<AppNavigatorCubit, AppNavigatorState>(
+      builder: (context, state) {
+        return IconButton(
+          onPressed: () {
+            context.read<AppNavigatorCubit>().gotoPageAtIndex(index);
+          },
+          splashRadius: 1,
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          icon: SvgPicture.asset(
+            svgIcon,
+            colorFilter: ColorFilter.mode(
+              state.index == index ? kPrimaryColor : Colors.black,
+              BlendMode.srcIn,
+            ),
+          ),
+        );
+      },
     );
   }
 }
