@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../../../utils/constants.dart';
 
 class FitTextFormField extends StatelessWidget {
   const FitTextFormField({
@@ -25,32 +25,32 @@ class FitTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           prefixIcon: Icon(
             icon,
-            color: const Color(0xffADB6C1),
+            color: kTextFieldContentColor,
           ),
           hintText: label,
           hintStyle: const TextStyle(
-            color: Color(0xffADB6C1),
+            color: kTextFieldContentColor,
             // fontSize: 12,
           ),
           labelText: label,
           labelStyle: const TextStyle(
             fontSize: 16,
-            color: Color(0xffADB6C1),
+            color: kTextFieldContentColor,
           ),
           filled: true,
-          fillColor: kTextFieldColor,
-          focusColor: const Color(0xfff8f8f8),
+          fillColor: kTextFieldFillColor,
+          focusColor: kTextFieldContentColor,
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color(0xff6a87f3), width: 3),
+            borderSide: const BorderSide(color: kPrimaryColor, width: 3),
             borderRadius: BorderRadius.circular(12),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color(0xffECEFF5)),
+            borderSide: const BorderSide(color: kTextFieldBorderColor),
             borderRadius: BorderRadius.circular(12),
           ),
           floatingLabelStyle: const TextStyle(
             fontSize: 18,
-            color: Color(0xff6a87f3),
+            color: kPrimaryColor,
           ),
         ),
       ),

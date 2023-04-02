@@ -1,7 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../../../utils/constants.dart';
 
 class FitDropDownMenu extends StatefulWidget {
   final List<String> items;
@@ -32,7 +32,7 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
                   Icon(
                     widget.icon,
                     size: 22,
-                    color: const Color(0xffADB6C1),
+                    color: kTextFieldContentColor,
                   ),
                   const SizedBox(
                     width: 11,
@@ -46,7 +46,7 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
                         style: const TextStyle(
                           fontSize: 16,
                           // fontWeight: FontWeight.bold,
-                          color: Color(0xff6a87f3),
+                          color: kPrimaryColor,
                         ),
                         // overflow: TextOverflow.ellipsis,
                       ),
@@ -65,7 +65,7 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
             Icon(
               widget.icon,
               size: 22,
-              color: const Color(0xffADB6C1),
+              color: kTextFieldContentColor,
             ),
             const SizedBox(
               width: 9,
@@ -74,7 +74,7 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
               child: Text(
                 widget.label,
                 style: const TextStyle(
-                  color: Color(0xffADB6C1),
+                  color: kTextFieldContentColor,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -106,9 +106,9 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: const Color(0xffECEFF5),
+              color: kTextFieldBorderColor,
             ),
-            color: const Color(0xffF7F8F9),
+            color: kTextFieldFillColor,
           ),
           elevation: 0,
         ),
@@ -118,8 +118,8 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
             size: 20,
           ),
           iconSize: 14,
-          iconEnabledColor: Color(0xffADB6C1),
-          iconDisabledColor: Color(0xff6a87f3),
+          iconEnabledColor: kTextFieldContentColor,
+          iconDisabledColor: kPrimaryColor,
         ),
         dropdownStyleData: DropdownStyleData(
           maxHeight: 200,
@@ -127,7 +127,7 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
           padding: null,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: const Color(0xff6a87f3),
+            color: kPrimaryColor,
           ),
           elevation: 8,
           offset: const Offset(-20, 0),

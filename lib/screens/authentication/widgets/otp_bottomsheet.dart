@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/bloc/update_account_bloc/update_account_bloc.dart';
-import '../bloc/auth_bloc/auth_bloc.dart';
-import '../constants.dart';
-import '../screens/update_account/update_account_view.dart';
-import 'fit_button.dart';
+
+import '../../../../utils/constants.dart';
+import '../../../bloc/auth_bloc/auth_bloc.dart';
+import '../../../widgets/fit_button.dart';
 import 'otp_tharasis.dart';
 
 class OtpBottomSheet extends StatelessWidget {
@@ -49,7 +48,7 @@ class OtpBottomSheet extends StatelessWidget {
                 'Enter the verification code we’ve just sent to the \n+91 8888190935',
                 style: TextStyle(
                   fontSize: 10,
-                  color: Color(0xffb6bbc8),
+                  color: kTextGreyColor,
                 ),
               ),
             ),
@@ -61,7 +60,7 @@ class OtpBottomSheet extends StatelessWidget {
                 right: kWidth(context) * 0.1,
                 bottom: 20,
               ),
-              child: const OtpTharasis()),
+              child: const OtpBoxes()),
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               if (state is LoadingAuthState) {
@@ -69,13 +68,8 @@ class OtpBottomSheet extends StatelessWidget {
               }
               return FitButton(
                 onTap: () {
-                  context.read<AuthBloc>().add(VerifyOTP());
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return BlocProvider<UpdateAccountBloc>(
-                        create: (_) => UpdateAccountBloc(),
-                        child: const UpdateAccountView());
-                  }));
+                  context.read<AuthBloc>().add(YouRAllSet());
+                  // Navigator.of(context).pushNamed('/updateAccount');
                 },
                 text: 'Verify',
                 height: 50,
@@ -96,7 +90,7 @@ class OtpBottomSheet extends StatelessWidget {
               'Resend code in 00:45',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
-                color: Color(0xffb6bbc8),
+                color: kTextGreyColor,
               ),
             ),
           ),

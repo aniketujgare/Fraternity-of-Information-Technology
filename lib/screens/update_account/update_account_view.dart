@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/services.dart';
-import '../../bloc/update_account_bloc/update_account_bloc.dart';
-import '../../constants.dart';
-import '../../widgets/fit_button.dart';
 
+import '../../bloc/update_account_bloc/update_account_bloc.dart';
+import '../../widgets/fit_button.dart';
 import 'widgets/agreement_text.dart';
 import 'widgets/fit_back_button.dart';
 import 'widgets/fit_dropdown_menu.dart';

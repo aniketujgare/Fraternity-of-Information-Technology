@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fraternity_of_information_technology/widgets/fit_button.dart';
 import 'package:fraternity_of_information_technology/widgets/textf_form_field_fit.dart';
 
-import '../bloc/auth_bloc/auth_bloc.dart';
-import '../constants.dart';
+import '../../../bloc/auth_bloc/auth_bloc.dart';
+import '../../../../utils/constants.dart';
 
 class LoginBottomSheet extends StatelessWidget {
   const LoginBottomSheet({super.key});

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../utils/constants.dart';
+
 class FitButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
-  final Color bgColor, textColor;
+  final Color bgColor, textColor, outlineColor;
   final double tMargin, bMargin, hMargin;
   final double height;
   final bool showArrow, showUpload, border;
@@ -12,7 +14,7 @@ class FitButton extends StatelessWidget {
     super.key,
     required this.onTap,
     required this.text,
-    this.bgColor = const Color(0xff6A87F4),
+    this.bgColor = kPrimaryColor,
     this.textColor = Colors.white,
     this.tMargin = 0,
     this.bMargin = 0,
@@ -21,6 +23,7 @@ class FitButton extends StatelessWidget {
     this.showArrow = true,
     this.showUpload = false,
     this.border = false,
+    this.outlineColor = Colors.black,
   });
 
   @override
@@ -46,7 +49,6 @@ class FitButton extends StatelessWidget {
                 child: SvgPicture.asset('assets/images/Upload.svg'),
               ),
             Row(
-              // mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(

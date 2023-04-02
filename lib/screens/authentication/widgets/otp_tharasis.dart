@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LengthLimitingTextInputFormatter;
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 
-class OtpTharasis extends StatelessWidget {
-  const OtpTharasis({super.key});
+import '../../../../utils/constants.dart';
+
+class OtpBoxes extends StatelessWidget {
+  const OtpBoxes({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ SizedBox textFieldBox(BuildContext context) {
         style: const TextStyle(
           fontSize: 36,
           fontWeight: FontWeight.w500,
-          color: Color(0xff1e232c),
+          color: kTextGreyColor,
         ),
         onChanged: (value) {
           if (value.length == 1) {
@@ -45,23 +47,20 @@ SizedBox textFieldBox(BuildContext context) {
           FilteringTextInputFormatter.digitsOnly
         ],
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(8),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff6a87f3), width: 2),
+          contentPadding: const EdgeInsets.all(8),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: kPrimaryColor, width: 2),
             borderRadius: BorderRadius.all(
               Radius.circular(11),
             ),
           ),
           disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: bordercol, width: 2),
-              borderRadius: BorderRadius.all(Radius.circular(11))),
+              borderRadius: const BorderRadius.all(Radius.circular(11))),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: bordercol, width: 2),
-              borderRadius: BorderRadius.all(Radius.circular(11))),
+              borderRadius: const BorderRadius.all(Radius.circular(11))),
         ),
-        // onEditingComplete: () {
-        //   bordercol = Color(0xff6a87f3);
-        // },
       ),
     ),
   );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants.dart';
+import '../../utils/constants.dart';
 
 class TextFormFieldFit extends StatelessWidget {
   final String hintText;
@@ -23,7 +23,7 @@ class TextFormFieldFit extends StatelessWidget {
           color: Color(0xffADB6C1),
         ),
         filled: true,
-        fillColor: kTextFieldColor,
+        fillColor: kTextFieldFillColor,
         focusColor: const Color(0xfff8f8f8),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Color(0xffECEFF5)),

@@ -8,3 +8,5 @@ class UnAuthState extends AuthState {}
 class LoadingAuthState extends AuthState {}
 
 class AuthSucessState extends AuthState {}
+
+class SendOTPState extends AuthState {}
