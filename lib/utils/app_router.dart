@@ -6,6 +6,9 @@ import 'package:fraternity_of_information_technology/screens/authentication/auth
 import 'package:fraternity_of_information_technology/screens/home/home_view.dart';
 import 'package:fraternity_of_information_technology/screens/update_account/update_account_view.dart';
 
+import '../screens/fit_committee/fit_committee_view.dart';
+import '../screens/user_profile/user_profile_view.dart';
+
 class AppRouter {
   final _authBloc = AuthBloc();
   final _updateAccountBloc = UpdateAccountBloc();
@@ -44,7 +47,7 @@ class AppRouter {
                 value: _updateAccountBloc,
               ),
             ],
-            child: const HomeView(),
+            child: const UserProfileView(),
           ),
         );
       default:

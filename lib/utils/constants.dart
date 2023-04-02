@@ -13,6 +13,7 @@ const kTextFieldFillColor = Color(0xffF7F8F9);
 const kTextFieldContentColor = Color(0xffADB6C1);
 const kTextFieldBorderColor = Color(0xffECEFF5);
 const kCyanLightColor = Color(0xffd5eeee);
+const kGrayCardColor = Color(0xfff7f8f9);
 bool isPortrait(BuildContext context) {
   return MediaQuery.of(context).orientation == Orientation.portrait;
 }
