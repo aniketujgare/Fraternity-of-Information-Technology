@@ -22,7 +22,7 @@ class FitCommitteeView extends StatelessWidget {
                       child: Text(
                         'FIT Committee',
                         style: TextStyle(
-                            fontSize: 36,
+                            fontSize: kHeadingFontSize,
                             color: kTextColor,
                             fontWeight: FontWeight.w400),
                       ),

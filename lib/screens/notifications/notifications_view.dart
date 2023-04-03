@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fraternity_of_information_technology/utils/constants.dart';
 
 import 'widgets/notification_card.dart';
 import 'widgets/notifications_header.dart';
@@ -9,6 +10,7 @@ class NotificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
           child: Column(
         children: [
@@ -25,8 +27,11 @@ class NotificationView extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return const Divider(
-                  thickness: 1,
+                return Divider(
+                  color: kTextGreyColor.withOpacity(0.5),
+                  thickness: 0.5,
+                  indent: 40,
+                  endIndent: 40,
                 );
               },
             ),

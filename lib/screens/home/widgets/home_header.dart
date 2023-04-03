@@ -51,7 +51,7 @@ class HomeHeader extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 24,
                     height: 1.26,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w400,
                     color: Colors.black,
                   ),
                   children: [
@@ -77,7 +77,7 @@ class HomeHeader extends StatelessWidget {
                 splashColor: kPrimaryColor.withOpacity(0.2),
                 onPressed: onPressed,
                 icon: const Icon(
-                  Icons.notifications,
+                  Icons.notifications_outlined,
                   size: 30,
                 ),
               ),

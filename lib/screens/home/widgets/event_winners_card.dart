@@ -29,7 +29,7 @@ class EventWinnersCard extends StatelessWidget {
             textAlign: TextAlign.left,
             style: const TextStyle(
               fontSize: 24,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
@@ -37,43 +37,43 @@ class EventWinnersCard extends StatelessWidget {
         Container(
           margin: const EdgeInsets.all(15),
           width: 337,
-          height: 274,
+          height: 290,
           decoration: BoxDecoration(
             color: kblueColor,
             borderRadius: BorderRadius.circular(28),
             boxShadow: const [
               BoxShadow(
                 color: Color(0x26000000),
-                offset: Offset(4, 4),
-                blurRadius: 2.5,
+                offset: Offset(0, 4),
+                blurRadius: 5,
               ),
             ],
           ),
           child: Stack(
             children: [
               Positioned(
-                left: 25,
+                left: 20,
                 top: 15,
                 child: Container(
-                  width: 148,
-                  height: 31,
+                  // width: 148,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 14, 130, 197)
                         .withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(36.5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.only(left: 15, right: 15),
+                    padding: EdgeInsets.only(left: 10, right: 15),
                     child: Align(
                       alignment: Alignment.center,
                       child: FittedBox(
                         child: Text(
-                          'Tera Bhi Katega',
+                          'Web-Dev Challenge Winners',
                           textAlign: TextAlign.left,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.w500,
                             height: 1.26,
                             color: Colors.white,
@@ -97,7 +97,7 @@ class EventWinnersCard extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(top: 50),
+                margin: const EdgeInsets.only(top: 60),
                 child: ListView.builder(
                   itemCount: 3,
                   physics: const NeverScrollableScrollPhysics(),
@@ -139,8 +139,8 @@ class EventWinnersCard extends StatelessWidget {
                                       user[index + 1]![0],
                                       maxLines: 1,
                                       style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
                                         height: 1.26,
                                         color: Color(0xffffffff),
                                       ),
@@ -148,8 +148,8 @@ class EventWinnersCard extends StatelessWidget {
                                     Text(
                                       user[index + 1]![1],
                                       style: const TextStyle(
-                                        fontSize: 13.3,
-                                        fontWeight: FontWeight.w500,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
                                         height: 1.26,
                                         color: Color(0xffffffff),
                                       ),

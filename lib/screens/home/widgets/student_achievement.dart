@@ -26,7 +26,7 @@ class StudentAchievement extends StatelessWidget {
             textAlign: TextAlign.left,
             style: const TextStyle(
               fontSize: 24,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
@@ -41,8 +41,8 @@ class StudentAchievement extends StatelessWidget {
             boxShadow: const [
               BoxShadow(
                 color: Color(0x26000000),
-                offset: Offset(4, 4),
-                blurRadius: 2.5,
+                offset: Offset(0, 4),
+                blurRadius: 5,
               ),
             ],
           ),

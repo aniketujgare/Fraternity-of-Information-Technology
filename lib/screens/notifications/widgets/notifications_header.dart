@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fraternity_of_information_technology/utils/constants.dart';
 
 class NotificationsHeader extends StatelessWidget {
   const NotificationsHeader({
@@ -20,6 +21,7 @@ class NotificationsHeader extends StatelessWidget {
                 onTap: () => Navigator.of(context).pop(),
                 child: SvgPicture.asset(
                   'assets/images/back_button.svg',
+                  height: 18,
                 )),
           ),
           const Align(
@@ -27,7 +29,7 @@ class NotificationsHeader extends StatelessWidget {
             child: Text(
               'Notifications',
               style: TextStyle(
-                fontSize: 36,
+                fontSize: kHeadingFontSize,
                 fontWeight: FontWeight.w400,
                 height: 1.26,
               ),

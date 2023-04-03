@@ -27,6 +27,7 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(25, 10, 22, 10),
+      color: Colors.white,
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

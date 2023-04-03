@@ -11,20 +11,20 @@ class FITBottomNavBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(
         bottom: 15,
-        left: 15,
-        right: 15,
+        left: 20,
+        right: 20,
       ),
       child: Container(
         width: double.infinity,
-        height: 55,
+        height: 60,
         decoration: BoxDecoration(
           color: const Color(0xffffffff),
-          borderRadius: BorderRadius.circular(23),
+          borderRadius: BorderRadius.circular(18),
           boxShadow: const [
             BoxShadow(
               color: Color(0x3f000000),
               offset: Offset(0, 4),
-              blurRadius: 2,
+              blurRadius: 5,
             ),
           ],
         ),
@@ -40,7 +40,7 @@ class FITBottomNavBar extends StatelessWidget {
             buildNavBarItems(
               index: 1,
               context: context,
-              svgIcon: 'assets/images/notepad_icon.svg',
+              svgIcon: 'assets/images/news_icon.svg',
             ),
             buildNavBarItems(
               index: 2,
@@ -69,6 +69,7 @@ class FITBottomNavBar extends StatelessWidget {
           onPressed: () {
             context.read<AppNavigatorCubit>().gotoPageAtIndex(index);
           },
+          iconSize: 24,
           splashRadius: 1,
           padding: const EdgeInsets.symmetric(horizontal: 25),
           icon: SvgPicture.asset(

@@ -32,7 +32,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                       'Profile',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          fontSize: 36,
+                          fontSize: kHeadingFontSize,
                           color: kTextColor,
                           fontWeight: FontWeight.w400),
                     ),
