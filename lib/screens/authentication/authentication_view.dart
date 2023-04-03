@@ -18,16 +18,9 @@ class AuthenticationView extends StatelessWidget {
         statusBarColor: kScaffoldColor,
       ),
       child: Scaffold(
-        bottomSheet: BlocConsumer<AuthBloc, AuthState>(
+        bottomSheet: BlocBuilder<AuthBloc, AuthState>(
           buildWhen: (previous, current) {
             return current is! LoadingAuthState;
-          },
-          listener: (context, state) async {
-            if (state is AuthSucessState) {
-              await Future.delayed(const Duration(seconds: 2));
-              Navigator.of(context)
-                  .pushReplacementNamed(ScreenName.fitUiNavigator);
-            }
           },
           builder: (context, state) {
             switch (state.runtimeType) {

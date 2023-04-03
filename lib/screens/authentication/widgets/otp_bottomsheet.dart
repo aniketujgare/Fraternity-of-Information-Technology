@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/widgets/fit_circular_loading_indicator.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../bloc/auth_bloc/auth_bloc.dart';
@@ -64,7 +65,7 @@ class OtpBottomSheet extends StatelessWidget {
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               if (state is LoadingAuthState) {
-                return const Center(child: CircularProgressIndicator());
+                return const FITCircularLoadingIndicator();
               }
               return FitButton(
                 onTap: () {

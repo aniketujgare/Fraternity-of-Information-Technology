@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/constants.dart';
+import '../../widgets/all_set_animation.dart';
 
 class YourAllSetview extends StatelessWidget {
   const YourAllSetview({super.key});
@@ -20,16 +20,16 @@ class YourAllSetview extends StatelessWidget {
           tileMode: TileMode.clamp,
         ),
       ),
-      child: Column(
+      child: const Column(
         children: [
-          const Spacer(flex: 2),
-          SvgPicture.asset('assets/images/all_set.svg'),
-          const Spacer(flex: 1),
-          const Text(
+          Spacer(flex: 2),
+          AllSetAnimation(),
+          Spacer(flex: 1),
+          Text(
             'You\'re all set!',
             style: TextStyle(fontSize: 36, color: Colors.white),
           ),
-          const Spacer(flex: 4),
+          Spacer(flex: 4),
         ],
       ),
     );
