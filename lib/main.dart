@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fraternity_of_information_technology/utils/app_router.dart';
-import 'utils/constants.dart';
+
+import 'src/config/router/app_router.dart';
+import 'src/utils/constants/constants.dart';
 
 void main() {
   runApp(const MyApp());
