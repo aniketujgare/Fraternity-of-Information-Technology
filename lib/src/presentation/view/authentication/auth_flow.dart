@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/authentication/your_all_set_view.dart';
-import '../../../utils/constants/constants.dart';
-import '../../blocs/auth_bloc/auth_bloc.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'widgets/login_bottomsheet.dart';
-import 'widgets/otp_bottomsheet.dart';
 
-class AuthenticationView extends StatelessWidget {
-  const AuthenticationView({super.key});
+import '../../../utils/constants/constants.dart';
+import '../../blocs/app_navigator_cubit/app_navigator_cubit.dart';
+import '../../blocs/auth_bloc/auth_bloc.dart';
+import 'widgets/otp_bottomsheet.dart';
+import 'your_all_set_view.dart';
+
+class AuthFlow extends StatelessWidget {
+  const AuthFlow({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +20,23 @@ class AuthenticationView extends StatelessWidget {
       ),
       child: Scaffold(
         bottomSheet: BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (previous, current) {
-            return current is! LoadingAuthState;
-          },
-          builder: (context, state) {
-            switch (state.runtimeType) {
-              case SendOTPState:
-                return const OtpBottomSheet();
-              case AuthSucessState:
-                return const YourAllSetview();
-              default:
-                return const LoginBottomSheet();
+          builder: (context, authState) {
+            if (authState is AuthSucessState) {
+              return BlocProvider(
+                create: (context) => AppNavigatorCubit(),
+                child: const YourAllSetview(),
+              );
+            } else if (authState is UnAuthState) {
+              return const LoginBottomSheet();
+            } else if (authState is SendOTPState) {
+              return const OtpBottomSheet();
             }
+            // else if (authState is CreateAccountPageState) {
+            //   return const CreateAccountPage();
+            // } else if (authState is ErrorPageState) {
+            //   return const ErrorPage();
+            // }
+            return const LoginBottomSheet();
           },
         ),
         body: SafeArea(

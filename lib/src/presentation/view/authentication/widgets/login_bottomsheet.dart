@@ -17,11 +17,14 @@ class LoginBottomSheet extends StatelessWidget {
       height: kHeight(context) * 0.45,
       width: kWidth(context),
       decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
           color: Colors.white,
-          border: Border.all(
-            color: Colors.white,
-          ),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(25))),
+        ),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(25),
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,

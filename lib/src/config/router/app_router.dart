@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
+import 'package:fraternity_of_information_technology/src/presentation/view/authentication/auth_flow.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../presentation/blocs/app_navigator_cubit/app_navigator_cubit.dart';
 import '../../presentation/blocs/auth_bloc/auth_bloc.dart';
 import '../../presentation/blocs/update_account_bloc/update_account_bloc.dart';
-import '../../presentation/view/authentication/authentication_view.dart';
 import '../../presentation/view/fit_committee/fit_committee_view.dart';
 import '../../presentation/view/fit_ui_navigator.dart';
 import '../../presentation/view/notifications/notifications_view.dart';
 import '../../presentation/view/update_account/update_account_view.dart';
 import '../../presentation/view/user_profile/user_profile_view.dart';
 import '../../presentation/view/winners/winners_view.dart';
-import '../../utils/constants/constants.dart';
+
+final _authBloc = AuthBloc();
+final _updateAccountBloc = UpdateAccountBloc();
+final _appNavigatorCubit = AppNavigatorCubit();
 
 class AppRouter {
-  final _authBloc = AuthBloc();
-  final _updateAccountBloc = UpdateAccountBloc();
-  final _appNavigatorCubit = AppNavigatorCubit();
-
-  Route? onGenerateRoute(RouteSettings routeSettings) {
-    switch (routeSettings.name) {
-      case ScreenName.authentication:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
+  GoRouter router = GoRouter(
+    routes: [
+      GoRoute(
+        name: AppRoutConstants.authFlow.name,
+        path: AppRoutConstants.authFlow.path,
+        pageBuilder: (context, state) => MaterialPage(
+          child: BlocProvider.value(
             value: _authBloc,
-            child: const AuthenticationView(),
+            child: const AuthFlow(),
           ),
-        );
-      case ScreenName.updateAccount:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
+        ),
+      ),
+      GoRoute(
+        name: AppRoutConstants.updateAccount.name,
+        path: AppRoutConstants.updateAccount.path,
+        pageBuilder: (context, state) => MaterialPage(
+          child: MultiBlocProvider(
             providers: [
               BlocProvider.value(
                 value: _authBloc,
@@ -40,10 +46,13 @@ class AppRouter {
             ],
             child: const UpdateAccountView(),
           ),
-        );
-      case ScreenName.home:
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
+        ),
+      ),
+      GoRoute(
+        name: AppRoutConstants.home.name,
+        path: AppRoutConstants.home.path,
+        pageBuilder: (context, state) => MaterialPage(
+          child: MultiBlocProvider(
             providers: [
               BlocProvider.value(
                 value: _authBloc,
@@ -54,10 +63,13 @@ class AppRouter {
             ],
             child: const UserProfileView(),
           ),
-        );
-      case ScreenName.notificationView: //'/home':
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
+        ),
+      ),
+      GoRoute(
+        name: AppRoutConstants.notificationView.name,
+        path: AppRoutConstants.notificationView.path,
+        pageBuilder: (context, state) => MaterialPage(
+          child: MultiBlocProvider(
             providers: [
               BlocProvider.value(
                 value: _authBloc,
@@ -68,10 +80,13 @@ class AppRouter {
             ],
             child: const NotificationView(),
           ),
-        );
-      case ScreenName.fitUiNavigator: //'/home':
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
+        ),
+      ),
+      GoRoute(
+        name: AppRoutConstants.fitUiNavigator.name,
+        path: AppRoutConstants.fitUiNavigator.path,
+        pageBuilder: (context, state) => MaterialPage(
+          child: MultiBlocProvider(
             providers: [
               BlocProvider.value(
                 value: _authBloc,
@@ -85,10 +100,13 @@ class AppRouter {
             ],
             child: const FITUINavigator(),
           ),
-        );
-      case ScreenName.fitCommittee: //'/home':
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
+        ),
+      ),
+      GoRoute(
+        name: AppRoutConstants.fitCommittee.name,
+        path: AppRoutConstants.fitCommittee.path,
+        pageBuilder: (context, state) => MaterialPage(
+          child: MultiBlocProvider(
             providers: [
               BlocProvider.value(
                 value: _authBloc,
@@ -102,10 +120,13 @@ class AppRouter {
             ],
             child: const FitCommitteeView(),
           ),
-        );
-      case ScreenName.winnersVIew: //'/home':
-        return MaterialPageRoute(
-          builder: (_) => MultiBlocProvider(
+        ),
+      ),
+      GoRoute(
+        name: AppRoutConstants.winnersView.name,
+        path: AppRoutConstants.winnersView.path,
+        pageBuilder: (context, state) => MaterialPage(
+          child: MultiBlocProvider(
             providers: [
               BlocProvider.value(
                 value: _authBloc,
@@ -119,14 +140,8 @@ class AppRouter {
             ],
             child: const WinnersView(),
           ),
-        );
-      default:
-        return null;
-    }
-  }
-
-  void dispose() {
-    _authBloc.close();
-    _updateAccountBloc.close();
-  }
+        ),
+      ),
+    ],
+  );
 }

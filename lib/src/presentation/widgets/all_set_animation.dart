@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../utils/constants/constants.dart';
@@ -32,8 +34,8 @@ class _AllSetAnimationState extends State<AllSetAnimation>
         _controller
           ..duration = composition.duration
           ..forward().whenComplete(
-            () => Navigator.of(context)
-                .pushReplacementNamed(ScreenName.fitUiNavigator),
+            () => context
+                .pushReplacementNamed(AppRoutConstants.fitUiNavigator.name),
           );
       },
       delegates: LottieDelegates(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../utils/constants/constants.dart';
 
@@ -17,7 +19,7 @@ class EventWinnersCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(ScreenName.winnersVIew),
+      onTap: () => context.pushNamed(AppRoutConstants.winnersView.name),
       child: Column(
         children: [
           //* Title Of card
@@ -114,7 +116,7 @@ class EventWinnersCard extends StatelessWidget {
                               colorFilter: ColorFilter.mode(
                                   const Color.fromARGB(255, 26, 94, 133)
                                       .withOpacity(0.40),
-                                  BlendMode.screen),
+                                  BlendMode.srcIn),
                             ),
                           ),
                           Positioned(

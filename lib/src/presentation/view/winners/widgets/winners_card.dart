@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../utils/constants/constants.dart';
-
 class WinnersCard extends StatelessWidget {
   final String headTitle;
 
@@ -16,7 +14,7 @@ class WinnersCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(ScreenName.winnersVIew),
+      // onTap: () => Navigator.of(context).pushNamed(ScreenName.winnersVIew),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

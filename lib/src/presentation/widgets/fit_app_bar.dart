@@ -73,11 +73,15 @@ class FITBottomNavBar extends StatelessWidget {
           iconSize: 24,
           splashRadius: 1,
           padding: const EdgeInsets.symmetric(horizontal: 25),
-          icon: SvgPicture.asset(
-            svgIcon,
-            colorFilter: ColorFilter.mode(
-              state.index == index ? kPrimaryColor : Colors.black,
-              BlendMode.srcIn,
+          icon: SizedBox(
+            height: 25,
+            width: 25,
+            child: SvgPicture.asset(
+              svgIcon,
+              colorFilter: ColorFilter.mode(
+                state.index == index ? kPrimaryColor : Colors.black,
+                BlendMode.srcIn,
+              ),
             ),
           ),
         );
