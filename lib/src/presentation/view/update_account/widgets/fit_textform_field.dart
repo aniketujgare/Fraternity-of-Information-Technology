@@ -10,17 +10,20 @@ class FitTextFormField extends StatelessWidget {
     this.horiPad = 25,
     this.topPad = 0,
     this.botPad = 0,
+    required this.textFieldController,
   });
 
   final double horiPad, topPad, botPad;
   final IconData icon;
   final String label;
+  final TextEditingController textFieldController;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(horiPad, topPad, horiPad, botPad),
       child: TextFormField(
+        controller: textFieldController,
         textAlign: TextAlign.start,
         decoration: InputDecoration(
           prefixIcon: Icon(

@@ -1,86 +1,73 @@
-// import 'package:appwrite/appwrite.dart';
-// import 'package:appwrite/models.dart';
-// import 'package:fitpulse/src/config/router/app_router.dart';
-// import 'package:fitpulse/src/data/datasources/appwrite.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/user_model.dart';
+import 'dart:io';
 
-// import '../../domain/models/user_model.dart';
+class DatabaseRepository {
+  final CollectionReference _collection =
+      FirebaseFirestore.instance.collection('users');
+  final user = FirebaseAuth.instance.currentUser;
+  Future<UserModel> getUser() async {
+    final snapshot = await _collection.doc(user!.uid).get();
+    return UserModel.fromJson(snapshot.data() as Map<String, dynamic>);
+  }
 
-// class DatabaseRepository {
-//   static const String fitPulseDatabaseId = '6484be018b503003ea70';
-//   static const String usersCollectionId = '6484be1836fe39cfbd9e';
+  Future<void> addUser(UserModel user) async {
+    await _collection.doc(user.docID).set(user.toJson());
+  }
 
-//   Databases databases = Databases(Appwrite.instance.client);
-//   Storage storage = Storage(Appwrite.instance.client);
-//   String createDocumnet(UserModel user) {
-//     Future result = databases.createDocument(
-//       databaseId: fitPulseDatabaseId,
-//       collectionId: usersCollectionId,
-//       documentId: user.userId,
-//       data: user.toJson(),
-//     );
-//     result.then((response) {
-//       print(response);
-//     }).catchError((error) {
-//       print(error.response);
-//     });
-//     print(user.userId);
-//     return user.userId;
-//   }
+  Future<UserModel> updateUser(UserModel userModel) async {
+    await _collection.doc(user!.uid).update(userModel.toJson());
+    return userModel;
+  }
 
-//   // Future<void> getDocument() async {
-//   //   DocumentList result = await databases.listDocuments(
-//   //       databaseId: fitPulseDatabaseId,
-//   //       collectionId: usersCollectionId,
-//   //       queries: [
-//   //         Query.equal("email", ["aniketujgare@gmail.com"]),
-//   //       ]);
-//   // }
+  Future<void> deleteUser(UserModel user) async {
+    await _collection.doc(user.docID).delete();
+  }
 
-//   Future<UserModel> getCurrentUser() async {
-//     var userr = await authRepository.getUser();
-//     DocumentList result = await databases.listDocuments(
-//         databaseId: fitPulseDatabaseId,
-//         collectionId: usersCollectionId,
-//         queries: [
-//           Query.equal("email", [userr.email]),
-//         ]);
-//     var json = result.documents.first.data;
-//     var user = UserModel.fromJson(json);
-//     return user;
-//   }
+  Future<bool> checkUserExists() async {
+    final snapshot = await _collection.doc(user!.uid).get();
+    return snapshot.exists;
+  }
 
-//   Future<UserModel> updateUserProfile({required UserModel userModel}) async {
-//     var currUser = await getCurrentUser();
-//     DocumentList result = await databases.listDocuments(
-//       databaseId: fitPulseDatabaseId,
-//       collectionId: usersCollectionId,
-//       queries: [
-//         Query.equal("email", [currUser.email]),
-//       ],
-//     );
-//     var docId = result.documents.first.$id;
-//     Document res = await databases.updateDocument(
-//         databaseId: fitPulseDatabaseId,
-//         collectionId: usersCollectionId,
-//         documentId: docId,
-//         data: userModel.toJson());
-//     var json = res.data;
-//     var user = UserModel.fromJson(json);
-//     return user;
-//   }
+  //  Future<UserModel> uploadProfilePic(String path, UserModel userModel) async {
+  //   File result = await storage.createFile(
+  //     bucketId: '6484f3557588980fdc8b',
+  //     fileId: ID.unique(),
+  //     file: InputFile.fromPath(path: path, filename: ID.unique()),
+  //   );
+  //   // 64874f8ec305c472a1f6
+  //   String url1 =
+  //       'https://cloud.appwrite.io/v1/storage/buckets/6484f3557588980fdc8b/files/';
+  //   String url2 = result.$id;
+  //   String url3 = '/view?project=64690d0eedba385967a1&mode=admin';
+  //   userModel.profilePic = url1 + url2 + url3;
+  //   return updateUserProfile(userModel: userModel);
+  // }
+  Future<String?> pickAndUploadImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
-//   Future<UserModel> uploadProfilePic(String path, UserModel userModel) async {
-//     File result = await storage.createFile(
-//       bucketId: '6484f3557588980fdc8b',
-//       fileId: ID.unique(),
-//       file: InputFile.fromPath(path: path, filename: ID.unique()),
-//     );
-//     // 64874f8ec305c472a1f6
-//     String url1 =
-//         'https://cloud.appwrite.io/v1/storage/buckets/6484f3557588980fdc8b/files/';
-//     String url2 = result.$id;
-//     String url3 = '/view?project=64690d0eedba385967a1&mode=admin';
-//     userModel.profilePic = url1 + url2 + url3;
-//     return updateUserProfile(userModel: userModel);
-//   }
-// }
+    if (pickedImage == null) return null;
+
+    File imageFile = File(pickedImage.path);
+
+    // Create a unique filename for the image
+    String fileName = path.basename(imageFile.path);
+    String firebasePath = 'images/$fileName';
+
+    // Get a reference to the Firebase storage location
+    Reference ref = FirebaseStorage.instance.ref().child(firebasePath);
+
+    // Upload the file to Firebase storage
+    TaskSnapshot uploadTask = await ref.putFile(imageFile);
+
+    // Get the download URL of the uploaded image
+    String downloadURL = await uploadTask.ref.getDownloadURL();
+
+    return downloadURL;
+  }
+}

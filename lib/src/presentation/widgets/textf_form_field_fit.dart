@@ -4,14 +4,17 @@ import '../../utils/constants/constants.dart';
 
 class TextFormFieldFit extends StatelessWidget {
   final String hintText;
+  final TextEditingController controller;
   const TextFormFieldFit({
     super.key,
     required this.hintText,
+    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
         prefixIcon: const Icon(

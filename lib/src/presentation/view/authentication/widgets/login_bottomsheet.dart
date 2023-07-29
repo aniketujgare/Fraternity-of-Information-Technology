@@ -7,9 +7,15 @@ import '../../../widgets/fit_button.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
 import '../../../widgets/textf_form_field_fit.dart';
 
-class LoginBottomSheet extends StatelessWidget {
+class LoginBottomSheet extends StatefulWidget {
   const LoginBottomSheet({super.key});
 
+  @override
+  State<LoginBottomSheet> createState() => _LoginBottomSheetState();
+}
+
+class _LoginBottomSheetState extends State<LoginBottomSheet> {
+  var phoneNoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,23 +48,24 @@ class LoginBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(
+          Padding(
+            padding: const EdgeInsets.symmetric(
               horizontal: 35,
               vertical: 25,
             ),
             child: TextFormFieldFit(
-              hintText: 'Phone number',
-            ),
+                hintText: 'Phone No', controller: phoneNoController),
+            // TextFormField(controller: phoneNoController),
           ),
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-              if (state is LoadingAuthState) {
+              if (state is AuthLoading) {
                 return const FITCircularLoadingIndicator();
               }
               return FitButton(
-                onTap: () {
-                  context.read<AuthBloc>().add(SendOTP());
+                onTap: () async {
+                  context.read<AuthBloc>().add(
+                      SendOtpToPhoneEvent(phoneNumber: phoneNoController.text));
                 },
                 text: 'Login',
                 height: 50,

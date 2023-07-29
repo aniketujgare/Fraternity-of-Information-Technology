@@ -7,18 +7,20 @@ class FitDropDownMenu extends StatefulWidget {
   final List<String> items;
   final String label;
   final IconData icon;
-  const FitDropDownMenu(
-      {super.key,
-      required this.items,
-      required this.label,
-      required this.icon});
+  final TextEditingController selectedValue;
+  const FitDropDownMenu({
+    super.key,
+    required this.items,
+    required this.label,
+    required this.icon,
+    required this.selectedValue,
+  });
 
   @override
   State<FitDropDownMenu> createState() => _FitDropDownMenuState();
 }
 
 class _FitDropDownMenuState extends State<FitDropDownMenu> {
-  String? selectedValue;
   @override
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
@@ -93,10 +95,12 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
                   ),
                 ))
             .toList(),
-        value: selectedValue,
+        value: widget.selectedValue.text == 'null'
+            ? null
+            : widget.selectedValue.text,
         onChanged: (value) {
           setState(() {
-            selectedValue = value as String;
+            widget.selectedValue.text = value as String;
           });
         },
         buttonStyleData: ButtonStyleData(

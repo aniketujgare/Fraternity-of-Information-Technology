@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
+import 'package:fraternity_of_information_technology/src/data/repositories/auth_repository.dart';
+import 'package:fraternity_of_information_technology/src/data/repositories/database_repository.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/user_model.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/profile_picture_bloc/profile_picture_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/view/authentication/auth_flow.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,9 +18,13 @@ import '../../presentation/view/update_account/update_account_view.dart';
 import '../../presentation/view/user_profile/user_profile_view.dart';
 import '../../presentation/view/winners/winners_view.dart';
 
-final _authBloc = AuthBloc();
-final _updateAccountBloc = UpdateAccountBloc();
+final _authrepository = AuthRepository();
+final _databaseRepository = DatabaseRepository();
+final _authBloc = AuthBloc(phoneAuthRepository: _authrepository);
+final _updateAccountBloc =
+    UpdateAccountBloc(dataRepository: _databaseRepository);
 final _appNavigatorCubit = AppNavigatorCubit();
+final _profilePicBloc = ProfilePictureBloc();
 
 class AppRouter {
   GoRouter router = GoRouter(
@@ -26,7 +34,7 @@ class AppRouter {
         path: AppRoutConstants.authFlow.path,
         pageBuilder: (context, state) => MaterialPage(
           child: BlocProvider.value(
-            value: _authBloc,
+            value: _authBloc..add(const AuthenticationCheckEvent()),
             child: const AuthFlow(),
           ),
         ),
@@ -44,7 +52,7 @@ class AppRouter {
                 value: _updateAccountBloc,
               ),
             ],
-            child: const UpdateAccountView(),
+            child: UpdateAccountView(userModel: state.extra as UserModel),
           ),
         ),
       ),
@@ -58,7 +66,7 @@ class AppRouter {
                 value: _authBloc,
               ),
               BlocProvider.value(
-                value: _updateAccountBloc,
+                value: UpdateAccountBloc(dataRepository: _databaseRepository),
               ),
             ],
             child: const UserProfileView(),
@@ -92,11 +100,14 @@ class AppRouter {
                 value: _authBloc,
               ),
               BlocProvider.value(
-                value: _updateAccountBloc,
+                value: _updateAccountBloc..add(const FetchUserEvent()),
               ),
               BlocProvider.value(
                 value: _appNavigatorCubit,
               ),
+              BlocProvider(
+                create: (context) => _profilePicBloc,
+              )
             ],
             child: const FITUINavigator(),
           ),

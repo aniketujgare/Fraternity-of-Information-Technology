@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1023730180508",
+    "project_id": "fit-2022-23",
+    "storage_bucket": "fit-2022-23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023730180508:android:c59c7fa96e7cb02ddde859",
+        "android_client_info": {
+          "package_name": "com.example.fraternity_of_information_technology"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023730180508-tqgf9r7c6h2qn1hjt02eul01ra7rh2fe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX9OzQgt-o2hKUd6rHJzaa03DGbycEfk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023730180508-tqgf9r7c6h2qn1hjt02eul01ra7rh2fe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

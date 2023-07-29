@@ -1,12 +1,54 @@
 part of 'auth_bloc.dart';
 
 @immutable
-abstract class AuthState {}
+abstract class AuthState extends Equatable {
+  const AuthState();
+  @override
+  List<Object> get props => [];
+}
 
-class UnAuthState extends AuthState {}
+class PhoneAuthInitial extends AuthState {
+  const PhoneAuthInitial();
+  @override
+  List<Object> get props => [];
+}
 
-class LoadingAuthState extends AuthState {}
+class AuthLoading extends AuthState {}
 
-class AuthSucessState extends AuthState {}
+class PhoneAuthError extends AuthState {
+  final String error;
 
-class SendOTPState extends AuthState {}
+  const PhoneAuthError({required this.error});
+
+  @override
+  List<Object> get props => [error];
+}
+
+class PhoneAuthVerified extends AuthState {}
+
+class PhoneAuthCodeSentSuccess extends AuthState {
+  final String verificationId;
+  const PhoneAuthCodeSentSuccess({
+    required this.verificationId,
+  });
+  @override
+  List<Object> get props => [verificationId];
+}
+
+class AuthenticationSigningOutState extends AuthState {
+  const AuthenticationSigningOutState();
+  @override
+  List<Object> get props => [];
+}
+// class UnAuthState extends AuthState {}
+
+// class LoadingAuthState extends AuthState {}
+
+// class AuthSucessState extends AuthState {}
+
+// class SendOTPState extends AuthState {
+//   final String verificationId;
+//   final int? resendToken;
+
+//   SendOTPState({required this.verificationId, this.resendToken});
+// }

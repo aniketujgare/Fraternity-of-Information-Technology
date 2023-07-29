@@ -23,3 +23,49 @@ abstract class UpdateAccountState extends Equatable {
 }
 
 class UpdateAccountInitial extends UpdateAccountState {}
+
+class UpdateAccountLoading extends UpdateAccountState {}
+
+class UpdateAccountError extends UpdateAccountState {
+  final String error;
+
+  const UpdateAccountError({required this.error});
+  @override
+  List<Object> get props => [error];
+}
+
+class FetchUserState extends UpdateAccountState {
+  final UserModel userModel;
+  const FetchUserState({required this.userModel});
+
+  @override
+  List<Object> get props => [userModel];
+}
+
+class AddUserState extends UpdateAccountState {
+  const AddUserState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateUserState extends UpdateAccountState {
+  const UpdateUserState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class DeleteUserState extends UpdateAccountState {
+  const DeleteUserState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class PickImageLoadingState extends UpdateAccountState {}
+
+class ImageUploadedState extends UpdateAccountState {
+  final String? imageURL;
+  const ImageUploadedState({required this.imageURL});
+}
