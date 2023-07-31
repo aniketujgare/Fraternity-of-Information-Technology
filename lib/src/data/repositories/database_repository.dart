@@ -1,4 +1,5 @@
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/fit_committee.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,9 +7,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/user_model.dart';
 import 'dart:io';
 
+import '../../domain/models/event_winners_model.dart';
+
 class DatabaseRepository {
-  final CollectionReference _collection =
-      FirebaseFirestore.instance.collection('users');
+  final _collection = FirebaseFirestore.instance.collection('users');
+  final winnersCollection =
+      FirebaseFirestore.instance.collection('event_winners');
+  final _fitCommittee = FirebaseFirestore.instance.collection('fit_committee');
   final user = FirebaseAuth.instance.currentUser;
   Future<UserModel> getUser() async {
     final snapshot = await _collection.doc(user!.uid).get();
@@ -33,20 +38,6 @@ class DatabaseRepository {
     return snapshot.exists;
   }
 
-  //  Future<UserModel> uploadProfilePic(String path, UserModel userModel) async {
-  //   File result = await storage.createFile(
-  //     bucketId: '6484f3557588980fdc8b',
-  //     fileId: ID.unique(),
-  //     file: InputFile.fromPath(path: path, filename: ID.unique()),
-  //   );
-  //   // 64874f8ec305c472a1f6
-  //   String url1 =
-  //       'https://cloud.appwrite.io/v1/storage/buckets/6484f3557588980fdc8b/files/';
-  //   String url2 = result.$id;
-  //   String url3 = '/view?project=64690d0eedba385967a1&mode=admin';
-  //   userModel.profilePic = url1 + url2 + url3;
-  //   return updateUserProfile(userModel: userModel);
-  // }
   Future<String?> pickAndUploadImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
@@ -69,5 +60,21 @@ class DatabaseRepository {
     String downloadURL = await uploadTask.ref.getDownloadURL();
 
     return downloadURL;
+  }
+
+  Future<List<EventWinnersModel>> getAllWinners() async {
+    final QuerySnapshot snapshot = await winnersCollection.get();
+
+    return snapshot.docs.map((doc) {
+      return EventWinnersModel.fromJson(doc.data() as Map<String, dynamic>);
+    }).toList();
+  }
+
+  getFitCommittee() async {
+    final QuerySnapshot fitCommittee = await _fitCommittee.get();
+
+    return fitCommittee.docs.map((doc) {
+      return FitCommitteeModel.fromJson(doc.data() as Map<String, dynamic>);
+    }).toList();
   }
 }

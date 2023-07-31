@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../../../domain/models/event_winners_model.dart';
+
 class WinnersCard extends StatelessWidget {
-  final String headTitle;
+  final String eventName;
+  final String organizer;
+  final List<Winner> winners;
 
   final double topMargin;
 
   const WinnersCard({
     Key? key,
     this.topMargin = 20,
-    required this.headTitle,
+    required this.eventName,
+    required this.organizer,
+    required this.winners,
   }) : super(key: key);
 
   @override
@@ -21,9 +27,9 @@ class WinnersCard extends StatelessWidget {
           //* Title Of card
           Container(
             margin: const EdgeInsets.only(left: 25, bottom: 5, top: 28),
-            child: const Text(
-              'CodeIT 1.0',
-              style: TextStyle(
+            child: Text(
+              eventName,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
                 color: Color(0xff6a87f3),
@@ -34,9 +40,9 @@ class WinnersCard extends StatelessWidget {
             margin: const EdgeInsets.only(left: 25, bottom: 10),
             width: double.infinity,
             height: 23,
-            child: const Text(
-              'Organizer - Kamna Raaj',
-              style: TextStyle(
+            child: Text(
+              'Organizer - $organizer',
+              style: const TextStyle(
                 fontSize: 16,
                 color: Color(0xff000000),
               ),
@@ -76,7 +82,7 @@ class WinnersCard extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.only(top: 14),
                     child: ListView.separated(
-                      itemCount: 3,
+                      itemCount: winners.length,
                       physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       separatorBuilder: (context, index) {
@@ -112,7 +118,7 @@ class WinnersCard extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      user[index + 1]![0],
+                                      winners[index].name ?? '',
                                       maxLines: 1,
                                       style: const TextStyle(
                                         fontSize: 18,
@@ -121,7 +127,7 @@ class WinnersCard extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      user[index + 1]![1],
+                                      winners[index].department ?? '',
                                       style: const TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.w400,

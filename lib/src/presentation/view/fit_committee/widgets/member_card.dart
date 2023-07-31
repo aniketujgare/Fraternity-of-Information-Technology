@@ -7,31 +7,39 @@ import 'social_link_button.dart';
 class MemberCard extends StatelessWidget {
   const MemberCard({
     super.key,
+    required this.branch,
+    required this.email,
+    required this.instagram,
+    required this.linkedin,
+    required this.name,
+    required this.phoneNumber,
     required this.position,
     required this.profilePic,
-    required this.branch,
-    required this.name,
     required this.year,
   });
 
-  final String profilePic;
-  final String position;
-  final String name;
-  final String year;
   final String branch;
+  final String email;
+  final String instagram;
+  final String linkedin;
+  final String name;
+  final String phoneNumber;
+  final String position;
+  final String profilePic;
+  final String year;
 
   @override
   Widget build(BuildContext context) {
-    final Uri whatsapp =
-        Uri.parse('whatsapp://send?phone=918888190935&text=Hey!');
+    final Uri _whatsapp =
+        Uri.parse('whatsapp://send?phone=$phoneNumber&text=Hey!');
 
-    final Uri linkedin = Uri.parse('https://linkedin.com/m/tejasbadone');
+    final Uri _linkedin = Uri.parse(linkedin);
 
-    final Uri instagram = Uri.parse('https://www.instagram.com/aniketujgare/');
+    final Uri _instagram = Uri.parse(instagram);
 
-    final Uri phoneNumber = Uri.parse('tel: +918888190935');
+    final Uri _phoneNumber = Uri.parse('tel: +91$phoneNumber');
 
-    final Uri email = Uri.parse('mailto:tejas.badone25@gmail.com');
+    final Uri _email = Uri.parse('mailto:$email');
 
     return Container(
       margin: const EdgeInsets.all(8),
@@ -102,33 +110,66 @@ class MemberCard extends StatelessWidget {
                       SocialLinkButton(
                         icon: 'phone_icon.svg',
                         onTap: () async {
-                          await launchUrl(phoneNumber);
+                          try {
+                            await launchUrl(_phoneNumber);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Dialer is not installed!')));
+                          }
                         },
                       ),
                       SocialLinkButton(
                         icon: 'whatsapp_icon.svg',
                         onTap: () async {
-                          await launchUrl(whatsapp);
+                          try {
+                            await launchUrl(_whatsapp);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Whatsapp is not installed!')));
+                          }
                         },
                       ),
                       SocialLinkButton(
                         icon: 'linkedin_icon.svg',
                         onTap: () async {
-                          await launchUrl(linkedin);
+                          try {
+                            await launchUrl(_linkedin);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('LinkedIn is not installed!')));
+                          }
                         },
                       ),
                       SocialLinkButton(
                         icon: 'instagram_icon.svg',
                         onTap: () async {
-                          await launchUrl(
-                            instagram,
-                          );
+                          try {
+                            await launchUrl(
+                              _instagram,
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Instagram is not installed!')));
+                          }
                         },
                       ),
                       SocialLinkButton(
                         icon: 'email_icon.svg',
                         onTap: () async {
-                          await launchUrl(email);
+                          try {
+                            await launchUrl(_email);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('G-Mail is not installed!')));
+                          }
                         },
                       ),
                     ],

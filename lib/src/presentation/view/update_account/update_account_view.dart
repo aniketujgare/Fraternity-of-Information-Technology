@@ -109,7 +109,12 @@ class _UpdateAccountViewState extends State<UpdateAccountView> {
                     const Spacer(),
                   ],
                 ),
-                BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
+                BlocConsumer<UpdateAccountBloc, UpdateAccountState>(
+                  listener: (context, state) {
+                    if (state is UpdatedSuccesFully) {
+                      context.pop();
+                    }
+                  },
                   builder: (context, state) {
                     if (state is UpdateAccountLoading) {
                       return const SizedBox(

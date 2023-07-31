@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/data/repositories/database_repository.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/user_model.dart';
 import 'package:meta/meta.dart';
 
 import '../../../data/repositories/auth_repository.dart';
+import '../../../data/repositories/database_repository.dart';
+import '../../../domain/models/user_model.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -60,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await phoneAuthRepository.verifyPhone(
         phoneNumber: '+91${event.phoneNumber}',
         verificationCompleted: (PhoneAuthCredential credential) async {
-          // On [verificationComplete], we will get the credential from the firebase  and will send it to the [OnPhoneAuthVerificationCompleteEvent] event to be handled by the bloc and then will emit the [PhoneAuthVerified] state after successful login
+          // On [verificationComplete], we will get the credential from the firebase and will send it to the [OnPhoneAuthVerificationCompleteEvent] event to be handled by the bloc and then will emit the [PhoneAuthVerified] state after successful login
           add(OnPhoneAuthVerificationCompleteEvent(credential: credential));
         },
         codeSent: (String verificationId, int? resendToken) {

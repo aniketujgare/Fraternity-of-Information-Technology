@@ -26,6 +26,8 @@ class UpdateAccountInitial extends UpdateAccountState {}
 
 class UpdateAccountLoading extends UpdateAccountState {}
 
+class UpdatedSuccesFully extends UpdateAccountState {}
+
 class UpdateAccountError extends UpdateAccountState {
   final String error;
 

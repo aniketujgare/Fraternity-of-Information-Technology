@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../utils/constants/constants.dart';
+import '../../../../config/router/app_router_constants.dart';
 
 class FITCommitteeCard extends StatelessWidget {
   final String headTitle;
@@ -39,7 +40,7 @@ class FITCommitteeCard extends StatelessWidget {
         ),
         //* Card
         GestureDetector(
-          onTap: () => Navigator.pushNamed(context, ScreenName.fitCommittee),
+          onTap: () => context.pushNamed(AppRoutConstants.fitCommittee.name),
           child: Container(
             margin: const EdgeInsets.all(15),
             width: 337,

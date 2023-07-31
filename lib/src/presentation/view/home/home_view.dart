@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../utils/constants/constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../config/router/app_router_constants.dart';
+import '../../blocs/update_account_bloc/update_account_bloc.dart';
 import 'widgets/event_winners_card.dart';
 import 'widgets/fit_committee_card.dart';
 import 'widgets/home_header.dart';
@@ -17,12 +20,20 @@ class HomeView extends StatelessWidget {
         SingleChildScrollView(
           child: Column(
             children: [
-              HomeHeader(
-                userName: 'Mihir',
-                userAvatar:
-                    'https://w0.peakpx.com/wallpaper/13/561/HD-wallpaper-anime-anime-waifu.jpg',
-                onPressed: () {
-                  Navigator.pushNamed(context, ScreenName.notificationView);
+              BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
+                builder: (context, state) {
+                  if (state is FetchUserState) {
+                    return HomeHeader(
+                      userName: '${state.userModel.name}',
+                      userAvatar: '${state.userModel.profilePic}',
+                      // 'https://w0.peakpx.com/wallpaper/13/561/HD-wallpaper-anime-anime-waifu.jpg',
+                      onPressed: () async {
+                        GoRouter.of(context)
+                            .pushNamed(AppRoutConstants.notificationView.name);
+                      },
+                    );
+                  }
+                  return const SizedBox(height: 120);
                 },
               ),
               const UpcomingEventsCard(

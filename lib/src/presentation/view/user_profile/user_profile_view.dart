@@ -114,11 +114,10 @@ class _UserProfileViewState extends State<UserProfileView> {
                           builder: (context, state) {
                             if (state is PickImageLoadingState) {
                               return const Center(
-                                  //TODO: shimmer effect
+                                  // TODO:Shimmer effect
                                   child: FITCircularLoadingIndicator());
                             } else if (state is ImageUploadedState &&
                                 state.imageURL != null) {
-                              print(state.imageURL);
                               return Image.network(
                                 state.imageURL!,
                                 fit: BoxFit.cover,

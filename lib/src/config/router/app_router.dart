@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
-import 'package:fraternity_of_information_technology/src/data/repositories/auth_repository.dart';
-import 'package:fraternity_of_information_technology/src/data/repositories/database_repository.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/user_model.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/profile_picture_bloc/profile_picture_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/authentication/auth_flow.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/database_repository.dart';
+import '../../domain/models/user_model.dart';
 import '../../presentation/blocs/app_navigator_cubit/app_navigator_cubit.dart';
 import '../../presentation/blocs/auth_bloc/auth_bloc.dart';
+import '../../presentation/blocs/fit_committee_bloc/fit_committee_bloc.dart';
+import '../../presentation/blocs/profile_picture_bloc/profile_picture_bloc.dart';
 import '../../presentation/blocs/update_account_bloc/update_account_bloc.dart';
+import '../../presentation/blocs/winners_bloc/winners_bloc.dart';
+import '../../presentation/view/authentication/auth_flow.dart';
 import '../../presentation/view/fit_committee/fit_committee_view.dart';
 import '../../presentation/view/fit_ui_navigator.dart';
 import '../../presentation/view/notifications/notifications_view.dart';
 import '../../presentation/view/update_account/update_account_view.dart';
 import '../../presentation/view/user_profile/user_profile_view.dart';
 import '../../presentation/view/winners/winners_view.dart';
+import 'app_router_constants.dart';
 
 final _authrepository = AuthRepository();
 final _databaseRepository = DatabaseRepository();
@@ -25,6 +27,9 @@ final _updateAccountBloc =
     UpdateAccountBloc(dataRepository: _databaseRepository);
 final _appNavigatorCubit = AppNavigatorCubit();
 final _profilePicBloc = ProfilePictureBloc();
+final _winnersBloc = WinnersBloc(databaseRepository: _databaseRepository);
+final _fitCommitteeBloc =
+    FitCommitteeBloc(databaseRepository: _databaseRepository);
 
 class AppRouter {
   GoRouter router = GoRouter(
@@ -128,6 +133,9 @@ class AppRouter {
               BlocProvider.value(
                 value: _appNavigatorCubit,
               ),
+              BlocProvider.value(
+                value: _fitCommitteeBloc..add(FetchFitCommitteeEvent()),
+              ),
             ],
             child: const FitCommitteeView(),
           ),
@@ -147,6 +155,9 @@ class AppRouter {
               ),
               BlocProvider.value(
                 value: _appNavigatorCubit,
+              ),
+              BlocProvider.value(
+                value: _winnersBloc..add(FetchWinnersEvent()),
               ),
             ],
             child: const WinnersView(),
