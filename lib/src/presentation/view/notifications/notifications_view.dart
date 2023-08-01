@@ -5,7 +5,11 @@ import 'widgets/notification_card.dart';
 import 'widgets/notifications_header.dart';
 
 class NotificationView extends StatelessWidget {
-  const NotificationView({super.key});
+  final String? message;
+  const NotificationView({
+    Key? key,
+    this.message,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

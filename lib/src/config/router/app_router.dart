@@ -31,8 +31,12 @@ final _winnersBloc = WinnersBloc(databaseRepository: _databaseRepository);
 final _fitCommitteeBloc =
     FitCommitteeBloc(databaseRepository: _databaseRepository);
 
+final GlobalKey<NavigatorState> rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+
 class AppRouter {
   GoRouter router = GoRouter(
+    navigatorKey: rootNavigatorKey,
     routes: [
       GoRoute(
         name: AppRoutConstants.authFlow.name,
@@ -91,7 +95,9 @@ class AppRouter {
                 value: _updateAccountBloc,
               ),
             ],
-            child: const NotificationView(),
+            child: NotificationView(
+              message: state.queryParameters['message'],
+            ),
           ),
         ),
       ),
