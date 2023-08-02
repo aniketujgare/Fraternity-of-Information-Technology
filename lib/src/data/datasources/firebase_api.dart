@@ -92,5 +92,6 @@ class FirebaseApi {
     print('Token: $fCMToken');
     initPushNotifications();
     initLocalNotifications();
+    _firebaseMessaging.subscribeToTopic('fcm-notification');
   }
 }

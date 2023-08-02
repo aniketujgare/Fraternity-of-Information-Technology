@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_events/upcoming_events_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/repositories/auth_repository.dart';
@@ -30,7 +31,8 @@ final _profilePicBloc = ProfilePictureBloc();
 final _winnersBloc = WinnersBloc(databaseRepository: _databaseRepository);
 final _fitCommitteeBloc =
     FitCommitteeBloc(databaseRepository: _databaseRepository);
-
+final _upcomingEventsBloc =
+    UpcomingEventsBloc(databaseRepository: _databaseRepository);
 final GlobalKey<NavigatorState> rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -42,8 +44,12 @@ class AppRouter {
         name: AppRoutConstants.authFlow.name,
         path: AppRoutConstants.authFlow.path,
         pageBuilder: (context, state) => MaterialPage(
-          child: BlocProvider.value(
-            value: _authBloc..add(const AuthenticationCheckEvent()),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: _authBloc..add(const AuthenticationCheckEvent()),
+              ),
+            ],
             child: const AuthFlow(),
           ),
         ),
@@ -76,6 +82,9 @@ class AppRouter {
               ),
               BlocProvider.value(
                 value: UpdateAccountBloc(dataRepository: _databaseRepository),
+              ),
+              BlocProvider.value(
+                value: _upcomingEventsBloc..add(FetchUpcomingEventsEvent()),
               ),
             ],
             child: const UserProfileView(),
@@ -118,7 +127,10 @@ class AppRouter {
               ),
               BlocProvider(
                 create: (context) => _profilePicBloc,
-              )
+              ),
+              BlocProvider.value(
+                value: _upcomingEventsBloc..add(FetchUpcomingEventsEvent()),
+              ),
             ],
             child: const FITUINavigator(),
           ),

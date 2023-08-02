@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/fit_committee.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -75,6 +76,17 @@ class DatabaseRepository {
 
     return fitCommittee.docs.map((doc) {
       return FitCommitteeModel.fromJson(doc.data() as Map<String, dynamic>);
+    }).toList();
+  }
+
+  getUpcomingEvents() async {
+    final collectinInstance =
+        FirebaseFirestore.instance.collection('upcoming_events');
+
+    final QuerySnapshot upcomingEvents = await collectinInstance.get();
+
+    return upcomingEvents.docs.map((doc) {
+      return UpcomingEventModel.fromJson(doc.data() as Map<String, dynamic>);
     }).toList();
   }
 }

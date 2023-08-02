@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_events/upcoming_events_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_circular_loading_indicator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../config/router/app_router_constants.dart';
@@ -36,12 +38,34 @@ class HomeView extends StatelessWidget {
                   return const SizedBox(height: 120);
                 },
               ),
-              const UpcomingEventsCard(
-                headTitle: 'Upcoming events',
-                eventTitle: 'DSA Coding Competition',
-                date: '22/10/2023',
-                organizer: 'Mihir Madarchod',
-                topMargin: 0,
+              BlocBuilder<UpcomingEventsBloc, UpcomingEventsState>(
+                builder: (context, state) {
+                  if (state is UpcomingEventsLoadedState) {
+                    return UpcomingEventsCard(
+                      headTitle: 'Upcoming events',
+                      eventTitle: 'DSA Coding Competition',
+                      date: '22/10/2023',
+                      organizer: state.upcomingEvents.first.organizer.first,
+                      topMargin: 0,
+                    );
+                  } else if (state is UpcomingEventsLoadingState) {
+                    return const SizedBox(
+                      height: 290,
+                      width: double.infinity,
+                      child: Center(
+                        child: FITCircularLoadingIndicator(),
+                      ),
+                    );
+                  } else {
+                    return const UpcomingEventsCard(
+                      headTitle: 'Upcoming events',
+                      eventTitle: 'No event but stay tuned',
+                      date: '22/10/2023',
+                      organizer: 'FIT',
+                      topMargin: 0,
+                    );
+                  }
+                },
               ),
               const EventWinnersCard(headTitle: 'Winners'),
               const StudentAchievement(headTitle: 'Honours Board'),
