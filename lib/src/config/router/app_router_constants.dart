@@ -18,4 +18,6 @@ class AppRoutConstants {
       _AppRoutModel(name: 'fitCommittee', path: '/fitCommittee');
   static final winnersView =
       _AppRoutModel(name: 'winnersView', path: '/winnersView');
+  static final eventRegistrationView = _AppRoutModel(
+      name: 'eventRegistrationView', path: '/eventRegistrationView');
 }

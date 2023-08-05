@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/my_slider/my_slider_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/random_winner_bloc/random_winner_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_events/upcoming_events_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/view/home/widgets/event_registration_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/repositories/auth_repository.dart';
@@ -33,6 +37,9 @@ final _fitCommitteeBloc =
     FitCommitteeBloc(databaseRepository: _databaseRepository);
 final _upcomingEventsBloc =
     UpcomingEventsBloc(databaseRepository: _databaseRepository);
+final _sliderBloc = MySliderBloc();
+final _randomWinnerBloc =
+    RandomWinnerBloc(databaseRepository: _databaseRepository);
 final GlobalKey<NavigatorState> rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -86,6 +93,12 @@ class AppRouter {
               BlocProvider.value(
                 value: _upcomingEventsBloc..add(FetchUpcomingEventsEvent()),
               ),
+              BlocProvider.value(
+                value: _sliderBloc,
+              ),
+              BlocProvider.value(
+                value: _randomWinnerBloc,
+              ),
             ],
             child: const UserProfileView(),
           ),
@@ -130,6 +143,12 @@ class AppRouter {
               ),
               BlocProvider.value(
                 value: _upcomingEventsBloc..add(FetchUpcomingEventsEvent()),
+              ),
+              BlocProvider.value(
+                value: _sliderBloc,
+              ),
+              BlocProvider.value(
+                value: _randomWinnerBloc..add(FetchRandomWinnerEvent()),
               ),
             ],
             child: const FITUINavigator(),
@@ -182,6 +201,15 @@ class AppRouter {
           ),
         ),
       ),
+      GoRoute(
+          name: AppRoutConstants.eventRegistrationView.name,
+          path: AppRoutConstants.eventRegistrationView.path,
+          pageBuilder: (context, state) {
+            UpcomingEventModel event = state.extra as UpcomingEventModel;
+            return MaterialPage(
+              child: EventRegistrationView(event: event),
+            );
+          }),
     ],
   );
 }

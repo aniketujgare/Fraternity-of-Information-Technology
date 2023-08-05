@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/random_winner_bloc/random_winner_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/widgets/text_shimmer.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../config/router/app_router_constants.dart';
 import '../../../../utils/constants/constants.dart';
 
 class EventWinnersCard extends StatelessWidget {
@@ -16,6 +20,7 @@ class EventWinnersCard extends StatelessWidget {
     required this.headTitle,
   }) : super(key: key);
 
+  @override
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -38,6 +43,7 @@ class EventWinnersCard extends StatelessWidget {
             ),
           ),
           //* Card
+
           Container(
             margin: const EdgeInsets.all(15),
             width: 337,
@@ -66,22 +72,33 @@ class EventWinnersCard extends StatelessWidget {
                           .withOpacity(0.4),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 10, right: 15),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 15),
                       child: Align(
                         alignment: Alignment.center,
                         child: FittedBox(
-                          child: Text(
-                            'Web-Dev Challenge Winners',
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              height: 1.26,
-                              color: Colors.white,
-                            ),
+                          child:
+                              BlocBuilder<RandomWinnerBloc, RandomWinnerState>(
+                            builder: (context, state) {
+                              if (state is RandomWinnersLoadedState) {
+                                return Text(
+                                  state.winners.eventName ??
+                                      'Event title is null',
+                                  textAlign: TextAlign.left,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.26,
+                                    color: Colors.white,
+                                  ),
+                                );
+                              } else {
+                                return const FITTextShimmer(
+                                    text: 'Loading...', fontSize: 20);
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -102,79 +119,31 @@ class EventWinnersCard extends StatelessWidget {
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 60),
-                  child: ListView.builder(
-                    itemCount: 3,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemBuilder: (context, index) {
-                      return Stack(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 6),
-                            child: SvgPicture.asset(
-                              'assets/images/winners_tile.svg',
-                              colorFilter: ColorFilter.mode(
-                                  const Color.fromARGB(255, 26, 94, 133)
-                                      .withOpacity(0.40),
-                                  BlendMode.srcIn),
-                            ),
-                          ),
-                          Positioned(
-                            top: 12.2,
-                            left: 13.7,
-                            child: Row(
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(right: 25),
-                                  width: 49,
-                                  height: 49,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(avatars[index]),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 152,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        user[index + 1]![0],
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          height: 1.26,
-                                          color: Color(0xffffffff),
-                                        ),
-                                      ),
-                                      Text(
-                                        user[index + 1]![1],
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.26,
-                                          color: Color(0xffffffff),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 42,
-                                  width: 42,
-                                  child: Image.asset(
-                                      'assets/images/winner_badge_${index + 1}.png'),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      );
+                  child: BlocBuilder<RandomWinnerBloc, RandomWinnerState>(
+                    builder: (context, state) {
+                      if (state is RandomWinnersLoadedState) {
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.winners.winners!.length,
+                          itemBuilder: (context, index) {
+                            final winner = state.winners.winners;
+                            return WinnerTile(
+                              name: winner![index].name ?? ' ',
+                              department: winner[index].department ?? ' ',
+                              year: winner[index].year ?? ' ',
+                              index: index,
+                            );
+                          },
+                        );
+                      } else {
+                        return const Column(
+                          children: [
+                            WinnerTileShimmer(index: 0),
+                            WinnerTileShimmer(index: 1),
+                            WinnerTileShimmer(index: 2),
+                          ],
+                        );
+                      }
                     },
                   ),
                 ),
@@ -183,6 +152,153 @@ class EventWinnersCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class WinnerTileShimmer extends StatelessWidget {
+  final int index;
+  const WinnerTileShimmer({
+    super.key,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          child: SvgPicture.asset(
+            'assets/images/winners_tile.svg',
+            colorFilter: ColorFilter.mode(
+                const Color.fromARGB(255, 26, 94, 133).withOpacity(0.40),
+                BlendMode.srcIn),
+          ),
+        ),
+        Positioned(
+          top: 12.2,
+          left: 13.7,
+          child: Row(
+            children: [
+              Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                child: Container(
+                  height: 49,
+                  width: 49,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25)),
+                  margin: const EdgeInsets.only(right: 25),
+                ),
+              ),
+              const SizedBox(
+                width: 152,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FITTextShimmer(text: 'Loading', fontSize: 18),
+                    FITTextShimmer(text: 'Please wait.........', fontSize: 13),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 42,
+                width: 42,
+                child:
+                    Image.asset('assets/images/winner_badge_${index + 1}.png'),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class WinnerTile extends StatelessWidget {
+  final String name;
+  final String year;
+  final String department;
+  final String? profilePic;
+  final int index;
+  const WinnerTile({
+    super.key,
+    required this.name,
+    required this.year,
+    required this.department,
+    this.profilePic,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          child: SvgPicture.asset(
+            'assets/images/winners_tile.svg',
+            colorFilter: ColorFilter.mode(
+                const Color.fromARGB(255, 26, 94, 133).withOpacity(0.40),
+                BlendMode.srcIn),
+          ),
+        ),
+        Positioned(
+          top: 12.2,
+          left: 13.7,
+          child: Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 25),
+                width: 49,
+                height: 49,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(avatars[0]),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 152,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        height: 1.26,
+                        color: Color(0xffffffff),
+                      ),
+                    ),
+                    Text(
+                      '$department - $year',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        height: 1.26,
+                        color: Color(0xffffffff),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 42,
+                width: 42,
+                child:
+                    Image.asset('assets/images/winner_badge_${index + 1}.png'),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

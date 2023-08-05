@@ -28,8 +28,11 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.2.3
+  carousel_slider: ^4.2.1
   cloud_firestore: ^4.8.1
   cupertino_icons: ^1.0.2
+  dots_indicator: ^3.0.0
   dropdown_button2: ^2.0.0
   equatable: ^2.0.5
   firebase_auth: ^4.6.3
@@ -45,9 +48,12 @@ dependencies:
   image_picker: ^0.8.9
   lottie: ^2.3.1
   meta: ^1.9.0
+  palette_generator: ^0.3.3+2
   path: ^1.8.3
   shadow: ^1.5.0
+  shimmer: ^3.0.0
   sliver_tools: ^0.2.9
+  typeset: ^1.0.1+1
   url_launcher: ^6.1.10
 
 dev_dependencies:

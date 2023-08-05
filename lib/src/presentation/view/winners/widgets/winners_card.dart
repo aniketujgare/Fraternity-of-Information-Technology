@@ -5,6 +5,7 @@ import '../../../../domain/models/event_winners_model.dart';
 class WinnersCard extends StatelessWidget {
   final String eventName;
   final String organizer;
+  final String date;
   final List<Winner> winners;
 
   final double topMargin;
@@ -15,6 +16,7 @@ class WinnersCard extends StatelessWidget {
     required this.eventName,
     required this.organizer,
     required this.winners,
+    required this.date,
   }) : super(key: key);
 
   @override
@@ -37,15 +39,27 @@ class WinnersCard extends StatelessWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 25, bottom: 10),
+            margin: const EdgeInsets.only(left: 25, bottom: 10, right: 25),
             width: double.infinity,
             height: 23,
-            child: Text(
-              'Organizer - $organizer',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Color(0xff000000),
-              ),
+            child: Row(
+              children: [
+                Text(
+                  'Organizer - $organizer',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff000000),
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  'Date - $date',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff000000),
+                  ),
+                ),
+              ],
             ),
           ),
           //* Card
@@ -126,13 +140,25 @@ class WinnersCard extends StatelessWidget {
                                         height: 1.26,
                                       ),
                                     ),
-                                    Text(
-                                      winners[index].department ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.26,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          winners[index].department ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400,
+                                            height: 1.26,
+                                          ),
+                                        ),
+                                        Text(
+                                          ' - ${winners[index].year}',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400,
+                                            height: 1.26,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

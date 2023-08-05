@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
-import 'package:fraternity_of_information_technology/src/data/repositories/database_repository.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/auth_bloc/auth_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/profile_picture_bloc/profile_picture_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/update_account_bloc/update_account_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/home/widgets/event_winners_card.dart';
-import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_circular_loading_indicator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
+import '../../../config/router/app_router_constants.dart';
 import '../../../utils/constants/constants.dart';
+import '../../blocs/auth_bloc/auth_bloc.dart';
+import '../../blocs/update_account_bloc/update_account_bloc.dart';
 import '../../widgets/fit_button.dart';
+import '../../widgets/fit_circular_loading_indicator.dart';
 import 'widgets/profile_card.dart';
 
 class UserProfileView extends StatefulWidget {

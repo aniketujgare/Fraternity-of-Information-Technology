@@ -29,8 +29,6 @@ class FirebaseApi {
         .pushNamed(AppRoutConstants.notificationView.name, queryParameters: {
       'message': message.notification?.body,
     });
-
-    print('naviation executed');
   }
 
   Future initPushNotifications() async {
@@ -88,8 +86,9 @@ class FirebaseApi {
 
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
-    final fCMToken = await _firebaseMessaging.getToken();
-    print('Token: $fCMToken');
+    // final fCMToken =
+    await _firebaseMessaging.getToken();
+    // print('Token: $fCMToken');
     initPushNotifications();
     initLocalNotifications();
     _firebaseMessaging.subscribeToTopic('fcm-notification');

@@ -28,7 +28,7 @@ class AuthRepository {
       );
       return authResult.user;
     } catch (e) {
-      print('Error signing in with email and password: $e');
+      // print('Error signing in with email and password: $e');
       return null;
     }
   }
@@ -42,7 +42,7 @@ class AuthRepository {
       );
       return authResult.user;
     } catch (e) {
-      print('Error signing up with email and password: $e');
+      // print('Error signing up with email and password: $e');
       return null;
     }
   }

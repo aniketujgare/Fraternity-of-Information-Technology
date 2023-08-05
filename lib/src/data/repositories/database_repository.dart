@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/event_registration_model.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/fit_committee.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -71,7 +74,23 @@ class DatabaseRepository {
     }).toList();
   }
 
-  getFitCommittee() async {
+  Future<EventWinnersModel> getARandomWinner() async {
+    // Returns number of documents in users collection
+// db.collection("users").count().get().then(
+//       (res) => print(res.count),
+//       onError: (e) => print("Error completing: $e"),
+//     );
+    final int lengthOfDocs = (await winnersCollection.count().get()).count;
+    final int randomIndex = Random().nextInt(min(10, lengthOfDocs));
+    // var randomIndex = await winnersCollection.limit(1).get();
+    final QuerySnapshot snapshot =
+        await winnersCollection.limit(min(10, lengthOfDocs)).get();
+    print(snapshot.docs[randomIndex].data().toString());
+    return EventWinnersModel.fromJson(
+        snapshot.docs[randomIndex].data() as Map<String, dynamic>);
+  }
+
+  Future<List<FitCommitteeModel>> getFitCommittee() async {
     final QuerySnapshot fitCommittee = await _fitCommittee.get();
 
     return fitCommittee.docs.map((doc) {
@@ -79,14 +98,27 @@ class DatabaseRepository {
     }).toList();
   }
 
-  getUpcomingEvents() async {
-    final collectinInstance =
+  Future<List<UpcomingEventModel>> getUpcomingEvents() async {
+    final collectionInstance =
         FirebaseFirestore.instance.collection('upcoming_events');
 
-    final QuerySnapshot upcomingEvents = await collectinInstance.get();
+    final QuerySnapshot upcomingEvents = await collectionInstance.get();
 
     return upcomingEvents.docs.map((doc) {
       return UpcomingEventModel.fromJson(doc.data() as Map<String, dynamic>);
     }).toList();
+  }
+
+  Future<void> registerForEvent(UpcomingEventModel event) async {
+    final registrationModel = EventRegistrationModel().copyWith(
+      date: event.date,
+      eventName: event.eventTitle,
+      organizer: event.organizer.first,
+    );
+    final user = await getUser();
+    FirebaseFirestore.instance
+        .collection('event_registrations')
+        .doc(user.docID)
+        .set(registrationModel.toJson());
   }
 }

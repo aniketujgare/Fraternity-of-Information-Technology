@@ -56,14 +56,9 @@ class WinnersView extends StatelessWidget {
                             return WinnersCard(
                               eventName: '${winner.eventName}',
                               organizer: '${winner.organizer}',
+                              date: '${winner.date}',
                               winners: winner.winners!,
                             );
-
-                            //  ListTile(
-                            //   title: Text('Year: ${winner.date}'),
-                            //   subtitle: Text(
-                            //       'Name: ${winner.eventName}, Department: ${winner.organizer}'),
-                            // );
                           },
                         );
                       }

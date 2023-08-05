@@ -1,13 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/update_account_bloc/update_account_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../config/router/app_router_constants.dart';
 import '../../../../utils/constants/constants.dart';
+import '../../../widgets/text_shimmer.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
     super.key,
-    required this.userName,
-    required this.userAvatar,
-    required this.onPressed,
     this.lMargin = 28,
     this.tMargin = 15,
     this.rMargin = 28,
@@ -18,9 +22,6 @@ class HomeHeader extends StatelessWidget {
   final double tMargin;
   final double rMargin;
   final double bMargin;
-  final String userAvatar;
-  final String userName;
-  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -32,42 +33,56 @@ class HomeHeader extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                margin: const EdgeInsets.only(right: 15),
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      userAvatar,
+              BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
+                builder: (context, state) {
+                  if (state is FetchUserState) {
+                    return ClipOval(
+                      child: CachedNetworkImage(
+                          height: 50,
+                          width: 50,
+                          fit: BoxFit.cover,
+                          imageUrl: state.userModel.profilePic ??
+                              'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/images%2FIMG-20230620-WA0005.jpg?alt=media&token=f261198f-e266-4c56-a186-212872527431'),
+                    );
+                  }
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25)),
+                      margin: const EdgeInsets.only(right: 15),
                     ),
-                  ),
+                  );
+                },
+              ),
+              const SizedBox(width: 15),
+              const Text(
+                'hola! ',
+                style: TextStyle(
+                  fontSize: 24,
+                  height: 1.26,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
                 ),
               ),
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 24,
-                    height: 1.26,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                  children: [
-                    const TextSpan(
-                      text: 'hola! ',
-                    ),
-                    TextSpan(
-                      text: userName,
+              BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
+                builder: (context, state) {
+                  if (state is FetchUserState) {
+                    return Text(
+                      state.userModel.name ?? 'Something wrong!!',
                       style: const TextStyle(
                         fontSize: 24,
                         height: 1.26,
                         color: kPrimaryColor,
                       ),
-                    ),
-                  ],
-                ),
+                    );
+                  }
+                  return const FITTextShimmer(fontSize: 24, text: 'Loading...');
+                },
               ),
               const Spacer(),
               IconButton(
@@ -75,7 +90,8 @@ class HomeHeader extends StatelessWidget {
                 highlightColor: kSecondaryColor.withOpacity(0.2),
                 focusColor: kSecondaryColor.withOpacity(0.2),
                 splashColor: kPrimaryColor.withOpacity(0.2),
-                onPressed: onPressed,
+                onPressed: () =>
+                    context.pushNamed(AppRoutConstants.notificationView.name),
                 icon: const Icon(
                   Icons.notifications_outlined,
                   size: 30,

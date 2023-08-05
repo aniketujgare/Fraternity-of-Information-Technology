@@ -1,16 +1,8 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/data/repositories/database_repository.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/user_model.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/update_account_bloc/update_account_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
-import 'package:path/path.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 part 'profile_picture_event.dart';
 part 'profile_picture_state.dart';
 

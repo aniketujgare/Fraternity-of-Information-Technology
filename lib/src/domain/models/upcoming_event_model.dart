@@ -11,12 +11,18 @@ class UpcomingEventModel {
   final List<String> organizer;
   final String eventTitle;
   final String regLink;
+  final String bannerImage;
+  final String description;
+  final String heading;
 
   UpcomingEventModel({
     required this.date,
     required this.organizer,
     required this.eventTitle,
     required this.regLink,
+    required this.bannerImage,
+    required this.description,
+    required this.heading,
   });
 
   factory UpcomingEventModel.fromJson(Map<String, dynamic> json) =>
@@ -25,6 +31,9 @@ class UpcomingEventModel {
         organizer: List<String>.from(json["organizer"].map((x) => x)),
         eventTitle: json["event_title"],
         regLink: json["reg_link"],
+        bannerImage: json["banner_image"],
+        description: json["description"],
+        heading: json["heading"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,5 +41,8 @@ class UpcomingEventModel {
         "organizer": List<dynamic>.from(organizer.map((x) => x)),
         "event_title": eventTitle,
         "reg_link": regLink,
+        "banner_image": bannerImage,
+        "description": description,
+        "heading": heading,
       };
 }
