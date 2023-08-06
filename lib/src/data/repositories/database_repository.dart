@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/event_registration_model.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/fit_committee.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/honour_board_model.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -18,6 +19,8 @@ class DatabaseRepository {
   final winnersCollection =
       FirebaseFirestore.instance.collection('event_winners');
   final _fitCommittee = FirebaseFirestore.instance.collection('fit_committee');
+  final _honourBoardCollection =
+      FirebaseFirestore.instance.collection('honour_board');
   final user = FirebaseAuth.instance.currentUser;
   Future<UserModel> getUser() async {
     final snapshot = await _collection.doc(user!.uid).get();
@@ -120,5 +123,13 @@ class DatabaseRepository {
         .collection('event_registrations')
         .doc(user.docID)
         .set(registrationModel.toJson());
+  }
+
+  Future<List<HonourBoardModel>> getHonourBoard() async {
+    final QuerySnapshot snapshot = await _honourBoardCollection.get();
+
+    return snapshot.docs.map((doc) {
+      return HonourBoardModel.fromJson(doc.data() as Map<String, dynamic>);
+    }).toList();
   }
 }

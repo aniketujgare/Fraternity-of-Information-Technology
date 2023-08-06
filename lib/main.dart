@@ -18,8 +18,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseApi().initNotifications();
-  FlutterNativeSplash.remove();
   runApp(const MyApp());
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatefulWidget {
@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     // FirebaseFirestore.instance
-    //     .collection('all_events')
+    //     .collection('honour_board')
     //     .get()
     //     .then((value) => print(value.docs.first.data()));
     // FirebaseFirestore.instance

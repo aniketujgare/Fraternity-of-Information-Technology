@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/honour_board_bloc/honour_board_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/widgets/text_shimmer.dart';
+import 'package:shimmer/shimmer.dart';
 
 class StudentAchievement extends StatelessWidget {
   final String headTitle;
@@ -67,17 +71,37 @@ class StudentAchievement extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 20),
-                          width: 49,
-                          height: 49,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(avatars[1]),
-                            ),
-                          ),
+                        BlocBuilder<HonourBoardBloc, HonourBoardState>(
+                          builder: (context, state) {
+                            if (state is HonourBoardLoaded) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 20),
+                                width: 49,
+                                height: 49,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        state.honourBoard.first.profilePic),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  height: 49,
+                                  width: 49,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(25)),
+                                  margin: const EdgeInsets.only(right: 20),
+                                ),
+                              );
+                            }
+                          },
                         ),
                         Container(
                           height: 55,
@@ -95,24 +119,43 @@ class StudentAchievement extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                user[1]![0],
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.26,
-                                  color: Color(0xffffffff),
-                                ),
+                              BlocBuilder<HonourBoardBloc, HonourBoardState>(
+                                builder: (context, state) {
+                                  if (state is HonourBoardLoaded) {
+                                    return Text(
+                                      state.honourBoard.first.name,
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                        height: 1.26,
+                                        color: Color(0xffffffff),
+                                      ),
+                                    );
+                                  } else {
+                                    return const FITTextShimmer(
+                                        text: 'Loading...', fontSize: 17);
+                                  }
+                                },
                               ),
-                              Text(
-                                user[1]![1],
-                                style: const TextStyle(
-                                  fontSize: 13.3,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.26,
-                                  color: Color(0xffffffff),
-                                ),
+                              BlocBuilder<HonourBoardBloc, HonourBoardState>(
+                                builder: (context, state) {
+                                  if (state is HonourBoardLoaded) {
+                                    return const Text(
+                                      //TODO: Fill widget
+                                      'IT - Final Year',
+                                      style: TextStyle(
+                                        fontSize: 13.3,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.26,
+                                        color: Color(0xffffffff),
+                                      ),
+                                    );
+                                  } else {
+                                    return const FITTextShimmer(
+                                        text: 'Loading...', fontSize: 17);
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -121,39 +164,45 @@ class StudentAchievement extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 18),
-                  ListView.separated(
-                    itemCount: 3,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            left: 28, right: 28, top: 6, bottom: 6),
-                        child: Text(
-                          '${index + 1}. Downloaded COD',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 28, right: 28),
-                        child: Divider(
-                          color: Colors.white.withOpacity(0.5),
-                          thickness: 1,
-                        ),
-                      );
+                  BlocBuilder<HonourBoardBloc, HonourBoardState>(
+                    builder: (context, state) {
+                      if (state is HonourBoardLoaded) {
+                        return ListView.separated(
+                          itemCount:
+                              state.honourBoard.first.achievements.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final achievements =
+                                state.honourBoard.first.achievements;
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 28, right: 28, top: 6, bottom: 6),
+                              child: Text(
+                                '${index + 1}. ${achievements[index]}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 28, right: 28),
+                              child: Divider(
+                                color: Colors.white.withOpacity(0.5),
+                                thickness: 1,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return const FITTextShimmer(
+                            text: 'Loading...', fontSize: 17);
+                      }
                     },
                   ),
-                  // const Padding(
-                  //   padding: EdgeInsets.only(left: 28, right: 28),
-                  //   child: Divider(
-                  //     color: Colors.white,
-                  //     thickness: 1,
-                  //   ),
-                  // ),
                 ],
               ),
             ],
@@ -163,24 +212,3 @@ class StudentAchievement extends StatelessWidget {
     );
   }
 }
-
-List<String> avatars = [
-  'https://c4.wallpaperflare.com/wallpaper/179/750/556/anime-boys-male-tongue-out-pierced-tongue-glasses-hd-wallpaper-preview.jpg',
-  'https://c4.wallpaperflare.com/wallpaper/993/328/892/league-of-legends-video-games-adc-women-wallpaper-preview.jpg',
-  'https://c4.wallpaperflare.com/wallpaper/410/558/539/anime-anime-girls-underboob-liang-xing-wallpaper-preview.jpg',
-];
-
-Map<int, List<String>> user = {
-  1: [
-    'Kunal Marathe',
-    'First Year - IT',
-  ],
-  2: [
-    'Tara Kutiyaa',
-    'Second Year - IT',
-  ],
-  3: [
-    'Elle Evans',
-    'Second Year - IT',
-  ],
-};

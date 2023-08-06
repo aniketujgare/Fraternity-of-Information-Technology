@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/honour_board_bloc/honour_board_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/my_slider/my_slider_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/random_winner_bloc/random_winner_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_events/upcoming_events_bloc.dart';
@@ -40,6 +41,8 @@ final _upcomingEventsBloc =
 final _sliderBloc = MySliderBloc();
 final _randomWinnerBloc =
     RandomWinnerBloc(databaseRepository: _databaseRepository);
+final _honourBoardBloc =
+    HonourBoardBloc(databaseRepository: _databaseRepository);
 final GlobalKey<NavigatorState> rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -99,6 +102,9 @@ class AppRouter {
               BlocProvider.value(
                 value: _randomWinnerBloc,
               ),
+              BlocProvider.value(
+                value: _honourBoardBloc,
+              ),
             ],
             child: const UserProfileView(),
           ),
@@ -149,6 +155,9 @@ class AppRouter {
               ),
               BlocProvider.value(
                 value: _randomWinnerBloc..add(FetchRandomWinnerEvent()),
+              ),
+              BlocProvider.value(
+                value: _honourBoardBloc..add(LoadHonourBoardEvent()),
               ),
             ],
             child: const FITUINavigator(),
