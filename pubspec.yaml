@@ -43,6 +43,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.2
   flutter_local_notifications: ^15.1.0+1
+  flutter_native_splash: ^2.3.1
   flutter_svg: ^2.0.4
   go_router: ^8.0.5
   image_picker: ^0.8.9
@@ -57,6 +58,7 @@ dependencies:
   url_launcher: ^6.1.10
 
 dev_dependencies:
+  change_app_package_name: ^1.1.0
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
@@ -71,6 +73,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
     - assets/images/
     - assets/lotties/
     # - images/a_dot_ham.jpeg
