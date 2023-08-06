@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.fraternity_of_information_technology">
+    package="com.aniketujgare.fitdbatu">
    <application
-        android:label="fraternity_of_information_technology"
+        android:label="FIT"
         android:name="${applicationName}"
         android:roundIcon="@mipmap/round_launcher"
         android:icon="@mipmap/ic_launcher">

@@ -7,12 +7,49 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1023730180508:android:315045b887815a98dde859",
+        "android_client_info": {
+          "package_name": "com.aniketujgare.fitdbatu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023730180508-tqgf9r7c6h2qn1hjt02eul01ra7rh2fe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX9OzQgt-o2hKUd6rHJzaa03DGbycEfk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023730180508-tqgf9r7c6h2qn1hjt02eul01ra7rh2fe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1023730180508:android:c59c7fa96e7cb02ddde859",
         "android_client_info": {
           "package_name": "com.example.fraternity_of_information_technology"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1023730180508-tjrmslbpa0bqev0p4gnijf9bd46pnpt1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fraternity_of_information_technology",
+            "certificate_hash": "9b6d55f04bfdd1a8ea81f48688fb5c992ff67fef"
+          }
+        },
         {
           "client_id": "1023730180508-tqgf9r7c6h2qn1hjt02eul01ra7rh2fe.apps.googleusercontent.com",
           "client_type": 3

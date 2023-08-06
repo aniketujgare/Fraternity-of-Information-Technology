@@ -1,4 +1,4 @@
-package com.example.fraternity_of_information_technology
+package com.aniketujgare.fitdbatu
 
 import io.flutter.embedding.android.FlutterActivity
 
