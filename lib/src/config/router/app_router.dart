@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/auth/auth_page.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/honour_board_bloc/honour_board_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/my_slider/my_slider_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/random_winner_bloc/random_winner_bloc.dart';
@@ -12,6 +13,7 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/database_repository.dart';
 import '../../domain/models/user_model.dart';
 import '../../presentation/blocs/app_navigator_cubit/app_navigator_cubit.dart';
+import '../../presentation/blocs/auth/bloc/email_auth_bloc.dart';
 import '../../presentation/blocs/auth_bloc/auth_bloc.dart';
 import '../../presentation/blocs/fit_committee_bloc/fit_committee_bloc.dart';
 import '../../presentation/blocs/profile_picture_bloc/profile_picture_bloc.dart';
@@ -29,6 +31,7 @@ import 'app_router_constants.dart';
 final _authrepository = AuthRepository();
 final _databaseRepository = DatabaseRepository();
 final _authBloc = AuthBloc(phoneAuthRepository: _authrepository);
+final _emailAuthBloc = EmailAuthBloc();
 final _updateAccountBloc =
     UpdateAccountBloc(dataRepository: _databaseRepository);
 final _appNavigatorCubit = AppNavigatorCubit();
@@ -56,8 +59,11 @@ class AppRouter {
         pageBuilder: (context, state) => MaterialPage(
           child: MultiBlocProvider(
             providers: [
+              // BlocProvider.value(
+              //   value: _authBloc..add(const AuthenticationCheckEvent()),
+              // ),
               BlocProvider.value(
-                value: _authBloc..add(const AuthenticationCheckEvent()),
+                value: _emailAuthBloc..add(EmailAuthenticationCheckEvent()),
               ),
             ],
             child: const AuthFlow(),
@@ -217,6 +223,14 @@ class AppRouter {
             UpcomingEventModel event = state.extra as UpcomingEventModel;
             return MaterialPage(
               child: EventRegistrationView(event: event),
+            );
+          }),
+      GoRoute(
+          name: AppRoutConstants.authView.name,
+          path: AppRoutConstants.authView.path,
+          pageBuilder: (context, state) {
+            return const MaterialPage(
+              child: AuthPage(),
             );
           }),
     ],

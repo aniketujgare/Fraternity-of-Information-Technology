@@ -33,10 +33,11 @@ class _AllSetAnimationState extends State<AllSetAnimation>
       onLoaded: (composition) {
         _controller
           ..duration = composition.duration
-          ..forward().whenComplete(
-            () => context
-                .pushReplacementNamed(AppRoutConstants.fitUiNavigator.name),
-          );
+          ..forward();
+        // .whenComplete(
+        //   () => context
+        //       .pushReplacementNamed(AppRoutConstants.fitUiNavigator.name),
+        // );
       },
       delegates: LottieDelegates(
         text: (initialText) => '**$initialText**',

@@ -20,4 +20,5 @@ class AppRoutConstants {
       _AppRoutModel(name: 'winnersView', path: '/winnersView');
   static final eventRegistrationView = _AppRoutModel(
       name: 'eventRegistrationView', path: '/eventRegistrationView');
+  static final authView = _AppRoutModel(name: 'authView', path: '/authView');
 }

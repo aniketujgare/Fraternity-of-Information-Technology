@@ -73,7 +73,7 @@ class HomeHeader extends StatelessWidget {
                 builder: (context, state) {
                   if (state is FetchUserState) {
                     return Text(
-                      state.userModel.name ?? 'Something wrong!!',
+                      state.userModel.name ?? 'Fitian',
                       style: const TextStyle(
                         fontSize: 24,
                         height: 1.26,

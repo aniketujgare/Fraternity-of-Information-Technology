@@ -62,6 +62,7 @@ class DatabaseRepository {
 
     // Upload the file to Firebase storage
     TaskSnapshot uploadTask = await ref.putFile(imageFile);
+    // UploadTask uploadTask = storageReference.putFile(mFileImage);
 
     // Get the download URL of the uploaded image
     String downloadURL = await uploadTask.ref.getDownloadURL();

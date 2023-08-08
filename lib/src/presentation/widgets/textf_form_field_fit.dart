@@ -5,10 +5,12 @@ import '../../utils/constants/constants.dart';
 class TextFormFieldFit extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
+  final IconData icon;
   const TextFormFieldFit({
     super.key,
     required this.hintText,
     required this.controller,
+    required this.icon,
   });
 
   @override
@@ -17,9 +19,9 @@ class TextFormFieldFit extends StatelessWidget {
       controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(
-        prefixIcon: const Icon(
-          Icons.phone_outlined,
-          color: Color(0xffADB6C1),
+        prefixIcon: Icon(
+          icon,
+          color: const Color(0xffADB6C1),
         ),
         hintText: hintText,
         hintStyle: const TextStyle(

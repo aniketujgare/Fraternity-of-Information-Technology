@@ -114,6 +114,9 @@ class _UserProfileViewState extends State<UserProfileView> {
                                   child: FITCircularLoadingIndicator());
                             } else if (state is ImageUploadedState &&
                                 state.imageURL != null) {
+                              context
+                                  .read<UpdateAccountBloc>()
+                                  .add(const FetchUserEvent());
                               return Image.network(
                                 state.imageURL!,
                                 fit: BoxFit.cover,

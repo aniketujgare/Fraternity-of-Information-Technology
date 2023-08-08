@@ -7,14 +7,14 @@ import '../../../widgets/fit_button.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
 import '../../../widgets/textf_form_field_fit.dart';
 
-class LoginBottomSheet extends StatefulWidget {
-  const LoginBottomSheet({super.key});
+class SignUpBottomSheet extends StatefulWidget {
+  const SignUpBottomSheet({super.key});
 
   @override
-  State<LoginBottomSheet> createState() => _LoginBottomSheetState();
+  State<SignUpBottomSheet> createState() => _SignUpBottomSheetState();
 }
 
-class _LoginBottomSheetState extends State<LoginBottomSheet> {
+class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   @override
@@ -41,11 +41,11 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
               top: 40,
               left: 25,
               right: kWidth(context) * 0.35,
-              bottom: 10,
+              bottom: 15,
             ),
             child: const FittedBox(
               child: Text(
-                'Log in\nto your account',
+                'Register\ncreate your account',
               ),
             ),
           ),
@@ -59,10 +59,9 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
               controller: emailController,
               icon: Icons.alternate_email,
             ),
-            // TextFormField(controller: phoneNoController),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(35, 10, 35, 5),
+            padding: const EdgeInsets.fromLTRB(35, 10, 35, 10),
             child: TextFormFieldFit(
               hintText: 'Password',
               controller: passwordController,
@@ -71,19 +70,19 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
             // TextFormField(controller: phoneNoController),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(37, 0, 37, 5),
+            padding: const EdgeInsets.fromLTRB(37, 0, 37, 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text('Don\'t have an account?'),
+                const Text('Already have an account?'),
                 GestureDetector(
                   child: const Text(
-                    '\t\tSignup',
+                    '\t\tLogin',
                     style: TextStyle(color: kPrimaryColor),
                   ),
                   onTap: () => context
                       .read<EmailAuthBloc>()
-                      .add(SignUpBottomSheetEvent()),
+                      .add(LoginBottomSheetEvent()),
                 ),
               ],
             ),
@@ -95,11 +94,12 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
               }
               return FitButton(
                 onTap: () async {
-                  context.read<EmailAuthBloc>().add(EmailLoginEvent(
-                      userEmail: emailController.text,
-                      password: passwordController.text));
+                  context.read<EmailAuthBloc>().add(EmailSignUpEvent(
+                        userEmail: emailController.text,
+                        password: passwordController.text,
+                      ));
                 },
-                text: 'Login',
+                text: 'Register',
                 height: 55,
                 tMargin: 20,
                 hMargin: 35,
