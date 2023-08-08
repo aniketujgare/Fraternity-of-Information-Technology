@@ -12,15 +12,15 @@ part 'email_auth_event.dart';
 part 'email_auth_state.dart';
 
 class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
-  EmailAuthBloc() : super(EmailLoginState()) {
+  EmailAuthBloc() : super(const EmailAuthInitialState(AuthFormType.signIn)) {
     on<EmailSignUpEvent>(_signUp);
     on<EmailVerificationEvent>(_verifyEmail);
     on<EmailLoginEvent>(_userLogin);
-    on<SignUpBottomSheetEvent>((event, emit) => emit(SignUpBottomSheetState()));
-    on<LoginBottomSheetEvent>((event, emit) => emit(LoginBottomSheetState()));
     on<YouRAllSetEvent>((event, emit) => emit(YouRAllSetState()));
     // When user clicks on send otp button then this event will be fired
     on<EmailAuthenticationCheckEvent>(_authCheck);
+    on<AuthToggleFormEvent>(
+        (event, emit) => emit(EmailAuthInitialState(event.formType)));
   }
 
   Future<void> _signUp(
@@ -83,7 +83,8 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
       add(YouRAllSetEvent());
       debugPrint('YouRAllSetEvent');
       await Future.delayed(const Duration(seconds: 4));
-      add(LoginBottomSheetEvent());
+      // add(LoginBottomSheetEvent());
+      add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
     }
   }
 
@@ -102,19 +103,20 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
       }
     }
   }
-}
 
-Future<void> _authCheck(
-    EmailAuthenticationCheckEvent event, Emitter<EmailAuthState> emit) async {
-  emit(EmailAuthLoading());
-  try {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      emit(UserLoggedIn());
-    } else {
-      emit(LoginBottomSheetState());
+  _authCheck(
+      EmailAuthenticationCheckEvent event, Emitter<EmailAuthState> emit) async {
+    emit(EmailAuthLoading());
+    try {
+      var user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        emit(UserLoggedIn());
+      } else {
+        // emit(LoginBottomSheetState());
+        add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
+      }
+    } catch (e) {
+      emit(EmailAuthError(error: e.toString()));
     }
-  } catch (e) {
-    emit(EmailAuthError(error: e.toString()));
   }
 }

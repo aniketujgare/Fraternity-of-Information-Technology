@@ -7,11 +7,15 @@ abstract class EmailAuthState extends Equatable {
   List<Object> get props => [];
 }
 
-class EmailAuthInitial extends EmailAuthState {}
+class EmailAuthInitialState extends EmailAuthState {
+  final AuthFormType formType;
+
+  const EmailAuthInitialState(this.formType);
+  @override
+  List<Object> get props => [formType];
+}
 
 class EmailAuthLoading extends EmailAuthState {}
-
-class EmailLoginState extends EmailAuthState {}
 
 class VerifyEmail extends EmailAuthState {
   final String email;
@@ -23,10 +27,6 @@ class VerifyEmail extends EmailAuthState {
 class UserLoggedIn extends EmailAuthState {}
 
 class YouRAllSetState extends EmailAuthState {}
-
-class LoginBottomSheetState extends EmailAuthState {}
-
-class SignUpBottomSheetState extends EmailAuthState {}
 
 class EmailAuthError extends EmailAuthState {
   final String error;

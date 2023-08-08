@@ -12,7 +12,7 @@ abstract class EmailAuthEvent extends Equatable {
 class AuthToggleFormEvent extends EmailAuthEvent {
   final AuthFormType formType;
 
-  const AuthToggleFormEvent(this.formType);
+  const AuthToggleFormEvent({required this.formType});
   @override
   List<Object> get props => [formType];
 }
@@ -52,10 +52,6 @@ class EmailLoginEvent extends EmailAuthEvent {
 }
 
 class UserLoggedInEvent extends EmailAuthEvent {}
-
-class LoginBottomSheetEvent extends EmailAuthEvent {}
-
-class SignUpBottomSheetEvent extends EmailAuthEvent {}
 
 class YouRAllSetEvent extends EmailAuthEvent {}
 

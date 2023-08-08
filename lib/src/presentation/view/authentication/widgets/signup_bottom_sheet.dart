@@ -80,9 +80,8 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                     '\t\tLogin',
                     style: TextStyle(color: kPrimaryColor),
                   ),
-                  onTap: () => context
-                      .read<EmailAuthBloc>()
-                      .add(LoginBottomSheetEvent()),
+                  onTap: () => context.read<EmailAuthBloc>().add(
+                      const AuthToggleFormEvent(formType: AuthFormType.signIn)),
                 ),
               ],
             ),

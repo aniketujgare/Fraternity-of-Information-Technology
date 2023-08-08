@@ -5,6 +5,7 @@ import 'package:fraternity_of_information_technology/src/presentation/blocs/auth
 import 'package:fraternity_of_information_technology/src/presentation/view/authentication/widgets/signup_bottom_sheet.dart';
 import 'package:fraternity_of_information_technology/src/presentation/view/authentication/widgets/verify_email_bottomsheet.dart';
 import 'package:fraternity_of_information_technology/src/presentation/view/authentication/your_all_set_view.dart';
+import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_circular_loading_indicator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../config/router/app_router_constants.dart';
 import 'widgets/login_bottomsheet.dart';
@@ -24,7 +25,6 @@ class AuthFlow extends StatelessWidget {
         bottomSheet: BlocConsumer<EmailAuthBloc, EmailAuthState>(
           listener: (context, state) {
             // If Phone Otp Verified. Send User to Home Screen
-
             if (state is UserLoggedIn) {
               context.goNamed(AppRoutConstants.fitUiNavigator.name);
             }
@@ -35,20 +35,22 @@ class AuthFlow extends StatelessWidget {
                   content: Text(state.error),
                 ),
               );
+              context.read<EmailAuthBloc>().add(
+                  const AuthToggleFormEvent(formType: AuthFormType.signIn));
             }
           },
           builder: (context, authState) {
             if (authState is VerifyEmail) {
               return const VerifyEmailBottomSheet();
             }
-            if (authState is SignUpBottomSheetState) {
-              return const SignUpBottomSheet();
-            }
+
             if (authState is YouRAllSetState) {
               return const YourAllSetview();
             }
-            if (authState is LoginBottomSheetState) {
-              return const LoginBottomSheet();
+            if (authState is EmailAuthInitialState) {
+              return authState.formType == AuthFormType.signIn
+                  ? const LoginBottomSheet()
+                  : const SignUpBottomSheet();
             }
             return const LoginBottomSheet();
           },
