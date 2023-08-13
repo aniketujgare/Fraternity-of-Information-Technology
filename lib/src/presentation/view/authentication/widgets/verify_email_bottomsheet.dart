@@ -3,10 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../utils/constants/constants.dart';
 import '../../../blocs/auth/bloc/email_auth_bloc.dart';
-import '../../../blocs/auth_bloc/auth_bloc.dart';
-import '../../../widgets/fit_button.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
-import '../../../widgets/textf_form_field_fit.dart';
 
 class VerifyEmailBottomSheet extends StatefulWidget {
   const VerifyEmailBottomSheet({super.key});

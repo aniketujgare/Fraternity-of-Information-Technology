@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' show debugPrint;
@@ -7,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../data/repositories/database_repository.dart';
 import '../../../../domain/models/user_model.dart';
-
 part 'email_auth_event.dart';
 part 'email_auth_state.dart';
 
@@ -17,10 +17,10 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
     on<EmailVerificationEvent>(_verifyEmail);
     on<EmailLoginEvent>(_userLogin);
     on<YouRAllSetEvent>((event, emit) => emit(YouRAllSetState()));
-    // When user clicks on send otp button then this event will be fired
     on<EmailAuthenticationCheckEvent>(_authCheck);
     on<AuthToggleFormEvent>(
         (event, emit) => emit(EmailAuthInitialState(event.formType)));
+    on<AuthSignOutEvent>(_signOut);
   }
 
   Future<void> _signUp(
@@ -37,7 +37,7 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
                 await DatabaseRepository().checkUserExists();
             if (!isCollectionExist) {
               DatabaseRepository().addUser(UserModel(
-                  docID: userCredential.user!.uid, phone: '9175197037'));
+                  docID: userCredential.user!.uid, email: event.userEmail));
             }
           }
           add(
@@ -83,7 +83,6 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
       add(YouRAllSetEvent());
       debugPrint('YouRAllSetEvent');
       await Future.delayed(const Duration(seconds: 4));
-      // add(LoginBottomSheetEvent());
       add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
     }
   }
@@ -91,16 +90,29 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
   void _userLogin(EmailLoginEvent event, Emitter<EmailAuthState> emit) async {
     emit(EmailAuthLoading());
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: event.userEmail, password: event.password)
-          .whenComplete(() => emit(UserLoggedIn()));
+      if (EmailValidator.validate(event.userEmail)) {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: event.userEmail, password: event.password)
+            .then((userCredentail) {
+          if (userCredentail.user != null) {
+            emit(UserLoggedIn());
+          }
+        });
+      } else {
+        emit(const EmailAuthError(error: 'Please enter a valid email!'));
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         debugPrint('No user found for that email.');
+        emit(const EmailAuthError(error: 'No user found for that email.'));
       } else if (e.code == 'wrong-password') {
         debugPrint('Wrong password provided for that user.');
+        emit(const EmailAuthError(
+            error: 'Wrong password provided for that user.'));
       }
+    } catch (e) {
+      emit(const EmailAuthError(error: 'error'));
     }
   }
 
@@ -115,6 +127,18 @@ class EmailAuthBloc extends Bloc<EmailAuthEvent, EmailAuthState> {
         // emit(LoginBottomSheetState());
         add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
       }
+    } catch (e) {
+      emit(EmailAuthError(error: e.toString()));
+    }
+  }
+
+  Future<void> _signOut(
+      AuthSignOutEvent event, Emitter<EmailAuthState> emit) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      emit(const EmailAuthInitialState(AuthFormType.signIn));
+    } on FirebaseAuthException catch (e) {
+      emit(EmailAuthError(error: e.toString()));
     } catch (e) {
       emit(EmailAuthError(error: e.toString()));
     }

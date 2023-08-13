@@ -36,3 +36,5 @@ class EmailAuthError extends EmailAuthState {
   @override
   List<Object> get props => [error];
 }
+
+class AuthSignedOutState extends EmailAuthState {}

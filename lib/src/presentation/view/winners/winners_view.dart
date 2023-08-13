@@ -66,14 +66,6 @@ class WinnersView extends StatelessWidget {
                     },
                   ),
                 )
-                // Expanded(
-                //   child: ListView.builder(
-                //     itemCount: 10,
-                //     itemBuilder: ((context, index) {
-                //       return const WinnersCard(headTitle: 'headTitle');
-                //     }),
-                //   ),
-                // )
               ],
             );
           },

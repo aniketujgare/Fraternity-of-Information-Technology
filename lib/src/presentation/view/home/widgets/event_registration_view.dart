@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
-import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 import '../../../widgets/fit_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -71,7 +69,7 @@ class EventRegistrationView extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                     child: FittedBox(
                       child: Text(
-                        event.heading,
+                        event.eventTitle,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           fontSize: 22,

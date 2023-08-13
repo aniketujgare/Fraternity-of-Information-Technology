@@ -16,6 +16,7 @@ class FitCommitteeModel {
   final String? mail;
   final String? name;
   final String? phone;
+  final String? profilePic;
 
   FitCommitteeModel({
     this.designation,
@@ -24,6 +25,7 @@ class FitCommitteeModel {
     this.mail,
     this.name,
     this.phone,
+    this.profilePic,
   });
 
   factory FitCommitteeModel.fromJson(Map<String, dynamic> json) =>
@@ -34,6 +36,7 @@ class FitCommitteeModel {
         mail: json["mail"],
         name: json["name"],
         phone: json["phone"],
+        profilePic: json["profile_pic"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,5 +46,6 @@ class FitCommitteeModel {
         "mail": mail,
         "name": name,
         "phone": phone,
+        "profile_pic": profilePic,
       };
 }

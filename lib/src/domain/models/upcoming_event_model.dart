@@ -13,7 +13,6 @@ class UpcomingEventModel {
   final String regLink;
   final String bannerImage;
   final String description;
-  final String heading;
 
   UpcomingEventModel({
     required this.date,
@@ -22,7 +21,6 @@ class UpcomingEventModel {
     required this.regLink,
     required this.bannerImage,
     required this.description,
-    required this.heading,
   });
 
   factory UpcomingEventModel.fromJson(Map<String, dynamic> json) =>
@@ -33,7 +31,6 @@ class UpcomingEventModel {
         regLink: json["reg_link"],
         bannerImage: json["banner_image"],
         description: json["description"],
-        heading: json["heading"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +40,5 @@ class UpcomingEventModel {
         "reg_link": regLink,
         "banner_image": bannerImage,
         "description": description,
-        "heading": heading,
       };
 }

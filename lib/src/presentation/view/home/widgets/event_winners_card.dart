@@ -127,11 +127,14 @@ class EventWinnersCard extends StatelessWidget {
                           itemCount: state.winners.winners!.length,
                           itemBuilder: (context, index) {
                             final winner = state.winners.winners;
-                            return WinnerTile(
-                              name: winner![index].name ?? ' ',
-                              department: winner[index].department ?? ' ',
-                              year: winner[index].year ?? ' ',
-                              index: index,
+                            return Container(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: WinnerTile(
+                                name: winner![index].name ?? ' ',
+                                department: winner[index].department ?? ' ',
+                                year: winner[index].year ?? ' ',
+                                index: index,
+                              ),
                             );
                           },
                         );
@@ -288,6 +291,9 @@ class WinnerTile extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                width: 28,
               ),
               SizedBox(
                 height: 42,

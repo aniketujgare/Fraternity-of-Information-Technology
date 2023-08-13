@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/honour_board_bloc/honour_board_bloc.dart';
+import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../blocs/winners_bloc/winners_bloc.dart';
 import 'widgets/event_winners_card.dart';
 import 'widgets/fit_committee_card.dart';
 import 'widgets/home_header.dart';
@@ -82,13 +80,14 @@ class AllEvents extends StatelessWidget {
         ),
         //* Card
         GestureDetector(
-          onTap: () => context.pushNamed("AppRoutConstants.fitCommittee.name"),
+          onTap: () =>
+              context.pushNamed(AppRoutConstants.allPastEventsView.name),
           child: Container(
             margin: const EdgeInsets.all(15),
             width: 337,
             height: 234,
             decoration: BoxDecoration(
-              color: const Color(0xffBA68C8),
+              color: const Color(0XFFBA68C8),
               borderRadius: BorderRadius.circular(28),
               boxShadow: const [
                 BoxShadow(

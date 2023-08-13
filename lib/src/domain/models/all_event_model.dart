@@ -12,6 +12,7 @@ class AllEventModel {
   final List<String>? eventImages;
   final String? bannerImage;
   final String? description;
+  final String? eventType;
 
   AllEventModel({
     this.date,
@@ -20,6 +21,7 @@ class AllEventModel {
     this.eventImages,
     this.bannerImage,
     this.description,
+    this.eventType,
   });
 
   factory AllEventModel.fromJson(Map<String, dynamic> json) => AllEventModel(
@@ -33,6 +35,7 @@ class AllEventModel {
             : List<String>.from(json["event_images"]!.map((x) => x)),
         bannerImage: json["banner_image"],
         description: json["description"],
+        eventType: json["event_type"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,5 +49,6 @@ class AllEventModel {
             : List<dynamic>.from(eventImages!.map((x) => x)),
         "banner_image": bannerImage,
         "description": description,
+        "event_type": eventType,
       };
 }

@@ -33,6 +33,7 @@ class AuthFlow extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.error),
+                  backgroundColor: kredDarkColor,
                 ),
               );
               context.read<EmailAuthBloc>().add(

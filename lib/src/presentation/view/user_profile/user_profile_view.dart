@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../config/router/app_router_constants.dart';
 import '../../../utils/constants/constants.dart';
-import '../../blocs/auth_bloc/auth_bloc.dart';
+import '../../blocs/auth/bloc/email_auth_bloc.dart';
 import '../../blocs/update_account_bloc/update_account_bloc.dart';
 import '../../widgets/fit_button.dart';
 import '../../widgets/fit_circular_loading_indicator.dart';
@@ -61,17 +61,17 @@ class _UserProfileViewState extends State<UserProfileView> {
                         }
                       },
                     ),
-                    BlocListener<AuthBloc, AuthState>(
+                    BlocListener<EmailAuthBloc, EmailAuthState>(
                       listener: (context, state) {
-                        if (state is PhoneAuthInitial) {
+                        if (state is EmailAuthInitialState) {
                           context.replaceNamed(AppRoutConstants.authFlow.name);
                         }
                       },
                       child: IconButton(
-                          onPressed: () {
+                          onPressed: () async {
                             context
-                                .read<AuthBloc>()
-                                .add(const AuthenticationSignOutEvent());
+                                .read<EmailAuthBloc>()
+                                .add(AuthSignOutEvent());
                           },
                           icon: const Icon(
                             Icons.exit_to_app,

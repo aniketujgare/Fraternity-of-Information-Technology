@@ -1,15 +1,17 @@
 import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/event_registration_model.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/fit_committee.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/honour_board_model.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+import 'package:flutter/material.dart' show debugPrint;
+import '../../domain/models/all_event_model.dart';
+import '../../domain/models/event_registration_model.dart';
+import '../../domain/models/fit_committee.dart';
+import '../../domain/models/honour_board_model.dart';
+import '../../domain/models/upcoming_event_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/user_model.dart';
+import '../../domain/models/user_model.dart';
 import 'dart:io';
 
 import '../../domain/models/event_winners_model.dart';
@@ -70,6 +72,56 @@ class DatabaseRepository {
     return downloadURL;
   }
 
+  Future<File?> pickImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage == null) return null;
+
+    File imageFile = File(pickedImage.path);
+
+    // Create a unique filename for the image
+    // String fileName = path.basename(imageFile.path);
+    // String firebasePath = 'images/${DateTime.now()}';
+
+    // // Get a reference to the Firebase storage location
+    // Reference ref = FirebaseStorage.instance.ref().child(firebasePath);
+
+    // // Upload the file to Firebase storage
+    // TaskSnapshot uploadTask = await ref.putFile(imageFile);
+    // // UploadTask uploadTask = storageReference.putFile(mFileImage);
+
+    // // Get the download URL of the uploaded image
+    // String downloadURL = await uploadTask.ref.getDownloadURL();
+
+    return imageFile;
+  }
+
+  Future<String?> uploadImage({required File imageFile}) async {
+    // final picker = ImagePicker();
+    // final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    // if (pickedImage == null) return null;
+
+    // File imageFile = File(pickedImage.path);
+
+    // Create a unique filename for the image
+    String fileName = path.basename(imageFile.path);
+    String firebasePath = 'images/fileName ${DateTime.now()}';
+
+    // Get a reference to the Firebase storage location
+    Reference ref = FirebaseStorage.instance.ref().child(firebasePath);
+
+    // Upload the file to Firebase storage
+    TaskSnapshot uploadTask = await ref.putFile(imageFile);
+    // UploadTask uploadTask = storageReference.putFile(mFileImage);
+
+    // Get the download URL of the uploaded image
+    String downloadURL = await uploadTask.ref.getDownloadURL();
+
+    return downloadURL;
+  }
+
   Future<List<EventWinnersModel>> getAllWinners() async {
     final QuerySnapshot snapshot = await winnersCollection.get();
 
@@ -78,12 +130,17 @@ class DatabaseRepository {
     }).toList();
   }
 
+  Future<List<AllEventModel>> getAllPastEvents() async {
+    final allEventsCollection =
+        FirebaseFirestore.instance.collection('all_events');
+    final QuerySnapshot snapshot = await allEventsCollection.get();
+
+    return snapshot.docs.map((doc) {
+      return AllEventModel.fromJson(doc.data() as Map<String, dynamic>);
+    }).toList();
+  }
+
   Future<EventWinnersModel> getARandomWinner() async {
-    // Returns number of documents in users collection
-// db.collection("users").count().get().then(
-//       (res) => print(res.count),
-//       onError: (e) => print("Error completing: $e"),
-//     );
     final int lengthOfDocs = (await winnersCollection.count().get()).count;
     final int randomIndex = Random().nextInt(min(10, lengthOfDocs));
     // var randomIndex = await winnersCollection.limit(1).get();
@@ -132,5 +189,17 @@ class DatabaseRepository {
     return snapshot.docs.map((doc) {
       return HonourBoardModel.fromJson(doc.data() as Map<String, dynamic>);
     }).toList();
+  }
+}
+
+Future<void> addUpcominEventToFirestore(UpcomingEventModel event) async {
+  final CollectionReference eventsCollection =
+      FirebaseFirestore.instance.collection('upcoming_events');
+
+  try {
+    await eventsCollection.doc().set(event.toJson());
+    debugPrint('Event added to Firestore');
+  } catch (error) {
+    debugPrint('Error adding event to Firestore: $error');
   }
 }

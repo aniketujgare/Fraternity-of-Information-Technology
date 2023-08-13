@@ -55,8 +55,7 @@ class FitCommitteeView extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final member = committeeList[index];
                                 return MemberCard(
-                                  profilePic:
-                                      'https://wallpapers.com/images/featured-full/kaneki-xsv5e4ut8mxmqae9.jpg',
+                                  profilePic: member.profilePic,
                                   position: '${member.designation}',
                                   name: '${member.name}',
                                   year: 'Final Year',

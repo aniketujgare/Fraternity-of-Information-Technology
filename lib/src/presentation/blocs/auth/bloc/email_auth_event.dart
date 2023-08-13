@@ -56,3 +56,5 @@ class UserLoggedInEvent extends EmailAuthEvent {}
 class YouRAllSetEvent extends EmailAuthEvent {}
 
 class EmailAuthenticationCheckEvent extends EmailAuthEvent {}
+
+class AuthSignOutEvent extends EmailAuthEvent {}

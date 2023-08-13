@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/fit_committee_bloc/fit_committee_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../utils/constants/constants.dart';
@@ -14,7 +17,7 @@ class MemberCard extends StatelessWidget {
     required this.name,
     required this.phoneNumber,
     required this.position,
-    required this.profilePic,
+    this.profilePic,
     required this.year,
   });
 
@@ -25,7 +28,7 @@ class MemberCard extends StatelessWidget {
   final String name;
   final String phoneNumber;
   final String position;
-  final String profilePic;
+  final String? profilePic;
   final String year;
 
   @override
@@ -53,19 +56,56 @@ class MemberCard extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         child: Row(
           children: [
-            Container(
-              height: 125,
-              width: 125,
-              decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      profilePic,
+            // BlocBuilder<FitCommitteeBloc, FitCommitteeState>(
+            //     builder: (context, state) {
+            //       if (state is FetchUserState) {
+            //         return ClipOval(
+            //           child: CachedNetworkImage(
+            //               height: 50,
+            //               width: 50,
+            //               fit: BoxFit.cover,
+            //               imageUrl: state.userModel.profilePic ??
+            //                   'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/images%2FIMG-20230620-WA0005.jpg?alt=media&token=f261198f-e266-4c56-a186-212872527431'),
+            //         );
+            //       }
+            //       return Shimmer.fromColors(
+            //         baseColor: Colors.grey.shade300,
+            //         highlightColor: Colors.grey.shade100,
+            //         child: Container(
+            //           height: 50,
+            //           width: 50,
+            //           decoration: BoxDecoration(
+            //               color: Colors.white,
+            //               borderRadius: BorderRadius.circular(25)),
+            //           margin: const EdgeInsets.only(right: 15),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              child: CachedNetworkImage(
+                height: 125,
+                width: 125,
+                fit: BoxFit.cover,
+                imageUrl: profilePic ??
+                    'https://wallpapers.com/images/featured-full/kaneki-xsv5e4ut8mxmqae9.jpg',
+                progressIndicatorBuilder: (context, url, progress) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      height: 125,
+                      width: 125,
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(20)),
                     ),
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  );
+                },
+              ),
             ),
+
             const SizedBox(
               width: 15,
             ),

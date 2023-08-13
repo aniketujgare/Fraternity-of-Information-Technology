@@ -11,12 +11,14 @@ class FitTextFormField extends StatelessWidget {
     this.topPad = 0,
     this.botPad = 0,
     required this.textFieldController,
+    this.lines = 1,
   });
 
   final double horiPad, topPad, botPad;
   final IconData icon;
   final String label;
   final TextEditingController textFieldController;
+  final int lines;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class FitTextFormField extends StatelessWidget {
       child: TextFormField(
         controller: textFieldController,
         textAlign: TextAlign.start,
+        maxLines: lines,
         decoration: InputDecoration(
           prefixIcon: Icon(
             icon,
