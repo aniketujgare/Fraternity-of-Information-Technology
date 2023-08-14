@@ -37,4 +37,6 @@ class AppRoutConstants {
       _AppRoutModel(name: 'upcomingEventsList', path: '/upcomingEventsList');
   static final upcomingEventUpdate =
       _AppRoutModel(name: 'upcomingEventUpdate', path: '/upcomingEventUpdate');
+  static final winnersAdmin =
+      _AppRoutModel(name: 'winnersAdmin', path: '/winnersAdmin');
 }

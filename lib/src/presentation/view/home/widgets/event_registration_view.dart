@@ -57,7 +57,7 @@ class EventRegistrationView extends StatelessWidget {
             DynamicSliverAppBar(
               flexibleSpace: CachedNetworkImage(
                 width: double.maxFinite,
-                imageUrl: event.bannerImage,
+                imageUrl: event.bannerImage!,
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.fitWidth,
               ),
@@ -69,7 +69,7 @@ class EventRegistrationView extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                     child: FittedBox(
                       child: Text(
-                        event.eventTitle,
+                        event.eventTitle!,
                         textAlign: TextAlign.justify,
                         style: const TextStyle(
                           fontSize: 22,
@@ -82,12 +82,12 @@ class EventRegistrationView extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Text.rich(
                         textAlign: TextAlign.justify,
-                        rich(convertNewLine(event.description))),
+                        rich(convertNewLine(event.description!))),
                   ),
                   FitButton(
                     onTap: () async {
                       try {
-                        await launchUrlString(event.regLink,
+                        await launchUrlString(event.regLink!,
                             mode: LaunchMode.externalApplication);
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(

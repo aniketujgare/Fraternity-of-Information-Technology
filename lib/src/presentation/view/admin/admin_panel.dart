@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
 import 'package:go_router/go_router.dart';
@@ -32,76 +33,99 @@ class AdminPanel extends StatelessWidget {
             )
           ],
           body: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
+            padding: const EdgeInsets.all(15),
+            child: GridView.count(
+                crossAxisCount: 2,
+                padding: EdgeInsets.all(8),
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 15,
                 children: [
-                  Container(
-                    height: 175,
-                    width: double.maxFinite,
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                      color: const Color(0XFF3498db),
-                      borderRadius: BorderRadius.circular(21),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x26000000),
-                          offset: Offset(0, 4),
-                          blurRadius: 5,
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: () => context
+                        .pushNamed(AppRoutConstants.upcomingEventsList.name),
+                    child: Container(
+                      height: 175,
+                      width: 175,
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: const Color(0XFF3498db),
+                        borderRadius: BorderRadius.circular(21),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x26000000),
+                            offset: Offset(0, 4),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: const Tile(index: 0, title: 'Upcoming\nEvents'),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Tile(index: 0, title: 'Upcoming\nEvents'),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              onPressed: () => context.pushNamed(
-                                  AppRoutConstants.upcomingEventsPanel.name),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.green,
-                                backgroundColor:
-                                    Colors.black, // Background Color
-                                fixedSize: Size.fromWidth(
-                                    MediaQuery.of(context).size.width * 0.4),
-                              ),
-                              child: const Text('Add'),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.amber,
-                                fixedSize: Size.fromWidth(
-                                    MediaQuery.of(context).size.width * 0.4),
-                                backgroundColor:
-                                    Colors.black, // Background Color
-                              ),
-                              child: const Text('Update'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.pushNamed(
-                                    AppRoutConstants.upcomingEventsList.name);
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.red,
-                                backgroundColor:
-                                    Colors.black, // Background Color
-                                fixedSize: Size.fromWidth(
-                                    MediaQuery.of(context).size.width * 0.4),
-                              ),
-                              child: const Text('Delete'),
-                            ),
-                          ],
-                        )
-                      ],
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        context.pushNamed(AppRoutConstants.winnersAdmin.name),
+                    child: Container(
+                      height: 175,
+                      width: 175,
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: const Color(0XFF3498db),
+                        borderRadius: BorderRadius.circular(21),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x26000000),
+                            offset: Offset(0, 4),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: const Tile(index: 0, title: 'Winners\nBoard'),
                     ),
-                  )
-                ],
-              )),
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        context.pushNamed(AppRoutConstants.winnersAdmin.name),
+                    child: Container(
+                      height: 175,
+                      width: 175,
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: const Color(0XFF3498db),
+                        borderRadius: BorderRadius.circular(21),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x26000000),
+                            offset: Offset(0, 4),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: const Tile(index: 0, title: 'Upcoming\nEvents'),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => context
+                        .pushNamed(AppRoutConstants.upcomingEventsList.name),
+                    child: Container(
+                      height: 175,
+                      width: 175,
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: const Color(0XFF3498db),
+                        borderRadius: BorderRadius.circular(21),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x26000000),
+                            offset: Offset(0, 4),
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: const Tile(index: 0, title: 'Upcoming\nEvents'),
+                    ),
+                  ),
+                ]),
+          ),
         ),
       ),
     );
@@ -122,16 +146,16 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 155,
+    return Center(
+        // width: 155,
         child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ));
+      title,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    ));
   }
 }

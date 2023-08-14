@@ -69,7 +69,7 @@ class UpcomingEventsCard extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: FittedBox(
                           child: Text(
-                            event.organizer.first,
+                            event.organizer!.first,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: const TextStyle(
@@ -91,7 +91,7 @@ class UpcomingEventsCard extends StatelessWidget {
                     width: 320,
                     height: 88,
                     child: Text(
-                      event.eventTitle,
+                      event.eventTitle!,
                       textAlign: TextAlign.left,
                       maxLines: 2,
                       overflow: TextOverflow.clip,
@@ -116,7 +116,7 @@ class UpcomingEventsCard extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        event.date,
+                        event.date!,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 16,

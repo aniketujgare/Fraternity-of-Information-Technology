@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/all_event_model.dart';
 import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_event_admin_bloc/upcoming_event_admin_bloc.dart';
 import 'package:fraternity_of_information_technology/src/presentation/view/all_past_events/widgets/past_event_card.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../utils/constants/constants.dart';
@@ -23,17 +27,54 @@ class UpcomingEventsList extends StatelessWidget {
         child: NestedScrollView(
           floatHeaderSlivers: true,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            const SliverAppBar(
+            SliverAppBar(
               floating: true,
               centerTitle: true,
-              leading: Icon(Icons.arrow_back, color: kPrimaryColor),
-              toolbarHeight: 75,
-              title: Text(
-                'Upcoming Events',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: kPrimaryColor,
-                ),
+              leading: GestureDetector(
+                  onTap: () => context.pop(),
+                  child: const Icon(Icons.arrow_back, color: kPrimaryColor)),
+              toolbarHeight: 110,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Upcoming Events',
+                    style: TextStyle(
+                      fontSize: 26,
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => context.pushNamed(
+                        AppRoutConstants.upcomingEventUpdate.name,
+                        extra: UpcomingEventModel()),
+                    child: Container(
+                      height: 46,
+                      width: 83,
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(76.5)),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Add ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Icon(
+                            Icons.add,
+                            size: 15,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
             )
           ],
@@ -60,6 +101,7 @@ class UpcomingEventsList extends StatelessWidget {
                         ],
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const SizedBox(width: 34),
                           Flexible(
@@ -70,7 +112,7 @@ class UpcomingEventsList extends StatelessWidget {
                                 SizedBox(
                                   width: double.maxFinite,
                                   child: Text(
-                                    state.upcomingEvents[index].eventTitle,
+                                    state.upcomingEvents[index].eventTitle!,
                                     style: const TextStyle(
                                       fontSize: 17,
                                       color: Color(0XFF000007),
@@ -81,7 +123,10 @@ class UpcomingEventsList extends StatelessWidget {
                                 ),
                                 // const SizedBox(height: 3),
                                 Text(
-                                  state.upcomingEvents[index].date,
+                                  DateFormat('dd MMM yyyy')
+                                      .format(DateTime.parse(
+                                          state.upcomingEvents[index].date!))
+                                      .toUpperCase(),
                                   style: const TextStyle(
                                     fontSize: 15,
                                     color: Color(0XFF8E9090),
@@ -91,20 +136,53 @@ class UpcomingEventsList extends StatelessWidget {
                               ],
                             ),
                           ),
-                          InkWell(
-                            onTap: () => context.pushNamed(
-                                AppRoutConstants.upcomingEventUpdate.name,
-                                extra: state.upcomingEvents[index]),
-                            child: const CircleAvatar(
-                              maxRadius: 25,
-                              backgroundColor: Color(0XFFD1DEFA),
-                              child: Icon(
-                                Icons.arrow_outward,
-                                color: Color(0XFF1E2E69),
+                          const SizedBox(width: 9),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              // InkWell(
+                              //   onTap: () => context.pushNamed(
+                              //     AppRoutConstants.upcomingEventUpdate.name,
+                              //     extra: state.upcomingEvents[index],
+                              //   ),
+                              //   child: CircleAvatar(
+                              //     maxRadius: 20,
+                              //     backgroundColor: Colors.amber.shade200,
+                              //     child: const Icon(
+                              //       Icons.edit,
+                              //       color: Color(0XFF1E2E69),
+                              //     ),
+                              //   ),
+                              // ),
+                              InkWell(
+                                onTap: () async {
+                                  await FirebaseStorage.instance
+                                      .refFromURL(state
+                                          .upcomingEvents[index].bannerImage!)
+                                      .delete();
+                                  await FirebaseFirestore.instance
+                                      .collection('upcoming_events')
+                                      .doc(state.upcomingEvents[index]
+                                          .docId) // <-- Doc ID to be deleted.
+                                      .delete();
+                                  // print('deleted');
+                                  // ignore: use_build_context_synchronously
+                                  context
+                                      .read<UpcomingEventsBloc>()
+                                      .add(FetchUpcomingEventsEvent());
+                                },
+                                child: CircleAvatar(
+                                  maxRadius: 20,
+                                  backgroundColor: Colors.red.shade200,
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Color(0XFF1E2E69),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          const SizedBox(width: 34),
+                          const SizedBox(width: 9),
                         ],
                       ),
                     );

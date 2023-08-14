@@ -13,10 +13,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../domain/models/user_model.dart';
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 
 import '../../domain/models/event_winners_model.dart';
 
 class DatabaseRepository {
+  var uuid = const Uuid();
+
   final _collection = FirebaseFirestore.instance.collection('users');
   final winnersCollection =
       FirebaseFirestore.instance.collection('event_winners');
@@ -106,7 +109,7 @@ class DatabaseRepository {
     // File imageFile = File(pickedImage.path);
 
     // Create a unique filename for the image
-    String fileName = path.basename(imageFile.path);
+    // String fileName = path.basename(imageFile.path);
     String firebasePath = 'images/fileName ${DateTime.now()}';
 
     // Get a reference to the Firebase storage location
@@ -174,7 +177,7 @@ class DatabaseRepository {
     final registrationModel = EventRegistrationModel().copyWith(
       date: event.date,
       eventName: event.eventTitle,
-      organizer: event.organizer.first,
+      organizer: event.organizer!.first,
     );
     final user = await getUser();
     FirebaseFirestore.instance
@@ -190,16 +193,20 @@ class DatabaseRepository {
       return HonourBoardModel.fromJson(doc.data() as Map<String, dynamic>);
     }).toList();
   }
-}
 
-Future<void> addUpcominEventToFirestore(UpcomingEventModel event) async {
-  final CollectionReference eventsCollection =
-      FirebaseFirestore.instance.collection('upcoming_events');
-
-  try {
-    await eventsCollection.doc().set(event.toJson());
-    debugPrint('Event added to Firestore');
-  } catch (error) {
-    debugPrint('Error adding event to Firestore: $error');
+  Future<void> addUpcominEventToFirestore(UpcomingEventModel event) async {
+    final CollectionReference eventsCollection =
+        FirebaseFirestore.instance.collection('upcoming_events');
+    try {
+      var docId = uuid.v1();
+      if (event.docId == null) {
+        event = event.copyWith(docId: docId);
+      }
+      // print(updatedEvent.toString());
+      await eventsCollection.doc(event.docId).set(event.toJson());
+      debugPrint('Event added to Firestore');
+    } catch (error) {
+      debugPrint('Error adding event to Firestore: $error');
+    }
   }
 }

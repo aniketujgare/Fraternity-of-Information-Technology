@@ -58,6 +58,7 @@ dependencies:
   sliver_tools: ^0.2.9
   typeset: ^1.0.1+1
   url_launcher: ^6.1.10
+  uuid: ^3.0.7
 
 dev_dependencies:
   change_app_package_name: ^1.1.0

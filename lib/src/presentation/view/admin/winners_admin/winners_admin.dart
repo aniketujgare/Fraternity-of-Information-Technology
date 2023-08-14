@@ -1,6 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/data/repositories/database_repository.dart';
+import 'package:fraternity_of_information_technology/src/presentation/blocs/cubit/dropdown_cubit.dart';
+import 'package:fraternity_of_information_technology/src/presentation/view/update_account/widgets/fit_dropdown_menu.dart';
+import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_circular_loading_indicator.dart';
+import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_text_form_field_new.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -9,35 +16,49 @@ import '../../../../domain/models/upcoming_event_model.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../blocs/date_picker_cubit/date_picker_cubit.dart';
 import '../../../blocs/image_picker_bloc/image_picker_bloc.dart';
+import '../../../blocs/upcoming_event_admin_bloc/upcoming_event_admin_bloc.dart';
+import '../../../blocs/winners_admin_bloc/winners_admin_bloc.dart';
 import '../../../widgets/fit_button.dart';
 import '../../update_account/widgets/fit_textform_field.dart';
 
-class UpcomingEventsUpdatePanel extends StatefulWidget {
+class WinnersAdmin extends StatefulWidget {
   final UpcomingEventModel eventModel;
-  const UpcomingEventsUpdatePanel({super.key, required this.eventModel});
+  const WinnersAdmin({super.key, required this.eventModel});
 
   @override
-  State<UpcomingEventsUpdatePanel> createState() =>
-      _UpcomingEventsUpdatePanelState();
+  State<WinnersAdmin> createState() => _WinnersAdminState();
 }
 
-class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
+class _WinnersAdminState extends State<WinnersAdmin> {
   TextEditingController eventTitleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController registrationLinkController = TextEditingController();
   TextEditingController organizersController = TextEditingController();
+  var branchController = TextEditingController();
+  var yearController = TextEditingController();
+
   String? eventDate;
   String? eventImage;
+
   @override
   void initState() {
-    eventTitleController.text = widget.eventModel.eventTitle;
-    descriptionController.text = widget.eventModel.description;
-    registrationLinkController.text = widget.eventModel.regLink;
-    organizersController.text = widget.eventModel.organizer.toString();
-    context.read<DatePickerCubit>().initDate(widget.eventModel.date);
-    context
-        .read<ImagePickerBloc>()
-        .add(InitImageEvent(image: widget.eventModel.bannerImage));
+    eventTitleController.text = widget.eventModel.eventTitle ?? '';
+    descriptionController.text = widget.eventModel.description ?? '';
+    registrationLinkController.text = widget.eventModel.regLink ?? '';
+    branchController.text = 'null';
+    yearController.text = 'null';
+
+    if (widget.eventModel.organizer != null) {
+      organizersController.text = widget.eventModel.organizer.toString();
+    }
+    if (widget.eventModel.date != null) {
+      context.read<DatePickerCubit>().initDate(widget.eventModel.date!);
+    }
+    if (widget.eventModel.bannerImage != null) {
+      context
+          .read<ImagePickerBloc>()
+          .add(InitImageEvent(image: widget.eventModel.bannerImage!));
+    }
 
     eventImage = widget.eventModel.bannerImage;
     super.initState();
@@ -53,6 +74,21 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
     super.dispose();
   }
 
+  final List<String> branhItems = const [
+    'IT',
+    'Computer',
+    'Chemical',
+    'Civil',
+    'Electrical',
+    'EXTC',
+    'Mechanical',
+  ];
+  final List<String> yearItems = const [
+    'First Year',
+    'Second Year',
+    'Third Year',
+    'Final Year',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +104,7 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
                   child: const Icon(Icons.arrow_back, color: kPrimaryColor)),
               toolbarHeight: 75,
               title: const Text(
-                'Upcoming Event',
+                'Winners Board',
                 style: TextStyle(
                   fontSize: 30,
                   color: kPrimaryColor,
@@ -82,42 +118,51 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  BlocBuilder<WinnersAdminBloc, WinnersAdminState>(
+                    builder: (context, state) {
+                      if (state is WinnersAdminInitial) {
+                        return FitTextFormFieldNew(
+                          label: 'Event Title',
+                          icon: Icons.title,
+                          onChanged: (value) {
+                            context.read<WinnersAdminBloc>().add(
+                                UpdateWinnersText(
+                                    title: value,
+                                    organizers: '',
+                                    date: 'date'));
+                          },
+                          horiPad: 15,
+                        );
+
+                        TextField(
+                          onChanged: (value) {
+                            context.read<WinnersAdminBloc>().add(
+                                UpdateWinnersText(
+                                    title: value,
+                                    organizers: '',
+                                    date: 'date'));
+                          },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
                   FitTextFormField(
                     label: 'Event Title',
                     icon: Icons.title,
                     textFieldController: eventTitleController,
-                  ),
-                  const SizedBox(height: 15),
-                  FitTextFormField(
-                    label: 'Event Details',
-                    lines: 10,
-                    icon: Icons.description,
-                    textFieldController: descriptionController,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
-                    child: Text(
-                      'use /n for new line. Rest Whatsapp style formating is supported ie. *text* for bold etc.',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  FitTextFormField(
-                    label: 'Registration Link',
-                    icon: Icons.link,
-                    lines: 1,
-                    textFieldController: registrationLinkController,
+                    horiPad: 15,
                   ),
                   const SizedBox(height: 15),
                   FitTextFormField(
                     label: 'Organizer\'s',
-                    icon: Icons.link,
+                    icon: Icons.people,
                     lines: 1,
                     textFieldController: organizersController,
+                    horiPad: 15,
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
                       'use , to seperate multiple organizers',
                       textAlign: TextAlign.justify,
@@ -125,9 +170,38 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
                     ),
                   ),
                   const SizedBox(height: 15),
+
                   dateField(context),
                   const SizedBox(height: 15),
-                  imageField(context),
+                  FitTextFormField(
+                    label: 'Winner 1 Name',
+                    icon: Icons.person,
+                    lines: 1,
+                    textFieldController: organizersController,
+                    horiPad: 15,
+                  ),
+                  // imageField(context),
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FitDropDownMenu(
+                          label: 'Branch',
+                          icon: Icons.book_outlined,
+                          items: branhItems,
+                          selectedValue: branchController,
+                        ),
+                        FitDropDownMenu(
+                          label: 'Year',
+                          icon: Icons.calendar_month_rounded,
+                          items: yearItems,
+                          selectedValue: yearController,
+                        ),
+                      ],
+                    ),
+                  ),
                   addEventButton(context)
                 ],
               ),
@@ -138,50 +212,71 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
     );
   }
 
-  FitButton addEventButton(BuildContext context) {
-    return FitButton(
-      onTap: () async {
-        bool b1 = eventTitleController.text.isEmpty;
-        bool b2 = descriptionController.text.isEmpty;
-        bool b3 = registrationLinkController.text.isEmpty;
-        bool b4 = organizersController.text.isEmpty;
-
-        if (!b1 &&
-            !b2 &&
-            !b3 &&
-            !b4 &&
-            eventDate != null &&
-            eventImage != null) {
+  BlocConsumer<UpcomingEventAdminBloc, UpcomingEventAdminState> addEventButton(
+      BuildContext context) {
+    return BlocConsumer<UpcomingEventAdminBloc, UpcomingEventAdminState>(
+      listener: (context, state) {
+        if (state is ImageUploadedInDBState) {
           UpcomingEventModel event = UpcomingEventModel(
             date: eventDate!,
             organizer: splitString(organizersController.text),
             eventTitle: eventTitleController.text,
             regLink: registrationLinkController.text,
-            bannerImage: eventImage!,
+            bannerImage: state.imageUrl,
             description: descriptionController.text,
           );
 
-          await addEventToFirestore(context, event);
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   const SnackBar(
-          //     content: Text('Event Added Succesfully'),
-          //     backgroundColor: Colors.green,
-          //   ),
-          // );
-        } else {
+          context
+              .read<UpcomingEventAdminBloc>()
+              .add(UploadToDBEvent(eventModel: event));
+        } else if (state is UpcomingEventAdminSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('One or more fields are empty!!'),
-              backgroundColor: kredDarkColor,
+              content: Text('Event Added Succesfully'),
+              backgroundColor: Colors.green,
             ),
           );
+          context.pop();
         }
       },
-      text: 'ADD Event',
-      height: 58,
-      tMargin: 30,
-      bMargin: 25,
-      showArrow: false,
+      builder: (context, state) {
+        if (state is UpcomingEventAdminLoading) {
+          return const Center(
+            child: FITCircularLoadingIndicator(),
+          );
+        }
+        return FitButton(
+          onTap: () async {
+            bool b1 = eventTitleController.text.isEmpty;
+            bool b2 = descriptionController.text.isEmpty;
+            bool b3 = registrationLinkController.text.isEmpty;
+            bool b4 = organizersController.text.isEmpty;
+
+            if (!b1 &&
+                !b2 &&
+                !b3 &&
+                !b4 &&
+                eventDate != null &&
+                eventImage != null) {
+              context
+                  .read<UpcomingEventAdminBloc>()
+                  .add(UpcomingEventAdminSubmit(imageFile: File(eventImage!)));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('One or more fields are empty!!'),
+                  backgroundColor: kredDarkColor,
+                ),
+              );
+            }
+          },
+          text: 'Add Event',
+          height: 58,
+          tMargin: 30,
+          bMargin: 25,
+          showArrow: false,
+        );
+      },
     );
   }
 
@@ -206,6 +301,7 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
                 builder: (context, state) {
                   if (state is ImageIsPicked) {
                     eventImage = state.imageFile.path;
+
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(28),
                       child: Image.file(
@@ -255,7 +351,7 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
 
   Padding dateField(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -278,10 +374,11 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
                 BlocBuilder<DatePickerCubit, DatePickerState>(
                   builder: (context, state) {
                     if (state is DateSelectedState) {
-                      eventDate = DateFormat('dd MMM yyyy')
-                          .format(DateTime.parse(state.date))
-                          .toUpperCase();
-                      return Text(eventDate!,
+                      eventDate = state.date;
+                      return Text(
+                          DateFormat('dd MMM yyyy')
+                              .format(DateTime.parse(eventDate!))
+                              .toUpperCase(),
                           style: const TextStyle(
                             fontSize: 16,
                           ));
@@ -312,31 +409,6 @@ class _UpcomingEventsUpdatePanelState extends State<UpcomingEventsUpdatePanel> {
             splashColor: kPrimaryColor.withOpacity(0.3),
           ),
         ],
-      ),
-    );
-  }
-}
-
-Future<void> addEventToFirestore(
-    BuildContext context, UpcomingEventModel event) async {
-  final CollectionReference eventsCollection =
-      FirebaseFirestore.instance.collection('upcoming_events');
-
-  try {
-    await eventsCollection.doc().set(event.toJson());
-    debugPrint('Event added to Firestore');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Event Added Succesfully'),
-        backgroundColor: Colors.green,
-      ),
-    );
-  } catch (error) {
-    debugPrint('Error adding event to Firestore: $error');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Something went Wrong, please try again!'),
-        backgroundColor: kredDarkColor,
       ),
     );
   }
