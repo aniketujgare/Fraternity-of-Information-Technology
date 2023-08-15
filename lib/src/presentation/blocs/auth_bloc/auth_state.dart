@@ -1,54 +1,40 @@
-// part of 'auth_bloc.dart';
+part of 'auth_bloc.dart';
 
-// @immutable
-// abstract class AuthState extends Equatable {
-//   const AuthState();
-//   @override
-//   List<Object> get props => [];
-// }
+abstract class AuthState extends Equatable {
+  const AuthState();
 
-// class PhoneAuthInitial extends AuthState {
-//   const PhoneAuthInitial();
-//   @override
-//   List<Object> get props => [];
-// }
+  @override
+  List<Object> get props => [];
+}
 
-// class AuthLoading extends AuthState {}
+class EmailAuthInitialState extends AuthState {
+  final AuthFormType formType;
 
-// class PhoneAuthError extends AuthState {
-//   final String error;
+  const EmailAuthInitialState(this.formType);
+  @override
+  List<Object> get props => [formType];
+}
 
-//   const PhoneAuthError({required this.error});
+class EmailAuthLoading extends AuthState {}
 
-//   @override
-//   List<Object> get props => [error];
-// }
+class VerifyEmail extends AuthState {
+  final String email;
+  const VerifyEmail({required this.email});
+  @override
+  List<Object> get props => [email];
+}
 
-// class PhoneAuthVerified extends AuthState {}
+class UserLoggedIn extends AuthState {}
 
-// class PhoneAuthCodeSentSuccess extends AuthState {
-//   final String verificationId;
-//   const PhoneAuthCodeSentSuccess({
-//     required this.verificationId,
-//   });
-//   @override
-//   List<Object> get props => [verificationId];
-// }
+class YouRAllSetState extends AuthState {}
 
-// class AuthenticationSigningOutState extends AuthState {
-//   const AuthenticationSigningOutState();
-//   @override
-//   List<Object> get props => [];
-// }
-// // class UnAuthState extends AuthState {}
+class EmailAuthError extends AuthState {
+  final String error;
 
-// // class LoadingAuthState extends AuthState {}
+  const EmailAuthError({required this.error});
 
-// // class AuthSucessState extends AuthState {}
+  @override
+  List<Object> get props => [error];
+}
 
-// // class SendOTPState extends AuthState {
-// //   final String verificationId;
-// //   final int? resendToken;
-
-// //   SendOTPState({required this.verificationId, this.resendToken});
-// // }
+class AuthSignedOutState extends AuthState {}

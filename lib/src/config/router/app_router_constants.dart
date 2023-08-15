@@ -6,7 +6,7 @@ class _AppRoutModel {
 }
 
 class AppRoutConstants {
-  static final authFlow = _AppRoutModel(name: 'authFlow', path: '/a');
+  static final authFlow = _AppRoutModel(name: 'authFlow', path: '/');
   static final home = _AppRoutModel(name: 'home', path: '/home');
   static final updateAccount =
       _AppRoutModel(name: 'updateAccount', path: '/updateAccount');
@@ -30,13 +30,15 @@ class AppRoutConstants {
   static final galleryView =
       _AppRoutModel(name: 'galleryView', path: '/galleryView');
   static final newsView = _AppRoutModel(name: 'newsView', path: '/newsView');
-  static final adminPanel = _AppRoutModel(name: 'adminPanel', path: '/');
-  static final upcomingEventsPanel =
-      _AppRoutModel(name: 'upcomingEventsPanel', path: '/upcomingEventsPanel');
-  static final upcomingEventsList =
-      _AppRoutModel(name: 'upcomingEventsList', path: '/upcomingEventsList');
-  static final upcomingEventUpdate =
-      _AppRoutModel(name: 'upcomingEventUpdate', path: '/upcomingEventUpdate');
-  static final winnersAdmin =
-      _AppRoutModel(name: 'winnersAdmin', path: '/winnersAdmin');
+  static final newsFullView =
+      _AppRoutModel(name: 'newsFullView', path: '/newsFullView');
+  // static final adminPanel = _AppRoutModel(name: 'adminPanel', path: '/a');
+  // static final upcomingEventsPanel =
+  //     _AppRoutModel(name: 'upcomingEventsPanel', path: '/upcomingEventsPanel');
+  // static final upcomingEventsList =
+  //     _AppRoutModel(name: 'upcomingEventsList', path: '/upcomingEventsList');
+  // static final upcomingEventUpdate =
+  //     _AppRoutModel(name: 'upcomingEventUpdate', path: '/upcomingEventUpdate');
+  // static final winnersAdmin =
+  //     _AppRoutModel(name: 'winnersAdmin', path: '/winnersAdmin');
 }

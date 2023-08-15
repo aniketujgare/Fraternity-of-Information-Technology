@@ -39,9 +39,10 @@ class CheckUserExistsEvent extends UpdateAccountEvent {
 }
 
 class PickImageEvent extends UpdateAccountEvent {
-  const PickImageEvent();
+  final String currImageUrl;
+  const PickImageEvent({required this.currImageUrl});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [currImageUrl];
 }
 
 class UploadImageEvent extends UpdateAccountEvent {

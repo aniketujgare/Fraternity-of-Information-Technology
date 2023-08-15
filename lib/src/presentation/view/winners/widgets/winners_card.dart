@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../domain/models/event_winners_model.dart';
+import '../../../../utils/constants/constants.dart';
 
 class WinnersCard extends StatelessWidget {
   final String eventName;
-  final String organizer;
+  final List<String> organizers;
   final String date;
   final List<Winner> winners;
 
@@ -14,7 +16,7 @@ class WinnersCard extends StatelessWidget {
     Key? key,
     this.topMargin = 20,
     required this.eventName,
-    required this.organizer,
+    required this.organizers,
     required this.winners,
     required this.date,
   }) : super(key: key);
@@ -40,20 +42,27 @@ class WinnersCard extends StatelessWidget {
           ),
           Container(
             margin: const EdgeInsets.only(left: 25, bottom: 10, right: 25),
-            width: double.infinity,
+            width: double.maxFinite,
             height: 23,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Organizer - $organizer',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff000000),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: FittedBox(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Organizer - ${organizersToString(organizers)}',
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Color(0xff000000),
+                      ),
+                    ),
                   ),
                 ),
-                const Spacer(),
                 Text(
-                  'Date - $date',
+                  'Date - ${DateFormat('dd MMM yyyy').format(DateTime.parse(date))}',
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xff000000),

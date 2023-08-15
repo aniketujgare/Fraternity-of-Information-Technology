@@ -55,8 +55,8 @@ class WinnersView extends StatelessWidget {
                             final winner = winnersList[index];
                             return WinnersCard(
                               eventName: '${winner.eventName}',
-                              organizer: '${winner.organizer}',
-                              date: '${winner.date}',
+                              organizers: winner.eventOrganizers ?? [],
+                              date: '${winner.eventDate}',
                               winners: winner.winners!,
                             );
                           },

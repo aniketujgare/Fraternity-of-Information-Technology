@@ -1,41 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/all_event_model.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/cubit/dropdown_cubit.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/date_picker_cubit/date_picker_cubit.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/image_picker_bloc/image_picker_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_event_admin_bloc/upcoming_event_admin_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/admin/admin_panel.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/admin/upcomin_event_admin/upcomin_events_list.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/admin/upcomin_event_admin/upcoming_event_add_update.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/admin/upcomin_event_admin/upcoming_events_add.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/admin/winners_admin/winners_admin.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/all_past_events/all_past_events.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/all_past_events/widgets/past_event_full_view.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/honours_board_view.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/news/news_view.dart';
+import 'package:fraternity_of_information_technology/src/presentation/view/news/widgets/news_full_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/repositories/database_repository.dart';
-import '../../domain/models/upcoming_event_model.dart';
+import '../../domain/models/event_model.dart';
 import '../../domain/models/user_model.dart';
 import '../../presentation/blocs/all_past_events_bloc/all_past_events_bloc.dart';
 import '../../presentation/blocs/app_navigator_cubit/app_navigator_cubit.dart';
-import '../../presentation/blocs/auth/bloc/email_auth_bloc.dart';
+import '../../presentation/blocs/auth_bloc/auth_bloc.dart';
 import '../../presentation/blocs/fit_committee_bloc/fit_committee_bloc.dart';
 import '../../presentation/blocs/honour_board_bloc/honour_board_bloc.dart';
 import '../../presentation/blocs/my_slider/my_slider_bloc.dart';
-import '../../presentation/blocs/profile_picture_bloc/profile_picture_bloc.dart';
 import '../../presentation/blocs/random_winner_bloc/random_winner_bloc.dart';
 import '../../presentation/blocs/upcoming_events/upcoming_events_bloc.dart';
 import '../../presentation/blocs/update_account_bloc/update_account_bloc.dart';
-import '../../presentation/blocs/winners_admin_bloc/winners_admin_bloc.dart';
 import '../../presentation/blocs/winners_bloc/winners_bloc.dart';
+import '../../presentation/view/all_past_events/all_past_events.dart';
+import '../../presentation/view/all_past_events/widgets/past_event_full_view.dart';
 import '../../presentation/view/authentication/auth_flow.dart';
 import '../../presentation/view/fit_committee/fit_committee_view.dart';
 import '../../presentation/view/fit_ui_navigator.dart';
 import '../../presentation/view/gallery/gallery_view.dart';
 import '../../presentation/view/home/widgets/event_registration_view.dart';
+import '../../presentation/view/honours_board_view.dart';
 import '../../presentation/view/notifications/notifications_view.dart';
 import '../../presentation/view/update_account/update_account_view.dart';
 import '../../presentation/view/winners/winners_view.dart';
@@ -43,11 +31,10 @@ import 'app_router_constants.dart';
 
 // final _authrepository = AuthRepository();
 final _databaseRepository = DatabaseRepository();
-final _emailAuthBloc = EmailAuthBloc();
+final _emailAuthBloc = AuthBloc();
 final _updateAccountBloc =
     UpdateAccountBloc(dataRepository: _databaseRepository);
 final _appNavigatorCubit = AppNavigatorCubit();
-final _profilePicBloc = ProfilePictureBloc();
 final _winnersBloc = WinnersBloc(databaseRepository: _databaseRepository);
 final _fitCommitteeBloc =
     FitCommitteeBloc(databaseRepository: _databaseRepository);
@@ -157,8 +144,8 @@ class AppRouter {
           name: AppRoutConstants.eventRegistrationView.name,
           path: AppRoutConstants.eventRegistrationView.path,
           pageBuilder: (context, state) {
-            UpcomingEventModel event = state.extra as UpcomingEventModel;
-            return MaterialPage(child: EventRegistrationView(event: event));
+            return MaterialPage(
+                child: EventRegistrationView(event: state.extra as EventModel));
           }),
       GoRoute(
         name: AppRoutConstants.honourBoardView.name,
@@ -194,8 +181,7 @@ class AppRouter {
                   ..add(const MySliderOnChangedEvent(value: 0)),
               ),
             ],
-            child:
-                PastEventFullView(allEventModel: state.extra as AllEventModel),
+            child: PastEventFullView(allEventModel: state.extra as EventModel),
           ),
         ),
       ),
@@ -206,11 +192,17 @@ class AppRouter {
             return const MaterialPage(child: GalleryView());
           }),
       GoRoute(
-          name: AppRoutConstants.adminPanel.name,
-          path: AppRoutConstants.adminPanel.path,
+          name: AppRoutConstants.newsFullView.name,
+          path: AppRoutConstants.newsFullView.path,
           pageBuilder: (context, state) {
-            return const MaterialPage(child: AdminPanel());
+            return const MaterialPage(child: NewsFullView());
           }),
+      // GoRoute(
+      //     name: AppRoutConstants.adminPanel.name,
+      //     path: AppRoutConstants.adminPanel.path,
+      //     pageBuilder: (context, state) {
+      //       return const MaterialPage(child: AdminPanel());
+      //     }),
       // GoRoute(
       //   name: AppRoutConstants.upcomingEventsPanel.name,
       //   path: AppRoutConstants.upcomingEventsPanel.path,
@@ -237,69 +229,69 @@ class AppRouter {
       //     );
       //   },
       // ),
-      GoRoute(
-          name: AppRoutConstants.upcomingEventsList.name,
-          path: AppRoutConstants.upcomingEventsList.path,
-          pageBuilder: (context, state) {
-            return MaterialPage(
-                child: MultiBlocProvider(
-              providers: [
-                BlocProvider.value(
-                  value: _upcomingEventsBloc..add(FetchUpcomingEventsEvent()),
-                ),
-              ],
-              child: const UpcomingEventsList(),
-            ));
-          }),
-      GoRoute(
-          name: AppRoutConstants.upcomingEventUpdate.name,
-          path: AppRoutConstants.upcomingEventUpdate.path,
-          pageBuilder: (context, state) {
-            return MaterialPage(
-                child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) =>
-                      ImagePickerBloc(databaseRepository: _databaseRepository),
-                ),
-                BlocProvider(
-                  create: (context) => DatePickerCubit(),
-                ),
-                BlocProvider(
-                  create: (context) => UpcomingEventAdminBloc(),
-                ),
-              ],
-              child: UpcomingEventsAddUpdatePanel(
-                  eventModel: state.extra as UpcomingEventModel),
-            ));
-          }),
-      GoRoute(
-          name: AppRoutConstants.winnersAdmin.name,
-          path: AppRoutConstants.winnersAdmin.path,
-          pageBuilder: (context, state) {
-            return MaterialPage(
-                child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) =>
-                      ImagePickerBloc(databaseRepository: _databaseRepository),
-                ),
-                BlocProvider(
-                  create: (context) => DatePickerCubit(),
-                ),
-                BlocProvider(
-                  create: (context) => UpcomingEventAdminBloc(),
-                ),
-                BlocProvider(
-                  create: (context) => DropdownCubit(),
-                ),
-                BlocProvider(
-                  create: (context) => WinnersAdminBloc(),
-                ),
-              ],
-              child: WinnersAdmin(eventModel: UpcomingEventModel()),
-            ));
-          }),
+      // GoRoute(
+      //     name: AppRoutConstants.upcomingEventsList.name,
+      //     path: AppRoutConstants.upcomingEventsList.path,
+      //     pageBuilder: (context, state) {
+      //       return MaterialPage(
+      //           child: MultiBlocProvider(
+      //         providers: [
+      //           BlocProvider.value(
+      //             value: _upcomingEventsBloc..add(FetchUpcomingEventsEvent()),
+      //           ),
+      //         ],
+      //         child: const UpcomingEventsList(),
+      //       ));
+      //     }),
+      // GoRoute(
+      //     name: AppRoutConstants.upcomingEventUpdate.name,
+      //     path: AppRoutConstants.upcomingEventUpdate.path,
+      //     pageBuilder: (context, state) {
+      //       return MaterialPage(
+      //           child: MultiBlocProvider(
+      //         providers: [
+      //           BlocProvider(
+      //             create: (context) =>
+      //                 ImagePickerBloc(databaseRepository: _databaseRepository),
+      //           ),
+      //           BlocProvider(
+      //             create: (context) => DatePickerCubit(),
+      //           ),
+      //           BlocProvider(
+      //             create: (context) => UpcomingEventAdminBloc(),
+      //           ),
+      //         ],
+      //         child: UpcomingEventsAddUpdatePanel(
+      //             eventModel: state.extra as UpcomingEventModel),
+      //       ));
+      //     }),
+      // GoRoute(
+      //     name: AppRoutConstants.winnersAdmin.name,
+      //     path: AppRoutConstants.winnersAdmin.path,
+      //     pageBuilder: (context, state) {
+      //       return MaterialPage(
+      //           child: MultiBlocProvider(
+      //         providers: [
+      //           BlocProvider(
+      //             create: (context) =>
+      //                 ImagePickerBloc(databaseRepository: _databaseRepository),
+      //           ),
+      //           BlocProvider(
+      //             create: (context) => DatePickerCubit(),
+      //           ),
+      //           BlocProvider(
+      //             create: (context) => UpcomingEventAdminBloc(),
+      //           ),
+      //           BlocProvider(
+      //             create: (context) => DropdownCubit(),
+      //           ),
+      //           BlocProvider(
+      //             create: (context) => WinnersAdminBloc(),
+      //           ),
+      //         ],
+      //         child: WinnersAdmin(eventModel: UpcomingEventModel()),
+      //       ));
+      //     }),
     ],
   );
 }

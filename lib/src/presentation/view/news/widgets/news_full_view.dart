@@ -1,14 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/all_event_model.dart';
-import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../blocs/my_slider/my_slider_bloc.dart';
-import '../../home/widgets/event_registration_view.dart';
+import '../../../../utils/constants/constants.dart';
 
 class NewsFullView extends StatelessWidget {
   const NewsFullView({
@@ -22,11 +17,13 @@ class NewsFullView extends StatelessWidget {
         child: NestedScrollView(
           floatHeaderSlivers: true,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            const SliverAppBar(
+            SliverAppBar(
               floating: true,
               centerTitle: true,
-              leading: Icon(Icons.arrow_back, color: kPrimaryColor),
-              title: Text('Detailed News'),
+              leading: GestureDetector(
+                  onTap: () => context.pop(),
+                  child: const Icon(Icons.arrow_back, color: kPrimaryColor)),
+              title: const Text('Detailed News'),
             ),
           ],
           // if (allEventModel.bannerImage != null)

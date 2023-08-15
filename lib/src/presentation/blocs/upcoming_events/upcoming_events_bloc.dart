@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/event_model.dart';
 
 import '../../../data/repositories/database_repository.dart';
 
@@ -14,9 +14,11 @@ class UpcomingEventsBloc
       : super(UpcomingEventsLoadingState()) {
     on<FetchUpcomingEventsEvent>((event, emit) async {
       try {
-        final List<UpcomingEventModel> upcomingEventsList =
+        final List<EventModel>? upcomingEventsList =
             await databaseRepository.getUpcomingEvents();
-        emit(UpcomingEventsLoadedState(upcomingEvents: upcomingEventsList));
+        if (upcomingEventsList != null) {
+          emit(UpcomingEventsLoadedState(upcomingEvents: upcomingEventsList));
+        }
       } catch (e) {
         emit(const UpcomingEventsErrorState(
             errorMessage: 'Failed to fetch upcoming events'));

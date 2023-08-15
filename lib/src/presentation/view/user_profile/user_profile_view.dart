@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../config/router/app_router_constants.dart';
 import '../../../utils/constants/constants.dart';
-import '../../blocs/auth/bloc/email_auth_bloc.dart';
+import '../../blocs/auth_bloc/auth_bloc.dart';
 import '../../blocs/update_account_bloc/update_account_bloc.dart';
 import '../../widgets/fit_button.dart';
 import '../../widgets/fit_circular_loading_indicator.dart';
@@ -61,7 +61,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                         }
                       },
                     ),
-                    BlocListener<EmailAuthBloc, EmailAuthState>(
+                    BlocListener<AuthBloc, AuthState>(
                       listener: (context, state) {
                         if (state is EmailAuthInitialState) {
                           context.replaceNamed(AppRoutConstants.authFlow.name);
@@ -69,9 +69,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                       },
                       child: IconButton(
                           onPressed: () async {
-                            context
-                                .read<EmailAuthBloc>()
-                                .add(AuthSignOutEvent());
+                            context.read<AuthBloc>().add(AuthSignOutEvent());
                           },
                           icon: const Icon(
                             Icons.exit_to_app,
@@ -110,7 +108,6 @@ class _UserProfileViewState extends State<UserProfileView> {
                           builder: (context, state) {
                             if (state is PickImageLoadingState) {
                               return const Center(
-                                  // TODO:Shimmer effect
                                   child: FITCircularLoadingIndicator());
                             } else if (state is ImageUploadedState &&
                                 state.imageURL != null) {
@@ -150,14 +147,24 @@ class _UserProfileViewState extends State<UserProfileView> {
                                 width: 3, color: const Color(0xffeceff5)),
                             shape: BoxShape.circle,
                             color: const Color(0xffF7F7F7)),
-                        child: GestureDetector(
-                          onTap: () {
-                            context
-                                .read<UpdateAccountBloc>()
-                                .add(const PickImageEvent());
+                        child:
+                            BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
+                          builder: (context, state) {
+                            if (state is FetchUserState) {
+                              return GestureDetector(
+                                onTap: () {
+                                  context.read<UpdateAccountBloc>().add(
+                                      PickImageEvent(
+                                          currImageUrl:
+                                              state.userModel.profilePic ??
+                                                  ''));
+                                },
+                                child: const Icon(Icons.edit,
+                                    size: 20, color: Colors.black),
+                              );
+                            }
+                            return Container();
                           },
-                          child: const Icon(Icons.edit,
-                              size: 20, color: Colors.black),
                         ),
                       ),
                     )

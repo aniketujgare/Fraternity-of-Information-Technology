@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/fit_committee_bloc/fit_committee_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,16 +32,16 @@ class MemberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Uri _whatsapp =
+    final Uri lWhatsapp =
         Uri.parse('whatsapp://send?phone=$phoneNumber&text=Hey!');
 
-    final Uri _linkedin = Uri.parse(linkedin);
+    final Uri lLinkedin = Uri.parse(linkedin);
 
-    final Uri _instagram = Uri.parse(instagram);
+    final Uri lInstagram = Uri.parse(instagram);
 
-    final Uri _phoneNumber = Uri.parse('tel: +91$phoneNumber');
+    final Uri lPhoneNumber = Uri.parse('tel: +91$phoneNumber');
 
-    final Uri _email = Uri.parse('mailto:$email');
+    final Uri lEmail = Uri.parse('mailto:$email');
 
     return Container(
       margin: const EdgeInsets.all(8),
@@ -151,7 +150,7 @@ class MemberCard extends StatelessWidget {
                         icon: 'phone_icon.svg',
                         onTap: () async {
                           try {
-                            await launchUrl(_phoneNumber);
+                            await launchUrl(lPhoneNumber);
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -163,7 +162,7 @@ class MemberCard extends StatelessWidget {
                         icon: 'whatsapp_icon.svg',
                         onTap: () async {
                           try {
-                            await launchUrl(_whatsapp);
+                            await launchUrl(lWhatsapp);
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -176,7 +175,7 @@ class MemberCard extends StatelessWidget {
                         icon: 'linkedin_icon.svg',
                         onTap: () async {
                           try {
-                            await launchUrl(_linkedin);
+                            await launchUrl(lLinkedin);
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -190,7 +189,7 @@ class MemberCard extends StatelessWidget {
                         onTap: () async {
                           try {
                             await launchUrl(
-                              _instagram,
+                              lInstagram,
                             );
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -204,7 +203,7 @@ class MemberCard extends StatelessWidget {
                         icon: 'email_icon.svg',
                         onTap: () async {
                           try {
-                            await launchUrl(_email);
+                            await launchUrl(lEmail);
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

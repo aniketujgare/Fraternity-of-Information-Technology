@@ -1,132 +1,145 @@
-// import 'package:equatable/equatable.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:meta/meta.dart';
+import 'dart:async';
 
-// import '../../../data/repositories/auth_repository.dart';
-// import '../../../data/repositories/database_repository.dart';
-// import '../../../domain/models/user_model.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart' show debugPrint;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// part 'auth_event.dart';
-// part 'auth_state.dart';
+import '../../../data/repositories/database_repository.dart';
+import '../../../domain/models/user_model.dart';
 
-// class AuthBloc extends Bloc<AuthEvent, AuthState> {
-//   final AuthRepository phoneAuthRepository;
-//   final auth = FirebaseAuth.instance;
-//   AuthBloc({required this.phoneAuthRepository})
-//       : super(const PhoneAuthInitial()) {
-//     // When user clicks on send otp button then this event will be fired
-//     on<AuthenticationCheckEvent>(_authCheck);
+part 'auth_event.dart';
+part 'auth_state.dart';
 
-//     // When user clicks on send otp button then this event will be fired
-//     on<SendOtpToPhoneEvent>(_onSendOtp);
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  AuthBloc() : super(const EmailAuthInitialState(AuthFormType.signIn)) {
+    on<EmailSignUpEvent>(_signUp);
+    on<EmailVerificationEvent>(_verifyEmail);
+    on<EmailLoginEvent>(_userLogin);
+    on<YouRAllSetEvent>((event, emit) => emit(YouRAllSetState()));
+    on<EmailAuthenticationCheckEvent>(_authCheck);
+    on<AuthToggleFormEvent>(
+        (event, emit) => emit(EmailAuthInitialState(event.formType)));
+    on<AuthSignOutEvent>(_signOut);
+  }
 
-//     // After receiving the otp, When user clicks on verify otp button then this event will be fired
-//     on<VerifySentOtpEvent>(_onVerifyOtp);
+  Future<void> _signUp(EmailSignUpEvent event, Emitter<AuthState> emit) async {
+    emit(EmailAuthLoading());
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: event.userEmail, password: event.password)
+          .then(
+        (userCredential) async {
+          if (userCredential.user != null) {
+            bool isCollectionExist =
+                await DatabaseRepository().checkUserExists();
+            if (!isCollectionExist) {
+              DatabaseRepository().addUser(UserModel(
+                  userId: userCredential.user!.uid, email: event.userEmail));
+            }
+          }
+          add(
+            EmailVerificationEvent(
+              user: userCredential.user!,
+              userEmail: event.userEmail,
+              password: event.userEmail,
+            ),
+          );
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        debugPrint('The password provided is too weak.');
+        emit(const EmailAuthError(error: 'The password provided is too weak.'));
+      } else if (e.code == 'email-already-in-use') {
+        debugPrint('The account already exists for that email.');
+        emit(const EmailAuthError(
+            error: 'The account already exists for that email.'));
+      }
+      // return null;
+    } catch (e) {
+      debugPrint(e.toString());
+      emit(EmailAuthError(error: e.toString()));
+    }
+  }
 
-//     // When the firebase sends the code to the user's phone, this event will be fired
-//     on<OnPhoneOtpSent>((event, emit) =>
-//         emit(PhoneAuthCodeSentSuccess(verificationId: event.verificationId)));
+  Future<void> _verifyEmail(
+      EmailVerificationEvent event, Emitter<AuthState> emit) async {
+    emit(VerifyEmail(email: event.user.email ?? ' '));
+    Timer? timer;
+    event.user.sendEmailVerification();
+    timer = Timer.periodic(const Duration(seconds: 3),
+        (_) => checkEmailVerified(event.user, timer));
+  }
 
-//     // When any error occurs while sending otp to the user's phone, this event will be fired
-//     on<OnPhoneAuthErrorEvent>(
-//         (event, emit) => emit(PhoneAuthError(error: event.error)));
+  checkEmailVerified(User user, Timer? timer) async {
+    await FirebaseAuth.instance.currentUser?.reload();
+    var emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    debugPrint('emial verified $emailVerified');
+    if (emailVerified) {
+      timer?.cancel();
+      add(YouRAllSetEvent());
+      debugPrint('YouRAllSetEvent');
+      await Future.delayed(const Duration(seconds: 4));
+      add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
+    }
+  }
 
-//     // When the otp verification is successful, this event will be fired
-//     on<OnPhoneAuthVerificationCompleteEvent>(_loginWithCredential);
+  void _userLogin(EmailLoginEvent event, Emitter<AuthState> emit) async {
+    emit(EmailAuthLoading());
+    try {
+      if (EmailValidator.validate(event.userEmail)) {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: event.userEmail, password: event.password)
+            .then((userCredentail) {
+          if (userCredentail.user != null) {
+            emit(UserLoggedIn());
+          }
+        });
+      } else {
+        emit(const EmailAuthError(error: 'Please enter a valid email!'));
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        debugPrint('No user found for that email.');
+        emit(const EmailAuthError(error: 'No user found for that email.'));
+      } else if (e.code == 'wrong-password') {
+        debugPrint('Wrong password provided for that user.');
+        emit(const EmailAuthError(
+            error: 'Wrong password provided for that user.'));
+      }
+    } catch (e) {
+      emit(const EmailAuthError(error: 'error'));
+    }
+  }
 
-//     // When the otp verification is successful, this event will be fired
-//     on<AuthenticationSignOutEvent>(_signOut);
-//   }
-//   Future<void> _authCheck(
-//       AuthenticationCheckEvent event, Emitter<AuthState> emit) async {
-//     emit(AuthLoading());
-//     try {
-//       var user = FirebaseAuth.instance.currentUser;
-//       if (user != null) {
-//         emit(PhoneAuthVerified());
-//       } else {
-//         emit(const PhoneAuthInitial());
-//       }
-//     } catch (e) {
-//       emit(PhoneAuthError(error: e.toString()));
-//     }
-//   }
+  _authCheck(
+      EmailAuthenticationCheckEvent event, Emitter<AuthState> emit) async {
+    emit(EmailAuthLoading());
+    try {
+      var user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        emit(UserLoggedIn());
+      } else {
+        // emit(LoginBottomSheetState());
+        add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
+      }
+    } catch (e) {
+      emit(EmailAuthError(error: e.toString()));
+    }
+  }
 
-//   Future<void> _onSendOtp(
-//       SendOtpToPhoneEvent event, Emitter<AuthState> emit) async {
-//     emit(AuthLoading());
-//     try {
-//       await phoneAuthRepository.verifyPhone(
-//         phoneNumber: '+91${event.phoneNumber}',
-//         verificationCompleted: (PhoneAuthCredential credential) async {
-//           // On [verificationComplete], we will get the credential from the firebase and will send it to the [OnPhoneAuthVerificationCompleteEvent] event to be handled by the bloc and then will emit the [PhoneAuthVerified] state after successful login
-//           add(OnPhoneAuthVerificationCompleteEvent(credential: credential));
-//         },
-//         codeSent: (String verificationId, int? resendToken) {
-//           // On [codeSent], we will get the verificationId and the resendToken from the firebase and will send it to the [OnPhoneOtpSent] event to be handled by the bloc and then will emit the [OnPhoneAuthVerificationCompleteEvent] event after receiving the code from the user's phone
-//           add(OnPhoneOtpSent(
-//               verificationId: verificationId, token: resendToken));
-//         },
-//         verificationFailed: (FirebaseAuthException e) {
-//           // On [verificationFailed], we will get the exception from the firebase and will send it to the [OnPhoneAuthErrorEvent] event to be handled by the bloc and then will emit the [PhoneAuthError] state in order to display the error to the user's screen
-//           add(OnPhoneAuthErrorEvent(error: e.code));
-//         },
-//         codeAutoRetrievalTimeout: (String verificationId) {},
-//       );
-//       // phoneAuthRepository.signUpWithEmailPassword(
-//       //     event.phoneNumber, 'password');
-//     } catch (e) {
-//       emit(PhoneAuthError(error: e.toString()));
-//     }
-//   }
-
-//   Future<void> _onVerifyOtp(
-//       VerifySentOtpEvent event, Emitter<AuthState> emit) async {
-//     try {
-//       emit(AuthLoading());
-//       // After receiving the otp, we will verify the otp and then will create a credential from the otp and verificationId and then will send it to the [OnPhoneAuthVerificationCompleteEvent] event to be handled by the bloc and then will emit the [PhoneAuthVerified] state after successful login
-//       PhoneAuthCredential credential = PhoneAuthProvider.credential(
-//         verificationId: event.verificationId,
-//         smsCode: event.otpCode,
-//       );
-//       add(OnPhoneAuthVerificationCompleteEvent(credential: credential));
-//     } catch (e) {
-//       emit(PhoneAuthError(error: e.toString()));
-//     }
-//   }
-
-//   Future<void> _loginWithCredential(OnPhoneAuthVerificationCompleteEvent event,
-//       Emitter<AuthState> emit) async {
-//     // After receiving the credential from the event, we will login with the credential and then will emit the [PhoneAuthVerified] state after successful login
-//     try {
-//       await auth.signInWithCredential(event.credential).then((user) async {
-//         if (user.user != null) {
-//           bool isCollectionExist = await DatabaseRepository().checkUserExists();
-//           if (!isCollectionExist) {
-//             DatabaseRepository().addUser(UserModel(
-//                 docID: user.user!.uid, phone: user.user!.phoneNumber));
-//           }
-//           emit(PhoneAuthVerified());
-//         }
-//       });
-//     } on FirebaseAuthException catch (e) {
-//       emit(PhoneAuthError(error: e.code));
-//     } catch (e) {
-//       emit(PhoneAuthError(error: e.toString()));
-//     }
-//   }
-
-//   Future<void> _signOut(
-//       AuthenticationSignOutEvent event, Emitter<AuthState> emit) async {
-//     // After receiving the credential from the event, we will login with the credential and then will emit the [PhoneAuthVerified] state after successful login
-//     try {
-//       await FirebaseAuth.instance.signOut();
-//       emit(const PhoneAuthInitial());
-//     } on FirebaseAuthException catch (e) {
-//       emit(PhoneAuthError(error: e.code));
-//     } catch (e) {
-//       emit(PhoneAuthError(error: e.toString()));
-//     }
-//   }
-// }
+  Future<void> _signOut(AuthSignOutEvent event, Emitter<AuthState> emit) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      emit(const EmailAuthInitialState(AuthFormType.signIn));
+    } on FirebaseAuthException catch (e) {
+      emit(EmailAuthError(error: e.toString()));
+    } catch (e) {
+      emit(EmailAuthError(error: e.toString()));
+    }
+  }
+}

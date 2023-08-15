@@ -3,15 +3,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/all_event_model.dart';
 import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../domain/models/event_model.dart';
 import '../../../blocs/my_slider/my_slider_bloc.dart';
 import '../../home/widgets/event_registration_view.dart';
 
 class PastEventFullView extends StatelessWidget {
-  final AllEventModel allEventModel;
+  final EventModel allEventModel;
   const PastEventFullView({super.key, required this.allEventModel});
 
   @override
@@ -48,7 +48,7 @@ class PastEventFullView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                     child: Text(
-                      'Date: ${DateFormat('dd MMM yyyy').format(DateTime.parse(allEventModel.date!)).toUpperCase()}',
+                      'Date: ${DateFormat('dd MMM yyyy').format(DateTime.parse(allEventModel.eventDate!)).toUpperCase()}',
                       textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontSize: 16,
@@ -61,10 +61,11 @@ class PastEventFullView extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Text.rich(
                         textAlign: TextAlign.justify,
-                        rich(convertNewLine(allEventModel.description ?? ''))),
+                        rich(convertNewLine(
+                            allEventModel.eventDescription ?? ''))),
                   ),
                   const SizedBox(height: 35),
-                  if (allEventModel.bannerImage != null)
+                  if (allEventModel.eventImages!.isNotEmpty)
                     CarouselSlider(
                       items: allEventModel.eventImages!
                           .map(
@@ -95,7 +96,7 @@ class PastEventFullView extends StatelessWidget {
                           },
                           viewportFraction: 0.85),
                     ),
-                  if (allEventModel.bannerImage != null)
+                  if (allEventModel.eventImages!.isNotEmpty)
                     BlocBuilder<MySliderBloc, MySliderState>(
                       builder: (context, pos) {
                         if (pos is MySliderOnChanged ||
@@ -112,39 +113,41 @@ class PastEventFullView extends StatelessWidget {
                       },
                     ),
                   const SizedBox(height: 25),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: Text('Organizer:'),
-                  ),
+                  if (allEventModel.eventOrganizers!.isNotEmpty)
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Text('Organizer:'),
+                    ),
                   const SizedBox(height: 10),
-                  Container(
-                    height: 130,
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 100,
-                          childAspectRatio: 3 / 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: allEventModel.organizers!.length,
-                        itemBuilder: (BuildContext ctx, index) {
-                          return Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Text(
-                              allEventModel.organizers![index],
-                              style: const TextStyle(
-                                color: Colors.white,
+                  if (allEventModel.eventOrganizers != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 100,
+                            childAspectRatio: 3 / 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemCount: allEventModel.eventOrganizers!.length,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: kPrimaryColor,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Text(
+                                allEventModel.eventOrganizers![index],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          );
-                        }),
-                  ),
+                            );
+                          }),
+                    ),
                 ],
               ),
             ),

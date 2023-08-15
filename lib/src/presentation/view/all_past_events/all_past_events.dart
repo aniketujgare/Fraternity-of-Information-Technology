@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/all_event_model.dart';
 import 'package:fraternity_of_information_technology/src/presentation/blocs/all_past_events_bloc/all_past_events_bloc.dart';
 
+import '../../../domain/models/event_model.dart';
 import '../../../utils/constants/constants.dart';
 import '../../widgets/fit_circular_loading_indicator.dart';
 import 'widgets/past_event_card.dart';
@@ -41,17 +41,17 @@ class AllPastEventsView extends StatelessWidget {
                   if (state is AllPastEventsLoading) {
                     return const Center(child: FITCircularLoadingIndicator());
                   } else if (state is AllPastEventsLoadedState) {
-                    final List<AllEventModel> allEventsList =
+                    final List<EventModel> allEventsList =
                         state.allPastEventsList;
                     return ListView.builder(
                       itemCount: allEventsList.length,
                       itemBuilder: (context, index) {
                         final event = allEventsList[index];
 
-                        final eventType = retrieveEnumFromFirestore(
-                            allEventsList[index].eventType!);
+                        // final eventType = ;
                         return PastEventCard(
-                            eventType: eventType, eventModel: event);
+                            eventType: allEventsList[index].eventType!,
+                            eventModel: event);
                       },
                     );
                   }

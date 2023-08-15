@@ -3,9 +3,9 @@ import 'package:fraternity_of_information_technology/src/config/router/app_route
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../domain/models/all_event_model.dart';
+import '../../../../domain/models/event_model.dart';
 
-enum EventType { contest, workshop, ceremony }
+// enum EventType { contest, workshop, ceremony }
 
 // Map the enum to strings
 Map<EventType, String> eventTypeToString = {
@@ -39,7 +39,7 @@ Map<EventType, Color> primaryColor = {
 
 class PastEventCard extends StatelessWidget {
   final EventType eventType;
-  final AllEventModel eventModel;
+  final EventModel eventModel;
 
   const PastEventCard({
     Key? key,
@@ -83,7 +83,7 @@ class PastEventCard extends StatelessWidget {
               children: [
                 Text(
                   DateFormat.MMM()
-                      .format(DateTime.parse(eventModel.date!))
+                      .format(DateTime.parse(eventModel.eventDate!))
                       .toUpperCase(),
                   style: TextStyle(
                     fontSize: 24,
@@ -93,7 +93,7 @@ class PastEventCard extends StatelessWidget {
                 ),
                 Text(
                   DateFormat('dd:yy')
-                      .format(DateTime.parse(eventModel.date!))
+                      .format(DateTime.parse(eventModel.eventDate!))
                       .toUpperCase(),
                   style: TextStyle(
                     fontSize: 17,

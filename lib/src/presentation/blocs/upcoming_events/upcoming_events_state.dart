@@ -10,7 +10,7 @@ abstract class UpcomingEventsState extends Equatable {
 class UpcomingEventsLoadingState extends UpcomingEventsState {}
 
 class UpcomingEventsLoadedState extends UpcomingEventsState {
-  final List<UpcomingEventModel> upcomingEvents;
+  final List<EventModel> upcomingEvents;
   const UpcomingEventsLoadedState({required this.upcomingEvents});
   @override
   List<Object> get props => [upcomingEvents];

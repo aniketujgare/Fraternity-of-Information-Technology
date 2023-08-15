@@ -147,7 +147,6 @@ class StudentAchievement extends StatelessWidget {
                                   builder: (context, state) {
                                     if (state is HonourBoardLoaded) {
                                       return const Text(
-                                        //TODO: Fill widget
                                         'IT - Final Year',
                                         style: TextStyle(
                                           fontSize: 13.3,

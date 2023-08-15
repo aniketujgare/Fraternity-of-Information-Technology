@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../utils/constants/constants.dart';
-import '../../../blocs/auth/bloc/email_auth_bloc.dart';
+import '../../../blocs/auth_bloc/auth_bloc.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
 
 class VerifyEmailBottomSheet extends StatefulWidget {
@@ -64,7 +64,7 @@ class _VerifyEmailBottomSheet extends State<VerifyEmailBottomSheet> {
               left: 25,
               right: kWidth(context) * 0.35,
             ),
-            child: BlocBuilder<EmailAuthBloc, EmailAuthState>(
+            child: BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 if (state is VerifyEmail) {
                   return Text(

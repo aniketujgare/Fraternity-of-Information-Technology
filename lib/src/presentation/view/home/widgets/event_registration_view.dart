@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
+import '../../../../domain/models/event_model.dart';
 import '../../../widgets/fit_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -38,7 +39,7 @@ class EventRegistrationView extends StatelessWidget {
   // final String bannerImage;
   // final String description;
   // final String heading;
-  final UpcomingEventModel event;
+  final EventModel event;
   const EventRegistrationView({
     super.key,
     // required this.regLink,
@@ -79,21 +80,60 @@ class EventRegistrationView extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                     child: Text.rich(
                         textAlign: TextAlign.justify,
-                        rich(convertNewLine(event.description!))),
+                        rich(convertNewLine(event.eventDescription!))),
                   ),
+                  if (event.eventOrganizers!.isNotEmpty)
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                      child: Text(
+                        'Organizer\'s:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  const SizedBox(height: 10),
+                  if (event.eventOrganizers != null)
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 100,
+                            childAspectRatio: 3 / 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemCount: event.eventOrganizers!.length,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: kPrimaryColor,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Text(
+                                event.eventOrganizers![index],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          }),
+                    ),
                   FitButton(
                     onTap: () async {
                       try {
-                        await launchUrlString(event.regLink!,
+                        await launchUrlString(event.registrationUrl!,
                             mode: LaunchMode.externalApplication);
                       } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                    Text('Stay Tuned for upcoming events!')));
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Link does not found!'),
+                          backgroundColor: kredDarkColor,
+                        ));
                       }
                     },
                     text: 'Register',

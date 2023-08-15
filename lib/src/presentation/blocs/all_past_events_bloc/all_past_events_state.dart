@@ -10,7 +10,7 @@ abstract class AllPastEventsState extends Equatable {
 class AllPastEventsLoading extends AllPastEventsState {}
 
 class AllPastEventsLoadedState extends AllPastEventsState {
-  final List<AllEventModel> allPastEventsList;
+  final List<EventModel> allPastEventsList;
   const AllPastEventsLoadedState({required this.allPastEventsList});
   @override
   List<Object> get props => [allPastEventsList];

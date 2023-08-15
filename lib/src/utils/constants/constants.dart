@@ -24,12 +24,9 @@ bool isPortrait(BuildContext context) {
 double kWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double kHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
-class ScreenName {
-  static const authentication = '/';
-  static const updateAccount = '/updateAccount';
-  static const home = '/home';
-  static const notificationView = '/notificationView';
-  static const fitUiNavigator = '/FITUINavigator';
-  static const fitCommittee = '/fitCommittee';
-  static const winnersVIew = '/winnersView';
+String organizersToString(List<String>? organizers) {
+  if (organizers == null) {
+    return '';
+  }
+  return organizers.toString().substring(1, organizers.toString().length - 1);
 }

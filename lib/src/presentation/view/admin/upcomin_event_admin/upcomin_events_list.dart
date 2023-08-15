@@ -1,244 +1,244 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/all_event_model.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_event_admin_bloc/upcoming_event_admin_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/all_past_events/widgets/past_event_card.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import 'package:shimmer/shimmer.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+// import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
+// import 'package:fraternity_of_information_technology/src/domain/models/all_event_model.dart';
+// import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
+// import 'package:fraternity_of_information_technology/src/presentation/blocs/upcoming_event_admin_bloc/upcoming_event_admin_bloc.dart';
+// import 'package:fraternity_of_information_technology/src/presentation/view/all_past_events/widgets/past_event_card.dart';
+// import 'package:go_router/go_router.dart';
+// import 'package:intl/intl.dart';
+// import 'package:shimmer/shimmer.dart';
 
-import '../../../../utils/constants/constants.dart';
-import '../../../blocs/upcoming_events/upcoming_events_bloc.dart';
-import '../../home/widgets/upcoming_events.dart';
+// import '../../../../utils/constants/constants.dart';
+// import '../../../blocs/upcoming_events/upcoming_events_bloc.dart';
+// import '../../home/widgets/upcoming_events.dart';
 
-class UpcomingEventsList extends StatelessWidget {
-  const UpcomingEventsList({super.key});
+// class UpcomingEventsList extends StatelessWidget {
+//   const UpcomingEventsList({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-              floating: true,
-              centerTitle: true,
-              leading: GestureDetector(
-                  onTap: () => context.pop(),
-                  child: const Icon(Icons.arrow_back, color: kPrimaryColor)),
-              toolbarHeight: 110,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Upcoming Events',
-                    style: TextStyle(
-                      fontSize: 26,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => context.pushNamed(
-                        AppRoutConstants.upcomingEventUpdate.name,
-                        extra: UpcomingEventModel()),
-                    child: Container(
-                      height: 46,
-                      width: 83,
-                      decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(76.5)),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Add ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Icon(
-                            Icons.add,
-                            size: 15,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-          body: BlocBuilder<UpcomingEventsBloc, UpcomingEventsState>(
-            builder: (context, state) {
-              if (state is UpcomingEventsLoadedState) {
-                return ListView.builder(
-                  itemCount: state.upcomingEvents.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 97,
-                      width: double.maxFinite, //365,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 21, vertical: 10.5),
-                      decoration: BoxDecoration(
-                        color: const Color(0XFFEAF0FE),
-                        borderRadius: BorderRadius.circular(21),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x26000000),
-                            offset: Offset(0, 1.5),
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(width: 34),
-                          Flexible(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: double.maxFinite,
-                                  child: Text(
-                                    state.upcomingEvents[index].eventTitle!,
-                                    style: const TextStyle(
-                                      fontSize: 17,
-                                      color: Color(0XFF000007),
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                                // const SizedBox(height: 3),
-                                Text(
-                                  DateFormat('dd MMM yyyy')
-                                      .format(DateTime.parse(
-                                          state.upcomingEvents[index].date!))
-                                      .toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Color(0XFF8E9090),
-                                    // fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 9),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              // InkWell(
-                              //   onTap: () => context.pushNamed(
-                              //     AppRoutConstants.upcomingEventUpdate.name,
-                              //     extra: state.upcomingEvents[index],
-                              //   ),
-                              //   child: CircleAvatar(
-                              //     maxRadius: 20,
-                              //     backgroundColor: Colors.amber.shade200,
-                              //     child: const Icon(
-                              //       Icons.edit,
-                              //       color: Color(0XFF1E2E69),
-                              //     ),
-                              //   ),
-                              // ),
-                              InkWell(
-                                onTap: () async {
-                                  await FirebaseStorage.instance
-                                      .refFromURL(state
-                                          .upcomingEvents[index].bannerImage!)
-                                      .delete();
-                                  await FirebaseFirestore.instance
-                                      .collection('upcoming_events')
-                                      .doc(state.upcomingEvents[index]
-                                          .docId) // <-- Doc ID to be deleted.
-                                      .delete();
-                                  // print('deleted');
-                                  // ignore: use_build_context_synchronously
-                                  context
-                                      .read<UpcomingEventsBloc>()
-                                      .add(FetchUpcomingEventsEvent());
-                                },
-                                child: CircleAvatar(
-                                  maxRadius: 20,
-                                  backgroundColor: Colors.red.shade200,
-                                  child: const Icon(
-                                    Icons.delete,
-                                    color: Color(0XFF1E2E69),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 9),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return SizedBox(
-                  height: 290,
-                  width: double.infinity,
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.white,
-                      ),
-                      margin: const EdgeInsets.all(30),
-                      height: 290,
-                      width: double.infinity,
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: NestedScrollView(
+//           floatHeaderSlivers: true,
+//           headerSliverBuilder: (context, innerBoxIsScrolled) => [
+//             SliverAppBar(
+//               floating: true,
+//               centerTitle: true,
+//               leading: GestureDetector(
+//                   onTap: () => context.pop(),
+//                   child: const Icon(Icons.arrow_back, color: kPrimaryColor)),
+//               toolbarHeight: 110,
+//               title: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   const Text(
+//                     'Upcoming Events',
+//                     style: TextStyle(
+//                       fontSize: 26,
+//                       color: kPrimaryColor,
+//                     ),
+//                   ),
+//                   GestureDetector(
+//                     onTap: () => context.pushNamed(
+//                         AppRoutConstants.upcomingEventUpdate.name,
+//                         extra: UpcomingEventModel()),
+//                     child: Container(
+//                       height: 46,
+//                       width: 83,
+//                       decoration: BoxDecoration(
+//                           color: kPrimaryColor,
+//                           borderRadius: BorderRadius.circular(76.5)),
+//                       child: const Row(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//                           Text(
+//                             'Add ',
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               color: Colors.white,
+//                               // fontWeight: FontWeight.bold,
+//                             ),
+//                           ),
+//                           Icon(
+//                             Icons.add,
+//                             size: 15,
+//                             color: Colors.white,
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             )
+//           ],
+//           body: BlocBuilder<UpcomingEventsBloc, UpcomingEventsState>(
+//             builder: (context, state) {
+//               if (state is UpcomingEventsLoadedState) {
+//                 return ListView.builder(
+//                   itemCount: state.upcomingEvents.length,
+//                   itemBuilder: (context, index) {
+//                     return Container(
+//                       height: 97,
+//                       width: double.maxFinite, //365,
+//                       margin: const EdgeInsets.symmetric(
+//                           horizontal: 21, vertical: 10.5),
+//                       decoration: BoxDecoration(
+//                         color: const Color(0XFFEAF0FE),
+//                         borderRadius: BorderRadius.circular(21),
+//                         boxShadow: const [
+//                           BoxShadow(
+//                             color: Color(0x26000000),
+//                             offset: Offset(0, 1.5),
+//                             blurRadius: 2,
+//                           ),
+//                         ],
+//                       ),
+//                       child: Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         children: [
+//                           const SizedBox(width: 34),
+//                           Flexible(
+//                             child: Column(
+//                               mainAxisAlignment: MainAxisAlignment.center,
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 SizedBox(
+//                                   width: double.maxFinite,
+//                                   child: Text(
+//                                     state.upcomingEvents[index].eventTitle!,
+//                                     style: const TextStyle(
+//                                       fontSize: 17,
+//                                       color: Color(0XFF000007),
+//                                       fontWeight: FontWeight.bold,
+//                                       overflow: TextOverflow.ellipsis,
+//                                     ),
+//                                   ),
+//                                 ),
+//                                 // const SizedBox(height: 3),
+//                                 Text(
+//                                   DateFormat('dd MMM yyyy')
+//                                       .format(DateTime.parse(state
+//                                           .upcomingEvents[index].eventDate!))
+//                                       .toUpperCase(),
+//                                   style: const TextStyle(
+//                                     fontSize: 15,
+//                                     color: Color(0XFF8E9090),
+//                                     // fontWeight: FontWeight.bold,
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           const SizedBox(width: 9),
+//                           Column(
+//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                             children: [
+//                               // InkWell(
+//                               //   onTap: () => context.pushNamed(
+//                               //     AppRoutConstants.upcomingEventUpdate.name,
+//                               //     extra: state.upcomingEvents[index],
+//                               //   ),
+//                               //   child: CircleAvatar(
+//                               //     maxRadius: 20,
+//                               //     backgroundColor: Colors.amber.shade200,
+//                               //     child: const Icon(
+//                               //       Icons.edit,
+//                               //       color: Color(0XFF1E2E69),
+//                               //     ),
+//                               //   ),
+//                               // ),
+//                               InkWell(
+//                                 onTap: () async {
+//                                   await FirebaseStorage.instance
+//                                       .refFromURL(state
+//                                           .upcomingEvents[index].bannerImage!)
+//                                       .delete();
+//                                   await FirebaseFirestore.instance
+//                                       .collection('upcoming_events')
+//                                       .doc(state.upcomingEvents[index]
+//                                           .eventId) // <-- Doc ID to be deleted.
+//                                       .delete();
+//                                   // print('deleted');
+//                                   // ignore: use_build_context_synchronously
+//                                   context
+//                                       .read<UpcomingEventsBloc>()
+//                                       .add(FetchUpcomingEventsEvent());
+//                                 },
+//                                 child: CircleAvatar(
+//                                   maxRadius: 20,
+//                                   backgroundColor: Colors.red.shade200,
+//                                   child: const Icon(
+//                                     Icons.delete,
+//                                     color: Color(0XFF1E2E69),
+//                                   ),
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                           const SizedBox(width: 9),
+//                         ],
+//                       ),
+//                     );
+//                   },
+//                 );
+//               } else {
+//                 return SizedBox(
+//                   height: 290,
+//                   width: double.infinity,
+//                   child: Shimmer.fromColors(
+//                     baseColor: Colors.grey.shade300,
+//                     highlightColor: Colors.grey.shade100,
+//                     child: Container(
+//                       decoration: BoxDecoration(
+//                         borderRadius: BorderRadius.circular(25),
+//                         color: Colors.white,
+//                       ),
+//                       margin: const EdgeInsets.all(30),
+//                       height: 290,
+//                       width: double.infinity,
+//                     ),
+//                   ),
+//                 );
+//               }
+//             },
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-List<String> imgs = [
-  'https://img.mensxp.com/media/content/2021/Jun/MX1400_60c201e0863f4.jpeg',
-  'https://www.famousbollywood.com/wp-content/uploads/2021/07/Indori-Ishq-season-1.jpg',
-  'https://images.bhaskarassets.com/thumb/1800x1800/web2images/521/2020/12/17/orig_03_1608162101.jpg',
-  'https://images.thequint.com/thequint%2F2021-06%2F38b4ed7a-0da3-4ede-9f6f-558577ba81e3%2FScreenshot_2021_06_08_150134.png',
-];
+// List<String> imgs = [
+//   'https://img.mensxp.com/media/content/2021/Jun/MX1400_60c201e0863f4.jpeg',
+//   'https://www.famousbollywood.com/wp-content/uploads/2021/07/Indori-Ishq-season-1.jpg',
+//   'https://images.bhaskarassets.com/thumb/1800x1800/web2images/521/2020/12/17/orig_03_1608162101.jpg',
+//   'https://images.thequint.com/thequint%2F2021-06%2F38b4ed7a-0da3-4ede-9f6f-558577ba81e3%2FScreenshot_2021_06_08_150134.png',
+// ];
 
-class Tile extends StatelessWidget {
-  final int index;
-  final String title;
-  const Tile({super.key, required this.index, required this.title});
+// class Tile extends StatelessWidget {
+//   final int index;
+//   final String title;
+//   const Tile({super.key, required this.index, required this.title});
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        width: 155,
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//         width: 155,
+//         child: Text(
+//           title,
+//           textAlign: TextAlign.center,
+//           style: const TextStyle(
+//             fontSize: 22,
+//             fontWeight: FontWeight.bold,
+//             color: Colors.white,
+//           ),
+//         ));
+//   }
+// }

@@ -249,14 +249,14 @@ class WinnerTile extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 12.2,
-          left: 13.7,
+          top: 10.2,
+          left: 14.7,
           child: Row(
             children: [
               Container(
                 margin: const EdgeInsets.only(right: 25),
-                width: 49,
-                height: 49,
+                width: 52,
+                height: 52,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   image: DecorationImage(

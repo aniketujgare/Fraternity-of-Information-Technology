@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-import 'package:fraternity_of_information_technology/src/presentation/blocs/auth/bloc/email_auth_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/authentication/widgets/signup_bottom_sheet.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/authentication/widgets/verify_email_bottomsheet.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/authentication/your_all_set_view.dart';
-import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_circular_loading_indicator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../config/router/app_router_constants.dart';
-import 'widgets/login_bottomsheet.dart';
 
+import '../../../config/router/app_router_constants.dart';
 import '../../../utils/constants/constants.dart';
+import '../../blocs/auth_bloc/auth_bloc.dart';
+import 'widgets/login_bottomsheet.dart';
+import 'widgets/signup_bottom_sheet.dart';
+import 'widgets/verify_email_bottomsheet.dart';
+import 'your_all_set_view.dart';
 
 class AuthFlow extends StatelessWidget {
   const AuthFlow({super.key});
@@ -22,7 +21,7 @@ class AuthFlow extends StatelessWidget {
         statusBarColor: kScaffoldColor,
       ),
       child: Scaffold(
-        bottomSheet: BlocConsumer<EmailAuthBloc, EmailAuthState>(
+        bottomSheet: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             // If Phone Otp Verified. Send User to Home Screen
             if (state is UserLoggedIn) {
@@ -36,7 +35,7 @@ class AuthFlow extends StatelessWidget {
                   backgroundColor: kredDarkColor,
                 ),
               );
-              context.read<EmailAuthBloc>().add(
+              context.read<AuthBloc>().add(
                   const AuthToggleFormEvent(formType: AuthFormType.signIn));
             }
           },

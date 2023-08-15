@@ -58,35 +58,35 @@ class EventModel {
       );
 
   factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
-        eventTitle: json["eventTitle"],
-        eventDate: json["eventDate"],
-        eventOrganizers: json["eventOrganizers"] == null
+        eventTitle: json["event_title"],
+        eventDate: json["event_date"],
+        eventOrganizers: json["event_organizers"] == null
             ? []
-            : List<String>.from(json["eventOrganizers"]!.map((x) => x)),
-        eventDescription: json["eventDescription"],
-        bannerImage: json["bannerImage"],
-        eventImages: json["eventImages"] == null
+            : List<String>.from(json["event_organizers"]!.map((x) => x)),
+        eventDescription: json["event_description"],
+        bannerImage: json["banner_image"],
+        eventImages: json["event_images"] == null
             ? []
-            : List<String>.from(json["eventImages"]!.map((x) => x)),
-        registrationUrl: json["registrationUrl"],
-        eventId: json["eventId"],
-        eventType: _parseEventType(json['eventType']),
+            : List<String>.from(json["event_images"]!.map((x) => x)),
+        registrationUrl: json["registration_url"],
+        eventId: json["event_id"],
+        eventType: _parseEventType(json['event_type']),
       );
 
   Map<String, dynamic> toJson() => {
-        "eventTitle": eventTitle,
-        "eventDate": eventDate,
-        "eventOrganizers": eventOrganizers == null
+        "event_title": eventTitle,
+        "event_date": eventDate,
+        "event_organizers": eventOrganizers == null
             ? []
             : List<dynamic>.from(eventOrganizers!.map((x) => x)),
-        "eventDescription": eventDescription,
-        "bannerImage": bannerImage,
-        "eventImages": eventImages == null
+        "event_description": eventDescription,
+        "banner_image": bannerImage,
+        "event_images": eventImages == null
             ? []
             : List<dynamic>.from(eventImages!.map((x) => x)),
-        "registrationUrl": registrationUrl,
-        "eventId": eventId,
-        "eventType": eventType.toString().split('.').last,
+        "registration_url": registrationUrl,
+        "event_id": eventId,
+        "event_type": eventType.toString().split('.').last,
       };
 
   static EventType? _parseEventType(String? value) {

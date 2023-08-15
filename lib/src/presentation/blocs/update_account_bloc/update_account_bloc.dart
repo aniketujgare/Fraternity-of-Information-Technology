@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart' show debugPrint;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/repositories/database_repository.dart';
@@ -49,6 +51,7 @@ class UpdateAccountBloc extends Bloc<UpdateAccountEvent, UpdateAccountState> {
   Future<void> _pickImage(
       PickImageEvent event, Emitter<UpdateAccountState> emit) async {
     try {
+      String imgdelurl = event.currImageUrl;
       emit(PickImageLoadingState());
       var url = await dataRepository.pickAndUploadImage();
       if (url == null) {
@@ -58,6 +61,14 @@ class UpdateAccountBloc extends Bloc<UpdateAccountEvent, UpdateAccountState> {
       }
       await dataRepository.updateUser(UserModel(profilePic: url));
       emit(ImageUploadedState(imageURL: url));
+
+      //delete old pic from db storage
+      try {
+        await FirebaseStorage.instance.refFromURL(imgdelurl).delete();
+        debugPrint('Image deleted successfully');
+      } catch (error) {
+        debugPrint('Error deleting image: $error');
+      }
     } on FirebaseAuthException catch (e) {
       emit(UpdateAccountError(error: e.code));
     } catch (e) {

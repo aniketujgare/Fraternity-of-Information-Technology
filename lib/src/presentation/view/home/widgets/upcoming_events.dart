@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/upcoming_event_model.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../domain/models/event_model.dart';
 import '../../../../utils/constants/constants.dart';
 
 class UpcomingEventsCard extends StatelessWidget {
-  final UpcomingEventModel event;
+  final EventModel event;
   const UpcomingEventsCard({
     Key? key,
     required this.event,
@@ -69,7 +70,7 @@ class UpcomingEventsCard extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: FittedBox(
                           child: Text(
-                            event.organizer!.first,
+                            organizersToString(event.eventOrganizers),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: const TextStyle(
@@ -116,7 +117,8 @@ class UpcomingEventsCard extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        event.date!,
+                        DateFormat('dd MMM yyyy')
+                            .format(DateTime.parse(event.eventDate!)),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 16,
