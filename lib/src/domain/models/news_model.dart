@@ -12,11 +12,11 @@ class NewsModel {
   final String? coverImage;
   final String? newsId;
   final String? newsContent;
-  final DateTime? newsDate;
+  final String? newsDate;
   final String? newsTitle;
-  final String? newsWriter;
+  final String? newsWritersName;
+  final String? newsWritersPicture;
   final List<String>? subImages;
-  final String? subtitle;
   final String? writersDepartment;
   final String? writersYear;
 
@@ -26,9 +26,9 @@ class NewsModel {
     this.newsContent,
     this.newsDate,
     this.newsTitle,
-    this.newsWriter,
+    this.newsWritersName,
+    this.newsWritersPicture,
     this.subImages,
-    this.subtitle,
     this.writersDepartment,
     this.writersYear,
   });
@@ -37,11 +37,11 @@ class NewsModel {
     String? coverImage,
     String? newsId,
     String? newsContent,
-    DateTime? newsDate,
+    String? newsDate,
     String? newsTitle,
-    String? newsWriter,
+    String? newsWritersName,
+    String? newsWritersPicture,
     List<String>? subImages,
-    String? subtitle,
     String? writersDepartment,
     String? writersYear,
   }) =>
@@ -51,9 +51,9 @@ class NewsModel {
         newsContent: newsContent ?? this.newsContent,
         newsDate: newsDate ?? this.newsDate,
         newsTitle: newsTitle ?? this.newsTitle,
-        newsWriter: newsWriter ?? this.newsWriter,
+        newsWritersName: newsWritersName ?? this.newsWritersName,
+        newsWritersPicture: newsWritersPicture ?? this.newsWritersPicture,
         subImages: subImages ?? this.subImages,
-        subtitle: subtitle ?? this.subtitle,
         writersDepartment: writersDepartment ?? this.writersDepartment,
         writersYear: writersYear ?? this.writersYear,
       );
@@ -62,15 +62,13 @@ class NewsModel {
         coverImage: json["cover_image"],
         newsId: json["news_id"],
         newsContent: json["news_content"],
-        newsDate: json["news_date"] == null
-            ? null
-            : DateTime.parse(json["news_date"]),
+        newsDate: json["news_date"],
         newsTitle: json["news_title"],
-        newsWriter: json["news_writer"],
+        newsWritersName: json["news_writers_name"],
+        newsWritersPicture: json["news_writers_picture"],
         subImages: json["sub_images"] == null
             ? []
             : List<String>.from(json["sub_images"]!.map((x) => x)),
-        subtitle: json["subtitle"],
         writersDepartment: json["writers_department"],
         writersYear: json["writers_year"],
       );
@@ -79,14 +77,13 @@ class NewsModel {
         "cover_image": coverImage,
         "news_id": newsId,
         "news_content": newsContent,
-        "news_date":
-            "${newsDate!.year.toString().padLeft(4, '0')}-${newsDate!.month.toString().padLeft(2, '0')}-${newsDate!.day.toString().padLeft(2, '0')}",
+        "news_date": newsDate,
         "news_title": newsTitle,
-        "news_writer": newsWriter,
+        "news_writers_name": newsWritersName,
+        "news_writers_picture": newsWritersPicture,
         "sub_images": subImages == null
             ? []
             : List<dynamic>.from(subImages!.map((x) => x)),
-        "subtitle": subtitle,
         "writers_department": writersDepartment,
         "writers_year": writersYear,
       };

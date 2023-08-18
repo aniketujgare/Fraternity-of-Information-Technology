@@ -3,10 +3,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../domain/models/event_model.dart';
+import '../../../../utils/constants/constants.dart';
 import '../../../blocs/my_slider/my_slider_bloc.dart';
 import '../../home/widgets/event_registration_view.dart';
 
@@ -22,6 +23,16 @@ class PastEventFullView extends StatelessWidget {
           slivers: [
             if (allEventModel.bannerImage != null)
               DynamicSliverAppBar(
+                leadingWidth: 45,
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: GestureDetector(
+                      onTap: () => context.pop(),
+                      child: SvgPicture.asset(
+                        'assets/images/back_button.svg',
+                        height: 18,
+                      )),
+                ),
                 flexibleSpace: CachedNetworkImage(
                   width: double.maxFinite,
                   imageUrl: allEventModel.bannerImage!,
@@ -34,21 +45,24 @@ class PastEventFullView extends StatelessWidget {
                 [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    child: FittedBox(
-                      child: Text(
-                        allEventModel.eventTitle ?? '',
-                        textAlign: TextAlign.justify,
-                        style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
+                    child: SizedBox(
+                      height: 50,
+                      child: FittedBox(
+                        child: Text(
+                          allEventModel.eventTitle ?? '',
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryColor),
+                        ),
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                     child: Text(
-                      'Date: ${DateFormat('dd MMM yyyy').format(DateTime.parse(allEventModel.eventDate!)).toUpperCase()}',
+                      'Date: ${kFormatDate(allEventModel.eventDate!)}',
                       textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontSize: 16,
@@ -61,7 +75,7 @@ class PastEventFullView extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Text.rich(
                         textAlign: TextAlign.justify,
-                        rich(convertNewLine(
+                        kRich(kConvertNewLine(
                             allEventModel.eventDescription ?? ''))),
                   ),
                   const SizedBox(height: 35),
@@ -148,6 +162,7 @@ class PastEventFullView extends StatelessWidget {
                             );
                           }),
                     ),
+                  const SizedBox(height: 25),
                 ],
               ),
             ),

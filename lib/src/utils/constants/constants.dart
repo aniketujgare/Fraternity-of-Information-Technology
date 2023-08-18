@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 const kPrimaryColor = Color(0XFF6A87F3);
 const kSecondaryColor = Color(0XFF988BE8);
@@ -24,9 +25,52 @@ bool isPortrait(BuildContext context) {
 double kWidth(BuildContext context) => MediaQuery.of(context).size.width;
 double kHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
-String organizersToString(List<String>? organizers) {
+String kOrganizersToString(List<String>? organizers) {
   if (organizers == null) {
     return '';
   }
   return organizers.toString().substring(1, organizers.toString().length - 1);
+}
+
+TextSpan kRich(String input, {TextStyle? style}) {
+  const styles = {
+    '_': TextStyle(fontStyle: FontStyle.italic),
+    '*': TextStyle(fontWeight: FontWeight.bold),
+    '~': TextStyle(decoration: TextDecoration.lineThrough),
+    '```': TextStyle(fontFamily: 'monospace', color: Colors.black87),
+  };
+  final spans = <TextSpan>[];
+  final pattern = RegExp(r'([_*~]|`{3})(.*?)\1');
+  input.trim().splitMapJoin(pattern, onMatch: (m) {
+    final input = m.group(2)!;
+    final style = styles[m.group(1)];
+    spans.add(pattern.hasMatch(input)
+        ? kRich(input, style: style)
+        : TextSpan(text: input, style: style));
+    return '';
+  }, onNonMatch: (String text) {
+    spans.add(TextSpan(text: text));
+    return '';
+  });
+  return TextSpan(style: const TextStyle(fontSize: 14), children: spans);
+}
+
+String kConvertNewLine(String content) {
+  return content.replaceAll(r'\n', '\n');
+}
+
+String kFormatDate(String date) {
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date)).toUpperCase();
+}
+
+//SnackBar And Its type
+enum SnackType { error, success }
+
+Map<SnackType, Color> snackColor = {
+  SnackType.success: Colors.green,
+  SnackType.error: kredDarkColor
+};
+void kShowSnackBar(BuildContext context, SnackType type, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(backgroundColor: snackColor[type], content: Text(message)));
 }

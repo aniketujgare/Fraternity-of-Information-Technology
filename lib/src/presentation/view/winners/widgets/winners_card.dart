@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../domain/models/event_winners_model.dart';
 import '../../../../utils/constants/constants.dart';
@@ -30,7 +29,7 @@ class WinnersCard extends StatelessWidget {
         children: [
           //* Title Of card
           Container(
-            margin: const EdgeInsets.only(left: 25, bottom: 5, top: 28),
+            margin: const EdgeInsets.only(left: 25, bottom: 10),
             child: Text(
               eventName,
               style: const TextStyle(
@@ -41,30 +40,33 @@ class WinnersCard extends StatelessWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 25, bottom: 10, right: 25),
+            margin: const EdgeInsets.only(left: 25, bottom: 0, right: 25),
             width: double.maxFinite,
             height: 23,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
+                  // color: Colors.red,
+                  height: 22,
+                  width: MediaQuery.of(context).size.width * 0.65,
                   child: FittedBox(
+                    fit: BoxFit.scaleDown,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Organizer - ${organizersToString(organizers)}',
+                      'Organizer - ${kOrganizersToString(organizers)}',
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 13,
                         color: Color(0xff000000),
                       ),
                     ),
                   ),
                 ),
                 Text(
-                  'Date - ${DateFormat('dd MMM yyyy').format(DateTime.parse(date))}',
+                  kFormatDate(date),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 13,
                     color: Color(0xff000000),
                   ),
                 ),
@@ -74,7 +76,8 @@ class WinnersCard extends StatelessWidget {
           //* Card
           Center(
             child: Container(
-              margin: const EdgeInsets.all(15),
+              margin: const EdgeInsets.only(
+                  top: 5, left: 15, right: 15, bottom: 30),
               width: 344,
               height: 234,
               decoration: BoxDecoration(

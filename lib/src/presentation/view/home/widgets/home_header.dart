@@ -31,6 +31,7 @@ class HomeHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
+            // mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
@@ -72,12 +73,21 @@ class HomeHeader extends StatelessWidget {
               BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
                 builder: (context, state) {
                   if (state is FetchUserState) {
-                    return Text(
-                      state.userModel.name ?? 'Fitian',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        height: 1.26,
-                        color: kPrimaryColor,
+                    return SizedBox(
+                      height: 25.26,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: FittedBox(
+                        alignment: Alignment.bottomLeft,
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          state.userModel.name ?? 'Fitian',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            height: 1.26,
+                            color: kPrimaryColor,
+                          ),
+                        ),
                       ),
                     );
                   }

@@ -2,37 +2,39 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../domain/models/event_model.dart';
 import '../../../widgets/fit_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-TextSpan rich(String input, {TextStyle? style}) {
-  const styles = {
-    '_': TextStyle(fontStyle: FontStyle.italic),
-    '*': TextStyle(fontWeight: FontWeight.bold),
-    '~': TextStyle(decoration: TextDecoration.lineThrough),
-    '```': TextStyle(fontFamily: 'monospace', color: Colors.black87),
-  };
-  final spans = <TextSpan>[];
-  final pattern = RegExp(r'([_*~]|`{3})(.*?)\1');
-  input.trim().splitMapJoin(pattern, onMatch: (m) {
-    final input = m.group(2)!;
-    final style = styles[m.group(1)];
-    spans.add(pattern.hasMatch(input)
-        ? rich(input, style: style)
-        : TextSpan(text: input, style: style));
-    return '';
-  }, onNonMatch: (String text) {
-    spans.add(TextSpan(text: text));
-    return '';
-  });
-  return TextSpan(style: const TextStyle(fontSize: 14), children: spans);
-}
+// TextSpan rich(String input, {TextStyle? style}) {
+//   const styles = {
+//     '_': TextStyle(fontStyle: FontStyle.italic),
+//     '*': TextStyle(fontWeight: FontWeight.bold),
+//     '~': TextStyle(decoration: TextDecoration.lineThrough),
+//     '```': TextStyle(fontFamily: 'monospace', color: Colors.black87),
+//   };
+//   final spans = <TextSpan>[];
+//   final pattern = RegExp(r'([_*~]|`{3})(.*?)\1');
+//   input.trim().splitMapJoin(pattern, onMatch: (m) {
+//     final input = m.group(2)!;
+//     final style = styles[m.group(1)];
+//     spans.add(pattern.hasMatch(input)
+//         ? rich(input, style: style)
+//         : TextSpan(text: input, style: style));
+//     return '';
+//   }, onNonMatch: (String text) {
+//     spans.add(TextSpan(text: text));
+//     return '';
+//   });
+//   return TextSpan(style: const TextStyle(fontSize: 14), children: spans);
+// }
 
-String convertNewLine(String content) {
-  return content.replaceAll(r'\n', '\n');
-}
+// String convertNewLine(String content) {
+//   return content.replaceAll(r'\n', '\n');
+// }
 
 class EventRegistrationView extends StatelessWidget {
   // final String regLink;
@@ -56,6 +58,16 @@ class EventRegistrationView extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             DynamicSliverAppBar(
+              leadingWidth: 45,
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: SvgPicture.asset(
+                      'assets/images/back_button.svg',
+                      height: 18,
+                    )),
+              ),
               flexibleSpace: CachedNetworkImage(
                 width: double.maxFinite,
                 imageUrl: event.bannerImage!,
@@ -68,13 +80,19 @@ class EventRegistrationView extends StatelessWidget {
                 [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    child: FittedBox(
-                      child: Text(
-                        event.eventTitle!,
-                        textAlign: TextAlign.justify,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                    child: SizedBox(
+                      // color: Colors.red,
+                      height: 50,
+                      child: FittedBox(
+                        // fit: BoxFit.scaleDown,
+                        child: Text(
+                          event.eventTitle!,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -83,7 +101,7 @@ class EventRegistrationView extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                     child: Text.rich(
                         textAlign: TextAlign.justify,
-                        rich(convertNewLine(event.eventDescription!))),
+                        kRich(kConvertNewLine(event.eventDescription!))),
                   ),
                   if (event.eventOrganizers!.isNotEmpty)
                     const Padding(
@@ -129,11 +147,8 @@ class EventRegistrationView extends StatelessWidget {
                         await launchUrlString(event.registrationUrl!,
                             mode: LaunchMode.externalApplication);
                       } catch (e) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Link does not found!'),
-                          backgroundColor: kredDarkColor,
-                        ));
+                        kShowSnackBar(
+                            context, SnackType.error, 'Link does not found!');
                       }
                     },
                     text: 'Register',

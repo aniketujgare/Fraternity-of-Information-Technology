@@ -15,60 +15,52 @@ class WinnersView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(18),
-                  child: Center(
-                    child: Text(
-                      'Winners board',
-                      style: TextStyle(
-                          fontSize: kHeadingFontSize,
-                          color: kTextColor,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            const SliverAppBar(
+              toolbarHeight: 100,
+              leading: SizedBox(),
+              centerTitle: true,
+              floating: true,
+              title: Text(
+                'Winners Board',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 36,
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: BlocConsumer<WinnersBloc, WinnersState>(
-                    listener: (context, state) {
-                      if (state is WinnersErrorState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.errorMessage)));
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is WinnersLoadingState) {
-                        return const Center(
-                            child: FITCircularLoadingIndicator());
-                      } else if (state is WinnersLoadedState) {
-                        final List<EventWinnersModel> winnersList =
-                            state.winners;
-                        return ListView.builder(
-                          itemCount: winnersList.length,
-                          itemBuilder: (context, index) {
-                            final winner = winnersList[index];
-                            return WinnersCard(
-                              eventName: '${winner.eventName}',
-                              organizers: winner.eventOrganizers ?? [],
-                              date: '${winner.eventDate}',
-                              winners: winner.winners!,
-                            );
-                          },
-                        );
-                      }
-                      return const Text('Something went wrong!');
-                    },
-                  ),
-                )
-              ],
-            );
-          },
+              ),
+            ),
+          ],
+          body: BlocConsumer<WinnersBloc, WinnersState>(
+            listener: (context, state) {
+              if (state is WinnersErrorState) {
+                kShowSnackBar(context, SnackType.error, state.errorMessage);
+              }
+            },
+            builder: (context, state) {
+              if (state is WinnersLoadingState) {
+                return const Center(child: FITCircularLoadingIndicator());
+              } else if (state is WinnersLoadedState) {
+                final List<EventWinnersModel> winnersList = state.winners;
+                return ListView.builder(
+                  shrinkWrap: true,
+                  // physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: winnersList.length,
+                  itemBuilder: (context, index) {
+                    final winner = winnersList[index];
+                    return WinnersCard(
+                      eventName: '${winner.eventName}',
+                      organizers: winner.eventOrganizers ?? [],
+                      date: '${winner.eventDate}',
+                      winners: winner.winners!,
+                    );
+                  },
+                );
+              }
+              return const Text('Something went wrong!');
+            },
+          ),
         ),
       ),
     );

@@ -5,14 +5,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart' show debugPrint;
+import 'package:fraternity_of_information_technology/src/domain/models/extras_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
 
 import '../../domain/models/event_model.dart';
 import '../../domain/models/event_winners_model.dart';
 import '../../domain/models/fit_committee.dart';
+import '../../domain/models/fit_committee_model.dart';
+import '../../domain/models/gallery_model.dart';
 import '../../domain/models/honour_board_model.dart';
+import '../../domain/models/news_model.dart';
 import '../../domain/models/user_model.dart';
 
 class DatabaseRepository {
@@ -139,11 +144,12 @@ class DatabaseRepository {
         snapshot.docs[randomIndex].data() as Map<String, dynamic>);
   }
 
-  Future<List<FitCommitteeModel>> getFitCommittee() async {
-    final QuerySnapshot fitCommittee = await _fitCommittee.get();
+  Future<List<FITCommitteeModel>> getFitCommittee() async {
+    final QuerySnapshot fitCommittee =
+        await _fitCommittee.orderBy("active_year", descending: true).get();
 
     return fitCommittee.docs.map((doc) {
-      return FitCommitteeModel.fromJson(doc.data() as Map<String, dynamic>);
+      return FITCommitteeModel.fromJson(doc.data() as Map<String, dynamic>);
     }).toList();
   }
 
@@ -169,5 +175,121 @@ class DatabaseRepository {
     return snapshot.docs.map((doc) {
       return HonourBoardModel.fromJson(doc.data() as Map<String, dynamic>);
     }).toList();
+  }
+
+  Future<List<NewsModel>> fetchNewsData() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('news')
+        .orderBy('news_date',
+            descending: true) // Order by news_date in descending order
+        .get();
+    return querySnapshot.docs.map((doc) {
+      return NewsModel.fromJson(doc.data());
+    }).toList();
+  }
+
+  Future<List<GalleryModel>> fetchGalleryData() async {
+    // Fetch data from Firestore collection
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('gallery')
+        .orderBy('date', descending: true)
+        .get();
+    return querySnapshot.docs.map((doc) {
+      return GalleryModel.fromJson(doc.data());
+    }).toList();
+    // Optionally yield an error state
+  }
+
+  // // 2. compress file and get file.
+  // Future<XFile?> testCompressAndGetFile(File file, String targetPath) async {
+  //   final cacheDir = await getTemporaryDirectory();
+  // final targetPath = '${cacheDir.path}/$filename';
+  //   var result = await FlutterImageCompress.compressAndGetFile(
+  //     file.absolute.path,
+  //     targetPath,
+  //     quality: 88,
+  //     rotate: 180,
+  //   );
+
+  //   // print(file.lengthSync());
+  //   // print(result.lengthSync());
+
+  //   return result;
+  // }
+
+  Future<void> uploadImagesToFirebase(List<XFile> images, String date) async {
+    String matchDate =
+        DateFormat('MMM yyyy').format(DateTime.parse(date)).toUpperCase();
+    try {
+      final storage = FirebaseStorage.instance;
+      final firestore = FirebaseFirestore.instance;
+      var id = uuid.v1();
+      List<String> downloadUrls = [];
+
+      for (XFile image in images) {
+        File file = File(image.path);
+        String imageName =
+            '${FirebaseAuth.instance.currentUser?.email ?? DateTime.now().millisecondsSinceEpoch}_${id}_${file.path.split('/').last}';
+        Reference ref = storage.ref().child('gallery_images/$imageName');
+
+        UploadTask uploadTask = ref.putFile(file);
+        TaskSnapshot snapshot = await uploadTask;
+
+        if (snapshot.state == TaskState.success) {
+          String downloadUrl = await ref.getDownloadURL();
+          downloadUrls.add(downloadUrl);
+        }
+      }
+
+      final CollectionReference galleryCollection =
+          firestore.collection('gallery');
+
+      // Query the document using the date field
+      final QuerySnapshot querySnapshot =
+          await galleryCollection.where('key_date', isEqualTo: matchDate).get();
+
+      if (querySnapshot.docs.isEmpty) {
+        // Create a new document if it doesn't exist
+        await galleryCollection.add({
+          'date': date,
+          'images': downloadUrls,
+          'key_date': matchDate,
+        });
+      } else {
+        // Retrieve the document reference
+        final DocumentSnapshot documentSnapshot = querySnapshot.docs.first;
+
+        // Retrieve the existing images array
+        List<String> existingImages =
+            List<String>.from(documentSnapshot['images']);
+
+        // Append new images to the existing array
+        existingImages.addAll(downloadUrls);
+
+        // Update the document with the modified images array
+        await galleryCollection
+            .doc(documentSnapshot.id)
+            .update({'images': existingImages});
+      }
+
+      debugPrint('Images uploaded and links stored successfully.');
+    } catch (error) {
+      debugPrint('Error uploading images and storing links: $error');
+    }
+  }
+
+  Future<ExtrasModel?> getExtras() async {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('extras')
+          .doc('downloadables') // Replace with your collection name
+          .get();
+
+      return ExtrasModel.fromJson(docSnapshot.data() as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('Error fetching data: $e');
+      return null;
+    }
   }
 }

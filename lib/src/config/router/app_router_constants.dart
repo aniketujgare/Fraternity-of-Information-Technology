@@ -32,13 +32,7 @@ class AppRoutConstants {
   static final newsView = _AppRoutModel(name: 'newsView', path: '/newsView');
   static final newsFullView =
       _AppRoutModel(name: 'newsFullView', path: '/newsFullView');
-  // static final adminPanel = _AppRoutModel(name: 'adminPanel', path: '/a');
-  // static final upcomingEventsPanel =
-  //     _AppRoutModel(name: 'upcomingEventsPanel', path: '/upcomingEventsPanel');
-  // static final upcomingEventsList =
-  //     _AppRoutModel(name: 'upcomingEventsList', path: '/upcomingEventsList');
-  // static final upcomingEventUpdate =
-  //     _AppRoutModel(name: 'upcomingEventUpdate', path: '/upcomingEventUpdate');
-  // static final winnersAdmin =
-  //     _AppRoutModel(name: 'winnersAdmin', path: '/winnersAdmin');
+  static final galleryUploadView =
+      _AppRoutModel(name: 'galleryUploadView', path: '/galleryUploadView');
+  static final aboutView = _AppRoutModel(name: 'aboutView', path: '/aboutView');
 }

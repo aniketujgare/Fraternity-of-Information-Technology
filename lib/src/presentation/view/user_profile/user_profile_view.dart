@@ -61,21 +61,14 @@ class _UserProfileViewState extends State<UserProfileView> {
                         }
                       },
                     ),
-                    BlocListener<AuthBloc, AuthState>(
-                      listener: (context, state) {
-                        if (state is EmailAuthInitialState) {
-                          context.replaceNamed(AppRoutConstants.authFlow.name);
-                        }
-                      },
-                      child: IconButton(
-                          onPressed: () async {
-                            context.read<AuthBloc>().add(AuthSignOutEvent());
-                          },
-                          icon: const Icon(
-                            Icons.exit_to_app,
-                            color: kPrimaryColor,
-                          )),
-                    ),
+                    IconButton(
+                        onPressed: () async {
+                          context.pushNamed(AppRoutConstants.aboutView.name);
+                        },
+                        icon: const Icon(
+                          Icons.interests,
+                          color: kPrimaryColor,
+                        )),
                   ],
                 ),
                 const SizedBox(
@@ -98,11 +91,8 @@ class _UserProfileViewState extends State<UserProfileView> {
                             BlocConsumer<UpdateAccountBloc, UpdateAccountState>(
                           listener: (context, state) {
                             if (state is UpdateAccountError) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(state.error),
-                                ),
-                              );
+                              kShowSnackBar(
+                                  context, SnackType.error, state.error);
                             }
                           },
                           builder: (context, state) {
@@ -217,7 +207,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                     }
                     return ProfileCard(
                         title: 'PRN Number',
-                        iconName: Icons.badge,
+                        iconName: Icons.format_list_numbered_rtl,
                         titleValue: prnNumber);
                   },
                 ),
@@ -229,7 +219,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                     }
                     return ProfileCard(
                         title: 'Branch',
-                        iconName: Icons.school,
+                        iconName: Icons.book_outlined,
                         titleValue: branch);
                   },
                 ),
@@ -248,12 +238,21 @@ class _UserProfileViewState extends State<UserProfileView> {
                 const SizedBox(
                   height: 30,
                 ),
-                FitButton(
-                  bgColor: kPrimaryColor,
-                  height: 50,
-                  text: 'Sign out',
-                  showArrow: false,
-                  onTap: () {},
+                BlocListener<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state is EmailAuthInitialState) {
+                      context.replaceNamed(AppRoutConstants.authFlow.name);
+                    }
+                  },
+                  child: FitButton(
+                    bgColor: kPrimaryColor,
+                    height: 50,
+                    text: 'Sign out',
+                    showArrow: false,
+                    onTap: () async {
+                      context.read<AuthBloc>().add(AuthSignOutEvent());
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 20,

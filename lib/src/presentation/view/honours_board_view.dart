@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../utils/constants/constants.dart';
 import '../blocs/honour_board_bloc/honour_board_bloc.dart';
 import '../widgets/fit_circular_loading_indicator.dart';
 import '../widgets/text_shimmer.dart';
@@ -16,46 +15,47 @@ class HonoursBoardView extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(18),
-                child: Center(
-                  child: Text(
-                    'Honours board',
-                    style: TextStyle(
-                        fontSize: kHeadingFontSize,
-                        color: kTextColor,
-                        fontWeight: FontWeight.w400),
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              const SliverAppBar(
+                toolbarHeight: 100,
+                leading: SizedBox(),
+                centerTitle: true,
+                floating: true,
+                title: Text(
+                  'Honours board',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 36,
                   ),
                 ),
               ),
-              Expanded(
-                child: BlocBuilder<HonourBoardBloc, HonourBoardState>(
-                  builder: (context, state) {
-                    if (state is HonourBoardLoading) {
-                      return const Center(child: FITCircularLoadingIndicator());
-                    } else if (state is HonourBoardLoaded) {
-                      return ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          final honorStudent = state.honourBoard[index];
-                          return HonourCard(
-                            profilePic: honorStudent.profilePic,
-                            achievents: honorStudent.achievements,
-                            name: honorStudent.name,
-                            department: honorStudent.department,
-                            year: honorStudent.year,
-                          );
-                        },
-                      );
-                    } else {
-                      return const Text('somthing went wrong');
-                    }
-                  },
-                ),
-              ),
             ],
+            body: BlocBuilder<HonourBoardBloc, HonourBoardState>(
+              builder: (context, state) {
+                if (state is HonourBoardLoading) {
+                  return const Center(child: FITCircularLoadingIndicator());
+                } else if (state is HonourBoardLoaded) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.honourBoard.length,
+                    itemBuilder: (context, index) {
+                      final honorStudent = state.honourBoard[index];
+                      return HonourCard(
+                        profilePic: honorStudent.profilePic,
+                        achievents: honorStudent.achievements,
+                        name: honorStudent.name,
+                        department: honorStudent.department,
+                        year: honorStudent.year,
+                      );
+                    },
+                  );
+                } else {
+                  return const Text('somthing went wrong');
+                }
+              },
+            ),
           ),
         ));
   }

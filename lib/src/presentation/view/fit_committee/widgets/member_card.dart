@@ -55,40 +55,15 @@ class MemberCard extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         child: Row(
           children: [
-            // BlocBuilder<FitCommitteeBloc, FitCommitteeState>(
-            //     builder: (context, state) {
-            //       if (state is FetchUserState) {
-            //         return ClipOval(
-            //           child: CachedNetworkImage(
-            //               height: 50,
-            //               width: 50,
-            //               fit: BoxFit.cover,
-            //               imageUrl: state.userModel.profilePic ??
-            //                   'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/images%2FIMG-20230620-WA0005.jpg?alt=media&token=f261198f-e266-4c56-a186-212872527431'),
-            //         );
-            //       }
-            //       return Shimmer.fromColors(
-            //         baseColor: Colors.grey.shade300,
-            //         highlightColor: Colors.grey.shade100,
-            //         child: Container(
-            //           height: 50,
-            //           width: 50,
-            //           decoration: BoxDecoration(
-            //               color: Colors.white,
-            //               borderRadius: BorderRadius.circular(25)),
-            //           margin: const EdgeInsets.only(right: 15),
-            //         ),
-            //       );
-            //     },
-            //   ),
             ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(20)),
               child: CachedNetworkImage(
                 height: 125,
                 width: 125,
                 fit: BoxFit.cover,
-                imageUrl: profilePic ??
-                    'https://wallpapers.com/images/featured-full/kaneki-xsv5e4ut8mxmqae9.jpg',
+                imageUrl: profilePic != ''
+                    ? profilePic!
+                    : 'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/avatar_person.jpg?alt=media&token=a9a70025-d971-4cd6-aae7-d50c27235598',
                 progressIndicatorBuilder: (context, url, progress) {
                   return Shimmer.fromColors(
                     baseColor: Colors.grey.shade300,
@@ -104,7 +79,6 @@ class MemberCard extends StatelessWidget {
                 },
               ),
             ),
-
             const SizedBox(
               width: 15,
             ),
@@ -152,9 +126,8 @@ class MemberCard extends StatelessWidget {
                           try {
                             await launchUrl(lPhoneNumber);
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Dialer is not installed!')));
+                            kShowSnackBar(context, SnackType.error,
+                                'Dialer is not installed!');
                           }
                         },
                       ),
@@ -164,53 +137,49 @@ class MemberCard extends StatelessWidget {
                           try {
                             await launchUrl(lWhatsapp);
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Whatsapp is not installed!')));
+                            kShowSnackBar(context, SnackType.error,
+                                'Whatsapp is not installed!');
                           }
                         },
                       ),
-                      SocialLinkButton(
-                        icon: 'linkedin_icon.svg',
-                        onTap: () async {
-                          try {
-                            await launchUrl(lLinkedin);
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('LinkedIn is not installed!')));
-                          }
-                        },
-                      ),
-                      SocialLinkButton(
-                        icon: 'instagram_icon.svg',
-                        onTap: () async {
-                          try {
-                            await launchUrl(
-                              lInstagram,
-                            );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Instagram is not installed!')));
-                          }
-                        },
-                      ),
-                      SocialLinkButton(
-                        icon: 'email_icon.svg',
-                        onTap: () async {
-                          try {
-                            await launchUrl(lEmail);
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('G-Mail is not installed!')));
-                          }
-                        },
-                      ),
+                      if (linkedin.length > 5)
+                        SocialLinkButton(
+                          icon: 'linkedin_icon.svg',
+                          onTap: () async {
+                            try {
+                              await launchUrl(lLinkedin);
+                            } catch (e) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'LinkedIn is not installed!');
+                            }
+                          },
+                        ),
+                      if (instagram.length > 5)
+                        SocialLinkButton(
+                          icon: 'instagram_icon.svg',
+                          onTap: () async {
+                            try {
+                              await launchUrl(
+                                lInstagram,
+                              );
+                            } catch (e) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'Instagram is not installed!');
+                            }
+                          },
+                        ),
+                      if (email.length > 5)
+                        SocialLinkButton(
+                          icon: 'email_icon.svg',
+                          onTap: () async {
+                            try {
+                              await launchUrl(lEmail);
+                            } catch (e) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'G-Mail is not installed!');
+                            }
+                          },
+                        ),
                     ],
                   )
                 ],

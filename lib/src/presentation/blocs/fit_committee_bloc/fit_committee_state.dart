@@ -10,7 +10,7 @@ abstract class FitCommitteeState extends Equatable {
 class FitCommitteeLoadingState extends FitCommitteeState {}
 
 class FitCommitteeLoadedState extends FitCommitteeState {
-  final List<FitCommitteeModel> fitCommittee;
+  final List<FITCommitteeModel> fitCommittee;
   const FitCommitteeLoadedState({required this.fitCommittee});
   @override
   List<Object> get props => [fitCommittee];

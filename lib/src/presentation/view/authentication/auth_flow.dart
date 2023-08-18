@@ -29,12 +29,8 @@ class AuthFlow extends StatelessWidget {
             }
             // Show error message if any error occurs while verifying phone number and otp code
             if (state is EmailAuthError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.error),
-                  backgroundColor: kredDarkColor,
-                ),
-              );
+              kShowSnackBar(context, SnackType.error, state.error);
+
               context.read<AuthBloc>().add(
                   const AuthToggleFormEvent(formType: AuthFormType.signIn));
             }

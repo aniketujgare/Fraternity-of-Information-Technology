@@ -1,10 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/all_past_events_bloc/all_past_events_bloc.dart';
 
 import '../../../domain/models/event_model.dart';
 import '../../../utils/constants/constants.dart';
+import '../../blocs/all_past_events_bloc/all_past_events_bloc.dart';
 import '../../widgets/fit_circular_loading_indicator.dart';
 import 'widgets/past_event_card.dart';
 
@@ -15,51 +14,47 @@ class AllPastEventsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(18),
-              child: Center(
-                child: Text(
-                  'All Past Events',
-                  style: TextStyle(
-                      fontSize: kHeadingFontSize,
-                      color: kTextColor,
-                      fontWeight: FontWeight.w400),
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            const SliverAppBar(
+              toolbarHeight: 100,
+              leading: SizedBox(),
+              centerTitle: true,
+              floating: true,
+              title: Text(
+                'All Past Events',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 36,
                 ),
               ),
             ),
-            Expanded(
-              child: BlocConsumer<AllPastEventsBloc, AllPastEventsState>(
-                listener: (context, state) {
-                  if (state is AllPastErrorState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.errorMessage)));
-                  }
-                },
-                builder: (context, state) {
-                  if (state is AllPastEventsLoading) {
-                    return const Center(child: FITCircularLoadingIndicator());
-                  } else if (state is AllPastEventsLoadedState) {
-                    final List<EventModel> allEventsList =
-                        state.allPastEventsList;
-                    return ListView.builder(
-                      itemCount: allEventsList.length,
-                      itemBuilder: (context, index) {
-                        final event = allEventsList[index];
-
-                        // final eventType = ;
-                        return PastEventCard(
-                            eventType: allEventsList[index].eventType!,
-                            eventModel: event);
-                      },
-                    );
-                  }
-                  return const Text('Something went wrong!');
-                },
-              ),
-            ),
           ],
+          body: BlocConsumer<AllPastEventsBloc, AllPastEventsState>(
+            listener: (context, state) {
+              if (state is AllPastErrorState) {
+                kShowSnackBar(context, SnackType.error, state.errorMessage);
+              }
+            },
+            builder: (context, state) {
+              if (state is AllPastEventsLoading) {
+                return const Center(child: FITCircularLoadingIndicator());
+              } else if (state is AllPastEventsLoadedState) {
+                final List<EventModel> allEventsList = state.allPastEventsList;
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: allEventsList.length,
+                  itemBuilder: (context, index) {
+                    return PastEventCard(
+                        eventType: allEventsList[index].eventType!,
+                        eventModel: allEventsList[index]);
+                  },
+                );
+              }
+              return const Text('Something went wrong!');
+            },
+          ),
         ),
       ),
     );

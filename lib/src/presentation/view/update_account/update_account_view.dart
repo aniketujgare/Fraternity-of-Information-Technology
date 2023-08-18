@@ -61,25 +61,29 @@ class _UpdateAccountViewState extends State<UpdateAccountView> {
                   label: 'Full Name',
                   icon: Icons.person_outline,
                   topPad: 70,
+                  keyboardType: TextInputType.name,
                   textFieldController: nameController,
                 ),
                 FitTextFormField(
                   label: 'Email',
                   icon: Icons.alternate_email,
                   topPad: 25,
+                  keyboardType: TextInputType.emailAddress,
                   textFieldController: emailController,
                 ),
                 FitTextFormField(
                   label: 'PRN',
-                  icon: Icons.format_indent_decrease,
+                  icon: Icons.format_list_numbered_rtl,
                   topPad: 25,
                   botPad: 25,
+                  keyboardType: TextInputType.number,
                   textFieldController: prnController,
                 ),
                 FitTextFormField(
                   label: 'Admission Year',
-                  icon: Icons.onetwothree,
+                  icon: Icons.event,
                   botPad: 25,
+                  keyboardType: TextInputType.number,
                   textFieldController: admissionYearController,
                 ),
                 Row(
@@ -100,7 +104,7 @@ class _UpdateAccountViewState extends State<UpdateAccountView> {
                       builder: (context, state) {
                         return FitDropDownMenu(
                           label: 'Year',
-                          icon: Icons.calendar_month_rounded,
+                          icon: Icons.badge,
                           items: state.yearItems,
                           selectedValue: yearController,
                         );

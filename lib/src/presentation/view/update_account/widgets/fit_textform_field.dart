@@ -12,6 +12,7 @@ class FitTextFormField extends StatelessWidget {
     this.botPad = 0,
     required this.textFieldController,
     this.lines = 1,
+    this.keyboardType = TextInputType.text,
   });
 
   final double horiPad, topPad, botPad;
@@ -19,6 +20,7 @@ class FitTextFormField extends StatelessWidget {
   final String label;
   final TextEditingController textFieldController;
   final int lines;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class FitTextFormField extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(horiPad, topPad, horiPad, botPad),
       child: TextFormField(
         controller: textFieldController,
+        keyboardType: keyboardType,
         textAlign: TextAlign.start,
         maxLines: lines,
         decoration: InputDecoration(

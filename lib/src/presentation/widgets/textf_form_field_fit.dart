@@ -6,16 +6,19 @@ class TextFormFieldFit extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final IconData icon;
+  final bool hideText;
   const TextFormFieldFit({
     super.key,
     required this.hintText,
     required this.controller,
     required this.icon,
+    this.hideText = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: hideText,
       controller: controller,
       textAlign: TextAlign.start,
       decoration: InputDecoration(

@@ -1,9 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../config/router/app_router_constants.dart';
 import '../../../utils/constants/constants.dart';
+import '../../blocs/gallery_bloc/gallery_bloc.dart';
+import '../../widgets/fit_circular_loading_indicator.dart';
 
 class GalleryView extends StatelessWidget {
   const GalleryView({super.key});
@@ -14,80 +21,156 @@ class GalleryView extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: NestedScrollView(
-              // floatHeaderSlivers: true,
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    SliverAppBar(
-                      // floating: true,
-                      toolbarHeight: 100,
-                      title: Row(
-                        children: [
-                          const Text(
-                            'Gallery',
-                            style: TextStyle(
-                              fontSize: 36,
+            // floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverAppBar(
+                // floating: true,
+                toolbarHeight: 100,
+                title: Row(
+                  children: [
+                    const Text(
+                      'Gallery',
+                      style: TextStyle(
+                        fontSize: 36,
+                      ),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () => context
+                          .pushNamed(AppRoutConstants.galleryUploadView.name),
+                      child: Container(
+                        height: 46,
+                        width: 133,
+                        decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(76.5)),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Upload ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const Spacer(),
-                          Container(
-                            height: 46,
-                            width: 133,
-                            decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(76.5)),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Upload ',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.add,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                              ],
+                            Icon(
+                              Icons.add,
+                              size: 15,
+                              color: Colors.white,
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
                     )
                   ],
-              body: GridView.custom(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                gridDelegate: SliverQuiltedGridDelegate(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 4,
-                  repeatPattern: QuiltedGridRepeatPattern.inverted,
-                  pattern: [
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(2, 2),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                  ],
                 ),
-                childrenDelegate: SliverChildBuilderDelegate(
-                  // childCount: 10,
-                  (context, index) =>
-                      Tile(index: index, imageUrl: imgs[index % 4]),
-                ),
-              )),
+              )
+            ],
+            body: BlocConsumer<GalleryBloc, GalleryState>(
+              listener: (context, state) {
+                if (state is GalleryErrorState) {
+                  kShowSnackBar(context, SnackType.error,
+                      'Error Loading Gallery Images!');
+                }
+              },
+              builder: (context, state) {
+                if (state is GalleryLoaded) {
+                  return CustomScrollView(
+                    slivers: [
+                      SliverList(
+                          delegate: SliverChildListDelegate([
+                        Column(
+                            children: state.galleryList
+                                .map(
+                                  (gallery) => Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(DateFormat('MMM yyyy')
+                                                .format(DateTime.parse(
+                                                    gallery.date!))
+                                                .toUpperCase()),
+                                            const Icon(Icons.filter_list),
+                                          ],
+                                        ),
+                                      ),
+                                      GridView.custom(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        gridDelegate: SliverQuiltedGridDelegate(
+                                          crossAxisCount: 3,
+                                          mainAxisSpacing: 4,
+                                          crossAxisSpacing: 4,
+                                          repeatPattern:
+                                              QuiltedGridRepeatPattern.inverted,
+                                          pattern: [
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(2, 2),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                            const QuiltedGridTile(1, 1),
+                                          ],
+                                        ),
+                                        childrenDelegate:
+                                            SliverChildBuilderDelegate(
+                                                childCount:
+                                                    gallery.images?.length ?? 0,
+                                                (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return PhotoView(
+                                                      imageProvider:
+                                                          CachedNetworkImageProvider(
+                                                              gallery.images![
+                                                                  index]));
+                                                },
+                                              );
+                                            },
+                                            child: Tile(
+                                              index: index,
+                                              imageUrl: gallery.images![index],
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                .toList()),
+                        const SizedBox(height: 105),
+                      ]))
+                    ],
+                  );
+                }
+                return const Center(
+                  child: FITCircularLoadingIndicator(),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -121,10 +204,3 @@ class Tile extends StatelessWidget {
     );
   }
 }
-
-List<String> imgs = [
-  'https://img.mensxp.com/media/content/2021/Jun/MX1400_60c201e0863f4.jpeg',
-  'https://www.famousbollywood.com/wp-content/uploads/2021/07/Indori-Ishq-season-1.jpg',
-  'https://images.bhaskarassets.com/thumb/1800x1800/web2images/521/2020/12/17/orig_03_1608162101.jpg',
-  'https://images.thequint.com/thequint%2F2021-06%2F38b4ed7a-0da3-4ede-9f6f-558577ba81e3%2FScreenshot_2021_06_08_150134.png',
-];

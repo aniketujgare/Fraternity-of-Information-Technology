@@ -67,6 +67,7 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
               hintText: 'Password',
               controller: passwordController,
               icon: Icons.password,
+              hideText: true,
             ),
             // TextFormField(controller: phoneNoController),
           ),

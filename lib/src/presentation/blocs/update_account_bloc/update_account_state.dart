@@ -15,6 +15,7 @@ abstract class UpdateAccountState extends Equatable {
     'Second Year',
     'Third Year',
     'Final Year',
+    'Passout',
   ];
   const UpdateAccountState();
 
