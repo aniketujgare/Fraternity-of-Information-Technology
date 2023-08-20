@@ -21,7 +21,7 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
-      height: kHeight(context) * 0.5,
+      height: kHeight(context) * 0.52,
       width: kWidth(context),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -38,10 +38,10 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-              top: 40,
+              top: 30,
               left: 25,
               right: kWidth(context) * 0.35,
-              bottom: 10,
+              bottom: 5,
             ),
             child: const FittedBox(
               child: Text(

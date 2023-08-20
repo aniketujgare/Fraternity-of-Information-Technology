@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_circular_loading_indicator.dart';
 
 import '../../../utils/constants/constants.dart';
 import '../../blocs/fit_committee_bloc/fit_committee_bloc.dart';
@@ -73,52 +74,10 @@ class FitCommitteeView extends StatelessWidget {
                     },
                   );
                 }
-                return const Center(child: Text('Something went wrong!!'));
+                return const Center(child: FITCircularLoadingIndicator());
               },
             )),
       ),
     );
   }
 }
-
-/*
-BlocConsumer<FitCommitteeBloc, FitCommitteeState>(
-            listener: (context, state) {
-              if (state is FitCommitteeErrorState) {
-                kShowSnackBar(context, SnackType.error, state.errorMessage);
-              }
-            },
-            builder: (context, state) {
-              if (state is FitCommitteeLoadingState) {
-                return const Center(child: FITCircularLoadingIndicator());
-              } else if (state is FitCommitteeLoadedState) {
-                final List<FITCommitteeModel> committeeList =
-                    state.fitCommittee;
-                print(state.fitCommittee.toList());
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: committeeList.length,
-                  itemBuilder: (context, index) {
-                    final member = committeeList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: MemberCard(
-                        profilePic: member.members.first.profilePic,
-                        position: '${member.members.first.designation}',
-                        name: '${member.members.first..name}',
-                        year: 'Final Year',
-                        branch: 'Information Technnology',
-                        email: '${member.members.first..mail}',
-                        instagram: '${member.members.first..instagram}',
-                        linkedin: '${member.members.first..linkedin}',
-                        phoneNumber: '${member.members.first..phone}',
-                      ),
-                    );
-                  },
-                );
-              }
-              return const Center(child: Text('Something went wrong!'));
-            },
-          ),
-
-          */

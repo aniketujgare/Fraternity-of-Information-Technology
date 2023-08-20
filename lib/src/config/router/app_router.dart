@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/extras_bloc/extras_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/view/extras_view/extras_view.dart';
+import '../../presentation/blocs/extras_bloc/extras_bloc.dart';
+import '../../presentation/view/extras_view/extras_view.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/repositories/database_repository.dart';
@@ -61,6 +61,7 @@ final _allPastEventsBloc =
 final _newsBloc = NewsBloc(databaseRepository: _databaseRepository);
 final _galleryBloc = GalleryBloc(databaseRepository: _databaseRepository);
 final _extrasBloc = ExtrasBloc(databaseRepository: _databaseRepository);
+final _admissionYrCubit = DatePickerCubit();
 final GlobalKey<NavigatorState> rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -82,8 +83,15 @@ class AppRouter {
         name: AppRoutConstants.updateAccount.name,
         path: AppRoutConstants.updateAccount.path,
         pageBuilder: (context, state) => MaterialPage(
-          child: BlocProvider.value(
-            value: _updateAccountBloc,
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: _updateAccountBloc,
+              ),
+              BlocProvider.value(
+                value: _admissionYrCubit,
+              ),
+            ],
             child: UpdateAccountView(userModel: state.extra as UserModel),
           ),
         ),
@@ -134,6 +142,9 @@ class AppRouter {
               //TODO: everytime fetching data do something to stop it
               BlocProvider.value(
                 value: _galleryBloc..add(LoadGalleryEvent()),
+              ),
+              BlocProvider.value(
+                value: DatePickerCubit(),
               ),
             ],
             child: const FITUINavigator(),

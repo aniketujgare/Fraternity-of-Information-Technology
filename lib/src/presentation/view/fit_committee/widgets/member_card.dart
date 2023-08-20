@@ -86,19 +86,23 @@ class MemberCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    position,
-                    style: const TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500),
+                  FittedBox(
+                    child: Text(
+                      position,
+                      style: const TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
-                  Text(
-                    name,
-                    style: const TextStyle(
-                        color: kTextColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
+                  FittedBox(
+                    child: Text(
+                      name,
+                      style: const TextStyle(
+                          color: kTextColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                   Text(
                     year,

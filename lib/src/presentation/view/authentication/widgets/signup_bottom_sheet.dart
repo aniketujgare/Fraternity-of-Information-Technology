@@ -21,7 +21,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
-      height: kHeight(context) * 0.5,
+      height: kHeight(context) * 0.52,
       width: kWidth(context),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -38,10 +38,10 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-              top: 40,
+              top: 30,
               left: 25,
-              right: kWidth(context) * 0.35,
-              bottom: 15,
+              right: kWidth(context) * 0.18,
+              bottom: 5,
             ),
             child: const FittedBox(
               child: Text(
@@ -61,7 +61,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(35, 10, 35, 10),
+            padding: const EdgeInsets.fromLTRB(35, 10, 35, 5),
             child: TextFormFieldFit(
               hintText: 'Password',
               controller: passwordController,
@@ -71,7 +71,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
             // TextFormField(controller: phoneNoController),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(37, 0, 37, 10),
+            padding: const EdgeInsets.fromLTRB(37, 0, 37, 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

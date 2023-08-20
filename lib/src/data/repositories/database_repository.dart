@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart' show debugPrint;
-import 'package:fraternity_of_information_technology/src/domain/models/extras_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -13,7 +12,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../domain/models/event_model.dart';
 import '../../domain/models/event_winners_model.dart';
-import '../../domain/models/fit_committee.dart';
+import '../../domain/models/extras_model.dart';
 import '../../domain/models/fit_committee_model.dart';
 import '../../domain/models/gallery_model.dart';
 import '../../domain/models/honour_board_model.dart';
@@ -40,7 +39,9 @@ class DatabaseRepository {
   }
 
   Future<UserModel> updateUser(UserModel userModel) async {
-    await _collection.doc(user!.uid).update(userModel.toJson());
+    await _collection
+        .doc(user!.uid)
+        .set(userModel.toJson(), SetOptions(merge: true));
     return userModel;
   }
 
@@ -200,23 +201,6 @@ class DatabaseRepository {
     }).toList();
     // Optionally yield an error state
   }
-
-  // // 2. compress file and get file.
-  // Future<XFile?> testCompressAndGetFile(File file, String targetPath) async {
-  //   final cacheDir = await getTemporaryDirectory();
-  // final targetPath = '${cacheDir.path}/$filename';
-  //   var result = await FlutterImageCompress.compressAndGetFile(
-  //     file.absolute.path,
-  //     targetPath,
-  //     quality: 88,
-  //     rotate: 180,
-  //   );
-
-  //   // print(file.lengthSync());
-  //   // print(result.lengthSync());
-
-  //   return result;
-  // }
 
   Future<void> uploadImagesToFirebase(List<XFile> images, String date) async {
     String matchDate =

@@ -10,14 +10,15 @@ part 'upcoming_events_state.dart';
 class UpcomingEventsBloc
     extends Bloc<UpcomingEventsEvent, UpcomingEventsState> {
   final DatabaseRepository databaseRepository;
+  List<EventModel>? upcomingEventsList;
   UpcomingEventsBloc({required this.databaseRepository})
       : super(UpcomingEventsLoadingState()) {
     on<FetchUpcomingEventsEvent>((event, emit) async {
       try {
-        final List<EventModel>? upcomingEventsList =
-            await databaseRepository.getUpcomingEvents();
+        upcomingEventsList ??= await databaseRepository.getUpcomingEvents();
         if (upcomingEventsList != null) {
-          emit(UpcomingEventsLoadedState(upcomingEvents: upcomingEventsList));
+          emit(UpcomingEventsLoadedState(
+              upcomingEvents: upcomingEventsList ?? []));
         }
       } catch (e) {
         emit(const UpcomingEventsErrorState(

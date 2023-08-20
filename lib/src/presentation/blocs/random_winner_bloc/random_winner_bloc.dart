@@ -7,19 +7,17 @@ import '../../../domain/models/event_winners_model.dart';
 part 'random_winner_event.dart';
 part 'random_winner_state.dart';
 
-List<EventWinnersModel> listEventWinners = [];
-
 class RandomWinnerBloc extends Bloc<RandomWinnerEvent, RandomWinnerState> {
   final DatabaseRepository databaseRepository;
+  EventWinnersModel? randEventWinner;
   RandomWinnerBloc({required this.databaseRepository})
       : super(RandomWinnerInitial()) {
     on<FetchRandomWinnerEvent>((event, emit) async {
       try {
-        if (listEventWinners.isEmpty) {
-          final winner = await databaseRepository.getARandomWinner();
-          listEventWinners.add(winner);
+        randEventWinner ??= await databaseRepository.getARandomWinner();
+        if (randEventWinner != null) {
+          emit(RandomWinnersLoadedState(winners: randEventWinner!));
         }
-        emit(RandomWinnersLoadedState(winners: listEventWinners.first));
       } catch (e) {
         emit(const RandomWinnerErrorState(
             errorMessage: 'Failed to fetch winners'));

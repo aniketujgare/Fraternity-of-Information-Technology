@@ -27,11 +27,8 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       (event, emit) async {
         try {
           emit(GalleryLoading());
-          // print(galleryList!.length);
           galleryList = await databaseRepository.fetchGalleryData();
-          // if (galleryList != null) {
           emit(GalleryLoaded(galleryList: galleryList!));
-          // print(galleryList!.length);
           // }
         } catch (e) {
           emit(const GalleryErrorState('Failed to load the Gallery!!'));

@@ -9,13 +9,15 @@ part 'winners_state.dart';
 
 class WinnersBloc extends Bloc<WinnersEvent, WinnersState> {
   final DatabaseRepository databaseRepository;
+  List<EventWinnersModel>? winnersList;
   WinnersBloc({required this.databaseRepository})
       : super(WinnersLoadingState()) {
     on<FetchWinnersEvent>((event, emit) async {
       try {
-        final List<EventWinnersModel> winnersList =
-            await databaseRepository.getAllWinners();
-        emit(WinnersLoadedState(winners: winnersList));
+        winnersList = await databaseRepository.getAllWinners();
+        if (winnersList != null) {
+          emit(WinnersLoadedState(winners: winnersList ?? []));
+        }
       } catch (e) {
         emit(const WinnersErrorState(errorMessage: 'Failed to fetch winners'));
       }

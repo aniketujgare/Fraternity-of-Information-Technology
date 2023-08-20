@@ -15,7 +15,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       try {
         newsList ??= await databaseRepository.fetchNewsData();
         if (newsList != null) {
-          emit(NewsLoadedState(newsList!));
+          emit(NewsLoadedState(newsList ?? []));
         }
       } catch (e) {
         emit(const NewsErrorState('Error loading news'));

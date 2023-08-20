@@ -150,7 +150,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                                                   ''));
                                 },
                                 child: const Icon(Icons.edit,
-                                    size: 20, color: Colors.black),
+                                    size: 20, color: kPrimaryColor),
                               );
                             }
                             return Container();
@@ -165,7 +165,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                 ),
                 BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
                   builder: (context, state) {
-                    String name = 'Full Name';
+                    String name = '';
                     if (state is FetchUserState) {
                       name = state.userModel.name ?? name;
                     }
@@ -177,7 +177,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                 ),
                 BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
                   builder: (context, state) {
-                    String phone = 'Phone Number';
+                    String phone = '';
                     if (state is FetchUserState) {
                       phone = state.userModel.phone ?? phone;
                     }
@@ -189,7 +189,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                 ),
                 BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
                   builder: (context, state) {
-                    String email = 'example@email.com';
+                    String email = '';
                     if (state is FetchUserState) {
                       email = state.userModel.email ?? email;
                     }
@@ -201,7 +201,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                 ),
                 BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
                   builder: (context, state) {
-                    String prnNumber = 'PRN Number';
+                    String prnNumber = '';
                     if (state is FetchUserState) {
                       prnNumber = state.userModel.prnNumber ?? prnNumber;
                     }
@@ -213,9 +213,9 @@ class _UserProfileViewState extends State<UserProfileView> {
                 ),
                 BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
                   builder: (context, state) {
-                    String branch = 'Branch';
+                    String branch = '';
                     if (state is FetchUserState) {
-                      branch = state.userModel.prnNumber ?? branch;
+                      branch = state.userModel.branch ?? branch;
                     }
                     return ProfileCard(
                         title: 'Branch',
@@ -225,7 +225,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                 ),
                 BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
                   builder: (context, state) {
-                    String year = 'Year';
+                    String year = '';
                     if (state is FetchUserState) {
                       year = state.userModel.year ?? year;
                     }
@@ -257,15 +257,15 @@ class _UserProfileViewState extends State<UserProfileView> {
                 const SizedBox(
                   height: 20,
                 ),
-                FitButton(
-                  bgColor: kPrimaryColor,
-                  height: 50,
-                  text: 'Reset password',
-                  showArrow: false,
-                  onTap: () {},
-                ),
+                // FitButton(
+                //   bgColor: kPrimaryColor,
+                //   height: 50,
+                //   text: 'Reset password',
+                //   showArrow: false,
+                //   onTap: () {},
+                // ),
                 const SizedBox(
-                  height: 20,
+                  height: 100,
                 ),
               ],
             ),

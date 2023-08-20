@@ -9,14 +9,16 @@ part 'all_past_events_state.dart';
 
 class AllPastEventsBloc extends Bloc<AllPastEventsEvent, AllPastEventsState> {
   final DatabaseRepository databaseRepository;
-
+  List<EventModel>? pastEventsList;
   AllPastEventsBloc({required this.databaseRepository})
       : super(AllPastEventsLoading()) {
     on<AllPastEventsEvent>((event, emit) async {
       try {
-        final List<EventModel> pastEventsList =
-            await databaseRepository.getAllPastEvents();
-        emit(AllPastEventsLoadedState(allPastEventsList: pastEventsList));
+        pastEventsList ??= await databaseRepository.getAllPastEvents();
+        if (pastEventsList != null) {
+          emit(AllPastEventsLoadedState(
+              allPastEventsList: pastEventsList ?? []));
+        }
       } catch (e) {
         emit(const AllPastErrorState(errorMessage: 'Failed to load Events!'));
       }

@@ -31,15 +31,23 @@ class ProfileCard extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(color: kTextGreyColor, fontSize: 14),
-                ),
-                Text(
-                  titleValue,
-                  style: const TextStyle(color: kTextColor, fontSize: 18),
-                ),
+                if (titleValue == '')
+                  Text(
+                    title,
+                    style: const TextStyle(color: kTextGreyColor, fontSize: 18),
+                  ),
+                if (titleValue != '') ...[
+                  Text(
+                    title,
+                    style: const TextStyle(color: kTextGreyColor, fontSize: 14),
+                  ),
+                  Text(
+                    titleValue,
+                    style: const TextStyle(color: kTextColor, fontSize: 18),
+                  ),
+                ]
               ],
             ),
           ],

@@ -37,7 +37,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 await DatabaseRepository().checkUserExists();
             if (!isCollectionExist) {
               DatabaseRepository().addUser(UserModel(
-                  userId: userCredential.user!.uid, email: event.userEmail));
+                  userId: userCredential.user!.uid,
+                  email: event.userEmail,
+                  dateOfCreation: DateTime.now().toString()));
             }
           }
           add(
@@ -58,7 +60,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const EmailAuthError(
             error: 'The account already exists for that email.'));
       }
-      // return null;
     } catch (e) {
       debugPrint(e.toString());
       emit(EmailAuthError(error: e.toString()));
@@ -81,9 +82,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (emailVerified) {
       timer?.cancel();
       add(YouRAllSetEvent());
-      debugPrint('YouRAllSetEvent');
-      await Future.delayed(const Duration(seconds: 4));
-      add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
     }
   }
 
@@ -96,7 +94,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 email: event.userEmail, password: event.password)
             .then((userCredentail) {
           if (userCredentail.user != null) {
-            emit(UserLoggedIn());
+            emit(YouRAllSetState());
           }
         });
       } else {
@@ -121,10 +119,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(EmailAuthLoading());
     try {
       var user = FirebaseAuth.instance.currentUser;
+
       if (user != null) {
-        emit(UserLoggedIn());
+        if (user.emailVerified) {
+          emit(UserLoggedIn());
+        } else {
+          emit(VerifyEmail(email: user.email!));
+        }
       } else {
-        // emit(LoginBottomSheetState());
         add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
       }
     } catch (e) {

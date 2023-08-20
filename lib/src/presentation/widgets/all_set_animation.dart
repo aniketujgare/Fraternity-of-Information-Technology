@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../config/router/app_router_constants.dart';
 import '../../utils/constants/constants.dart';
 
 class AllSetAnimation extends StatefulWidget {
@@ -31,11 +33,10 @@ class _AllSetAnimationState extends State<AllSetAnimation>
       onLoaded: (composition) {
         _controller
           ..duration = composition.duration
-          ..forward();
-        // .whenComplete(
-        //   () => context
-        //       .pushReplacementNamed(AppRoutConstants.fitUiNavigator.name),
-        // );
+          ..forward().whenComplete(
+            () => context
+                .pushReplacementNamed(AppRoutConstants.fitUiNavigator.name),
+          );
       },
       delegates: LottieDelegates(
         text: (initialText) => '**$initialText**',

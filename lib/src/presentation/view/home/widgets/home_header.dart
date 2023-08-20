@@ -43,7 +43,7 @@ class HomeHeader extends StatelessWidget {
                           width: 50,
                           fit: BoxFit.cover,
                           imageUrl: state.userModel.profilePic ??
-                              'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/images%2FIMG-20230620-WA0005.jpg?alt=media&token=f261198f-e266-4c56-a186-212872527431'),
+                              'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/avatar_person.jpg?alt=media&token=a9a70025-d971-4cd6-aae7-d50c27235598'),
                     );
                   }
                   return Shimmer.fromColors(
@@ -74,13 +74,15 @@ class HomeHeader extends StatelessWidget {
                 builder: (context, state) {
                   if (state is FetchUserState) {
                     return SizedBox(
-                      height: 25.26,
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 28.26,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       child: FittedBox(
                         alignment: Alignment.bottomLeft,
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          state.userModel.name ?? 'Fitian',
+                          state.userModel.name == ''
+                              ? 'Fitian'
+                              : state.userModel.name!,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 24,
@@ -94,19 +96,19 @@ class HomeHeader extends StatelessWidget {
                   return const FITTextShimmer(fontSize: 24, text: 'Loading...');
                 },
               ),
-              const Spacer(),
-              IconButton(
-                splashRadius: 25,
-                highlightColor: kSecondaryColor.withOpacity(0.2),
-                focusColor: kSecondaryColor.withOpacity(0.2),
-                splashColor: kPrimaryColor.withOpacity(0.2),
-                onPressed: () =>
-                    context.pushNamed(AppRoutConstants.notificationView.name),
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  size: 30,
-                ),
-              ),
+              // const Spacer(),
+              // IconButton(
+              //   splashRadius: 25,
+              //   highlightColor: kSecondaryColor.withOpacity(0.2),
+              //   focusColor: kSecondaryColor.withOpacity(0.2),
+              //   splashColor: kPrimaryColor.withOpacity(0.2),
+              //   onPressed: () =>
+              //       context.pushNamed(AppRoutConstants.notificationView.name),
+              //   icon: const Icon(
+              //     Icons.notifications_outlined,
+              //     size: 30,
+              //   ),
+              // ),
             ],
           ),
           Container(

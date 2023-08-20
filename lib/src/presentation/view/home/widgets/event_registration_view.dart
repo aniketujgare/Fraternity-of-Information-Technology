@@ -9,45 +9,10 @@ import '../../../../domain/models/event_model.dart';
 import '../../../widgets/fit_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-// TextSpan rich(String input, {TextStyle? style}) {
-//   const styles = {
-//     '_': TextStyle(fontStyle: FontStyle.italic),
-//     '*': TextStyle(fontWeight: FontWeight.bold),
-//     '~': TextStyle(decoration: TextDecoration.lineThrough),
-//     '```': TextStyle(fontFamily: 'monospace', color: Colors.black87),
-//   };
-//   final spans = <TextSpan>[];
-//   final pattern = RegExp(r'([_*~]|`{3})(.*?)\1');
-//   input.trim().splitMapJoin(pattern, onMatch: (m) {
-//     final input = m.group(2)!;
-//     final style = styles[m.group(1)];
-//     spans.add(pattern.hasMatch(input)
-//         ? rich(input, style: style)
-//         : TextSpan(text: input, style: style));
-//     return '';
-//   }, onNonMatch: (String text) {
-//     spans.add(TextSpan(text: text));
-//     return '';
-//   });
-//   return TextSpan(style: const TextStyle(fontSize: 14), children: spans);
-// }
-
-// String convertNewLine(String content) {
-//   return content.replaceAll(r'\n', '\n');
-// }
-
 class EventRegistrationView extends StatelessWidget {
-  // final String regLink;
-  // final String bannerImage;
-  // final String description;
-  // final String heading;
   final EventModel event;
   const EventRegistrationView({
     super.key,
-    // required this.regLink,
-    // required this.bannerImage,
-    // required this.description,
-    // required this.heading,
     required this.event,
   });
 
@@ -58,14 +23,14 @@ class EventRegistrationView extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             DynamicSliverAppBar(
-              leadingWidth: 45,
+              leadingWidth: 55,
               leading: Padding(
-                padding: const EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 25),
                 child: GestureDetector(
                     onTap: () => context.pop(),
                     child: SvgPicture.asset(
                       'assets/images/back_button.svg',
-                      height: 18,
+                      // height: 18,
                     )),
               ),
               flexibleSpace: CachedNetworkImage(

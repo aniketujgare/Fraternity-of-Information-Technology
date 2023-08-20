@@ -7,17 +7,16 @@ import 'package:fraternity_of_information_technology/src/domain/models/honour_bo
 part 'honour_board_event.dart';
 part 'honour_board_state.dart';
 
-List<HonourBoardModel>? honourBoard;
-
 class HonourBoardBloc extends Bloc<HonourBoardEvent, HonourBoardState> {
   final DatabaseRepository databaseRepository;
+  List<HonourBoardModel>? honourBoard;
   HonourBoardBloc({required this.databaseRepository})
       : super(HonourBoardLoading()) {
     on<HonourBoardEvent>((event, emit) async {
       try {
-        if (honourBoard == null) {
-          debugPrint('runned honor board fetch');
-          honourBoard = await databaseRepository.getHonourBoard();
+        debugPrint('runned honor board fetch');
+        honourBoard ??= await databaseRepository.getHonourBoard();
+        if (honourBoard != null) {
           emit(HonourBoardLoaded(honourBoard: honourBoard!));
         }
       } catch (e) {

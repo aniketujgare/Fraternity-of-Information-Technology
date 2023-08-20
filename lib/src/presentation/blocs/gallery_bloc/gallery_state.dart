@@ -13,6 +13,8 @@ class GalleryLoaded extends GalleryState {
   final List<GalleryModel> galleryList;
 
   const GalleryLoaded({required this.galleryList});
+  @override
+  List<Object> get props => [galleryList];
 }
 
 final class GalleryErrorState extends GalleryState {
@@ -20,3 +22,5 @@ final class GalleryErrorState extends GalleryState {
 
   const GalleryErrorState(this.errorMessage);
 }
+
+final class PopUploadPageState extends GalleryState {}
