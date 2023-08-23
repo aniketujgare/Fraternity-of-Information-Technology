@@ -21,22 +21,6 @@ class UpcomingEventsCard extends StatelessWidget {
       },
       child: Column(
         children: [
-          //* Title Of card
-          // Container(
-          //   margin: EdgeInsets.only(top: topMargin),
-          //   padding: const EdgeInsets.only(left: 28),
-          //   width: double.infinity,
-          //   height: 31,
-          //   child: Text(
-          //     headTitle,
-          //     textAlign: TextAlign.left,
-          //     style: const TextStyle(
-          //       fontSize: 24,
-          //       fontWeight: FontWeight.w400,
-          //     ),
-          //   ),
-          // ),
-          //* Card
           Container(
             margin: const EdgeInsets.all(15),
             width: 337,
@@ -88,10 +72,10 @@ class UpcomingEventsCard extends StatelessWidget {
                   left: 23.5,
                   top: 101,
                   child: SizedBox(
-                    width: 320,
+                    width: 300,
                     height: 88,
                     child: Text(
-                      event.eventTitle!,
+                      event.eventTitle ?? '',
                       textAlign: TextAlign.left,
                       maxLines: 2,
                       overflow: TextOverflow.clip,
@@ -116,12 +100,13 @@ class UpcomingEventsCard extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        kFormatDate(event.eventDate!),
+                        kFormatDate(
+                            event.eventDate ?? DateTime.now().toString()),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          height: 1.26,
+                          // height: 1.26,
                           color: Colors.white,
                         ),
                       ),

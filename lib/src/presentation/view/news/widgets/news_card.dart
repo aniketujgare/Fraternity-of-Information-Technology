@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../config/router/app_router_constants.dart';
 import '../../../../domain/models/news_model.dart';
@@ -38,6 +39,17 @@ class NewsCard extends StatelessWidget {
                 height: 369,
                 fit: BoxFit.cover,
                 imageUrl: newsModel.coverImage ?? '',
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    height: 367,
+                    width: 369,
+                    decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.circular(38)),
+                  ),
+                ),
               ),
             ),
           ),

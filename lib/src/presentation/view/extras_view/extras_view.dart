@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
 import 'package:flutter_svg/svg.dart';
+import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
 import 'package:go_router/go_router.dart';
 
 import 'widgets/developers.dart';
@@ -18,6 +21,8 @@ class ExtrasView extends StatelessWidget {
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
             leadingWidth: 50,
+            toolbarHeight: 70,
+            centerTitle: true,
             leading: Padding(
               padding: const EdgeInsets.only(left: 25),
               child: GestureDetector(
@@ -26,12 +31,10 @@ class ExtrasView extends StatelessWidget {
                     'assets/images/back_button.svg',
                   )),
             ),
-            toolbarHeight: 100,
-            centerTitle: true,
             title: const Text(
               'Extra\'s',
               style: TextStyle(
-                fontSize: 36,
+                fontSize: kHeading2FontSize,
               ),
             ),
           )

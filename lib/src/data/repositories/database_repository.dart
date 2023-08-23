@@ -39,9 +39,23 @@ class DatabaseRepository {
   }
 
   Future<UserModel> updateUser(UserModel userModel) async {
+    await _collection.doc(user!.uid).set(
+        userModel.toJson(),
+        SetOptions(mergeFields: [
+          'name',
+          'phone',
+          'prn_number',
+          'admission_year',
+          'branch',
+          'year'
+        ]));
+    return userModel;
+  }
+
+  Future<UserModel> updateImgeUrl(UserModel userModel) async {
     await _collection
         .doc(user!.uid)
-        .set(userModel.toJson(), SetOptions(merge: true));
+        .set(userModel.toJson(), SetOptions(mergeFields: ['profile_pic']));
     return userModel;
   }
 
@@ -124,7 +138,7 @@ class DatabaseRepository {
 
   Future<List<EventModel>> getAllPastEvents() async {
     final allEventsCollection = FirebaseFirestore.instance
-        .collection('all_events')
+        .collection('past_events')
         .orderBy("event_date", descending: true);
 
     final QuerySnapshot snapshot = await allEventsCollection.get();

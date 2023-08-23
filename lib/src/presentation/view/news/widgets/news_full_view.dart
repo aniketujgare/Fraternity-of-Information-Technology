@@ -23,8 +23,8 @@ class NewsFullView extends StatelessWidget {
           floatHeaderSlivers: true,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             const SliverAppBar(
-              toolbarHeight: 100,
-              // leadingWidth: 50,
+              toolbarHeight: 70,
+              leadingWidth: 50,
               leading: SizedBox(),
 
               // Padding(
@@ -41,39 +41,18 @@ class NewsFullView extends StatelessWidget {
                 'Detailed News',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: kHeading2FontSize,
                 ),
               ),
             ),
           ],
-
-          // headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          //   SliverAppBar(
-          //     leadingWidth: 50,
-          //     leading: Padding(
-          //       padding: const EdgeInsets.only(left: 25),
-          //       child: GestureDetector(
-          //           onTap: () => context.pop(),
-          //           child: SvgPicture.asset(
-          //             'assets/images/back_button.svg',
-          //           )),
-          //     ),
-          //     floating: true,
-          //     centerTitle: true,
-          //     // leading: GestureDetector(
-          //     //     onTap: () => context.pop(),
-          //     //     child: const Icon(Icons.arrow_back, color: kPrimaryColor)),
-          //     title: const Text('Detailed News'),
-          //   ),
-          // ],
-          // if (allEventModel.bannerImage != null)
           body: CustomScrollView(
             slivers: [
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
                     Padding(
-                      padding: const EdgeInsets.all(25),
+                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(27),
                         child: CachedNetworkImage(
@@ -100,9 +79,9 @@ class NewsFullView extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 20),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -143,7 +122,7 @@ class NewsFullView extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(25, 15, 25, 5),
+                      padding: const EdgeInsets.fromLTRB(25, 0, 25, 5),
                       child: Text(
                         'Date: ${kFormatDate(newsModel.newsDate!)}',
                         textAlign: TextAlign.end,
@@ -154,7 +133,6 @@ class NewsFullView extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Text.rich(
@@ -164,7 +142,6 @@ class NewsFullView extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 35),
                     if (newsModel.subImages != null)
                       CarouselSlider(
@@ -203,23 +180,21 @@ class NewsFullView extends StatelessWidget {
                         builder: (context, pos) {
                           if (pos is MySliderOnChanged ||
                               pos is MySliderInitial) {
-                            return DotsIndicator(
-                              dotsCount: newsModel.subImages!.length,
-                              position: pos.value,
-                              decorator: const DotsDecorator(
-                                  color: Colors.grey, // Inactive color
-                                  activeColor: kPrimaryColor),
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: DotsIndicator(
+                                dotsCount: newsModel.subImages!.length,
+                                position: pos.value,
+                                decorator: const DotsDecorator(
+                                    color: Colors.grey, // Inactive color
+                                    activeColor: kPrimaryColor),
+                              ),
                             );
                           }
                           return const SizedBox();
                         },
                       ),
                     const SizedBox(height: 25),
-                    // const Padding(
-                    //   padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    //   child: Text('Organizer:'),
-                    // ),
-                    // const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -230,20 +205,3 @@ class NewsFullView extends StatelessWidget {
     );
   }
 }
-
-String descs =
-    'Diwali, also known as the Festival of Lights, is one of the most significant and widely celebrated festivals in India and among Hindu communities around the world. This joyous occasion is steeped in cultural and religious significance, symbolizing the victory of light over darkness and good over evil. Celebrated typically over a span of five days, Diwali is a time of great enthusiasm, fervor, and togetherness. \n\nDuring Diwali, homes and streets are adorned with vibrant decorations, intricate rangoli designs, and rows of oil lamps, or diyas, which illuminate the surroundings and create a mesmerizing spectacle. Families come together to exchange heartfelt greetings, indulge in sumptuous feasts, and offer prayers to deities, seeking blessings for prosperity and well-being. The festival also marks the worship of Goddess Lakshmi, the Hindu goddess of wealth and prosperity, with homes being meticulously cleaned and preparations made to welcome her blessings. Additionally, the skies come alive with spectacular firework displays, further adding to the festive spirit and creating a truly enchanting atmosphere. \n\nIn essence, Diwali is a time of unity, renewal, and jubilation, where communities come together to celebrate the triumph of light, love, and hope, making it a cherished and memorable event for people of all ages.';
-
-List<String> imgList = [
-  'https://images.pexels.com/photos/17518683/pexels-photo-17518683/free-photo-of-analog-minolta-camera.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-  'https://images.pexels.com/photos/17686105/pexels-photo-17686105/free-photo-of-animal-cute-agriculture-farm.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-  'https://images.pexels.com/photos/17818751/pexels-photo-17818751.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-];
-
-// class IMGS {
-//   List<String> imgList = [
-//   'https://images.pexels.com/photos/17518683/pexels-photo-17518683/free-photo-of-analog-minolta-camera.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-//   'https://images.pexels.com/photos/17686105/pexels-photo-17686105/free-photo-of-animal-cute-agriculture-farm.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-//   'https://images.pexels.com/photos/17818751/pexels-photo-17818751.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
-// ];
-// }

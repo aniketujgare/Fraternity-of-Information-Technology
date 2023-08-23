@@ -66,33 +66,39 @@ class Winner {
   final String? year;
   final String? name;
   final String? department;
+  final String? picture;
 
   Winner({
     this.year,
     this.name,
     this.department,
+    this.picture,
   });
 
   Winner copyWith({
     String? year,
     String? name,
     String? department,
+    String? picture,
   }) =>
       Winner(
         year: year ?? this.year,
         name: name ?? this.name,
         department: department ?? this.department,
+        picture: picture ?? this.picture,
       );
 
   factory Winner.fromJson(Map<String, dynamic> json) => Winner(
         year: json["year"],
         name: json["name"],
         department: json["department"],
+        picture: json["picture"],
       );
 
   Map<String, dynamic> toJson() => {
         "year": year,
         "name": name,
         "department": department,
+        "picture": picture,
       };
 }

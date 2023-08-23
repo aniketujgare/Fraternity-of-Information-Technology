@@ -10,6 +10,7 @@ class AgreementText extends StatelessWidget {
   Widget build(BuildContext context) {
     return FittedBox(
       child: RichText(
+        textAlign: TextAlign.center,
         text: const TextSpan(
           text: 'By pressing “Save” you will accept\n',
           style: TextStyle(

@@ -25,13 +25,13 @@ class GalleryView extends StatelessWidget {
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverAppBar(
                 // floating: true,
-                toolbarHeight: 100,
+                toolbarHeight: 80,
                 title: Row(
                   children: [
                     const Text(
                       'Gallery',
                       style: TextStyle(
-                        fontSize: 36,
+                        fontSize: kHeading1FontSize,
                       ),
                     ),
                     const Spacer(),
@@ -85,20 +85,21 @@ class GalleryView extends StatelessWidget {
                             children: state.galleryList
                                 .map(
                                   (gallery) => Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(DateFormat('MMM yyyy')
-                                                .format(DateTime.parse(
-                                                    gallery.date!))
-                                                .toUpperCase()),
-                                            const Icon(Icons.filter_list),
-                                          ],
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 20, 15, 5),
+                                        child: Text(
+                                          DateFormat('MMM yyyy')
+                                              .format(
+                                                  DateTime.parse(gallery.date!))
+                                              .toUpperCase(),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                       GridView.custom(

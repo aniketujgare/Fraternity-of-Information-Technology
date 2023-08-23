@@ -19,7 +19,7 @@ class WinnersView extends StatelessWidget {
           floatHeaderSlivers: true,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             const SliverAppBar(
-              toolbarHeight: 100,
+              toolbarHeight: 70,
               leading: SizedBox(),
               centerTitle: true,
               floating: true,
@@ -27,7 +27,7 @@ class WinnersView extends StatelessWidget {
                 'Winners Board',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: kHeading2FontSize,
                 ),
               ),
             ),

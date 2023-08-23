@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<EmailSignUpEvent>(_signUp);
     on<EmailVerificationEvent>(_verifyEmail);
     on<EmailLoginEvent>(_userLogin);
-    on<YouRAllSetEvent>((event, emit) => emit(YouRAllSetState()));
+    on<YouRAllSetEvent>((event, emit) => emit(const YouRAllSetState(text: '')));
     on<EmailAuthenticationCheckEvent>(_authCheck);
     on<AuthToggleFormEvent>(
         (event, emit) => emit(EmailAuthInitialState(event.formType)));
@@ -27,30 +27,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _signUp(EmailSignUpEvent event, Emitter<AuthState> emit) async {
     emit(EmailAuthLoading());
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: event.userEmail, password: event.password)
-          .then(
-        (userCredential) async {
-          if (userCredential.user != null) {
-            bool isCollectionExist =
-                await DatabaseRepository().checkUserExists();
-            if (!isCollectionExist) {
-              DatabaseRepository().addUser(UserModel(
-                  userId: userCredential.user!.uid,
-                  email: event.userEmail,
-                  dateOfCreation: DateTime.now().toString()));
+      if (EmailValidator.validate(event.userEmail)) {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: event.userEmail, password: event.password)
+            .then(
+          (userCredential) async {
+            if (userCredential.user != null) {
+              bool isCollectionExist =
+                  await DatabaseRepository().checkUserExists();
+              if (!isCollectionExist) {
+                DatabaseRepository().addUser(UserModel(
+                    userId: userCredential.user!.uid,
+                    email: event.userEmail,
+                    dateOfCreation: DateTime.now().toString()));
+              }
             }
-          }
-          add(
-            EmailVerificationEvent(
-              user: userCredential.user!,
-              userEmail: event.userEmail,
-              password: event.userEmail,
-            ),
-          );
-        },
-      );
+            add(
+              EmailVerificationEvent(
+                user: userCredential.user!,
+                userEmail: event.userEmail,
+                password: event.userEmail,
+              ),
+            );
+          },
+        );
+      } else {
+        emit(const EmailAuthError(error: 'Please enter valid email!!'));
+        emit(const EmailAuthInitialState(AuthFormType.signUp));
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         debugPrint('The password provided is too weak.');
@@ -94,7 +99,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 email: event.userEmail, password: event.password)
             .then((userCredentail) {
           if (userCredentail.user != null) {
-            emit(YouRAllSetState());
+            if (userCredentail.user!.emailVerified) {
+              emit(const YouRAllSetState(text: 'Login Success'));
+            } else {
+              emit(VerifyEmail(email: event.userEmail));
+            }
           }
         });
       } else {
@@ -120,12 +129,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       var user = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
-        if (user.emailVerified) {
-          emit(UserLoggedIn());
-        } else {
-          emit(VerifyEmail(email: user.email!));
-        }
+      if (user != null && user.emailVerified) {
+        emit(UserLoggedIn());
       } else {
         add(const AuthToggleFormEvent(formType: AuthFormType.signIn));
       }

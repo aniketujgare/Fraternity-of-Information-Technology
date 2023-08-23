@@ -24,15 +24,13 @@ class AuthFlow extends StatelessWidget {
         bottomSheet: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             // If Phone Otp Verified. Send User to Home Screen
+            debugPrint(state.runtimeType.toString());
             if (state is UserLoggedIn) {
               context.goNamed(AppRoutConstants.fitUiNavigator.name);
             }
             // Show error message if any error occurs while verifying phone number and otp code
             if (state is EmailAuthError) {
               kShowSnackBar(context, SnackType.error, state.error);
-
-              context.read<AuthBloc>().add(
-                  const AuthToggleFormEvent(formType: AuthFormType.signIn));
             }
           },
           builder: (context, authState) {
@@ -41,7 +39,7 @@ class AuthFlow extends StatelessWidget {
             }
 
             if (authState is YouRAllSetState) {
-              return const YourAllSetview();
+              return YourAllSetview(text: authState.text);
             }
             if (authState is EmailAuthInitialState) {
               return authState.formType == AuthFormType.signIn

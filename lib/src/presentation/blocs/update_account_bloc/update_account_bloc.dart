@@ -59,7 +59,8 @@ class UpdateAccountBloc extends Bloc<UpdateAccountEvent, UpdateAccountState> {
         emit(FetchUserState(userModel: _userModel!));
         return;
       }
-      await dataRepository.updateUser(UserModel(profilePic: url));
+
+      await dataRepository.updateImgeUrl(UserModel(profilePic: url));
       emit(ImageUploadedState(imageURL: url));
 
       //delete old pic from db storage

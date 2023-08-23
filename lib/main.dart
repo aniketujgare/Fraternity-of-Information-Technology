@@ -11,6 +11,7 @@ import 'firebase_options.dart';
 import 'src/config/router/app_router.dart';
 import 'src/config/themes/color_schemes.g.dart';
 import 'src/data/datasources/firebase_api.dart';
+import 'upload_to_db.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -36,6 +37,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    // UploadToDb().addUpcomingEvent();
     // FirebaseFirestore.instance
     //     .collection('honour_board')
     //     .get()

@@ -16,7 +16,8 @@ const kTextFieldBorderColor = Color(0xffECEFF5);
 const kCyanLightColor = Color(0xffd5eeee);
 const kGrayCardColor = Color(0xfff7f8f9);
 
-const kHeadingFontSize = 28.0;
+const kHeading1FontSize = 36.0;
+const kHeading2FontSize = 28.0;
 
 bool isPortrait(BuildContext context) {
   return MediaQuery.of(context).orientation == Orientation.portrait;

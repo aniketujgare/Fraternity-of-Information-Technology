@@ -2,10 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../config/router/app_router.dart';
-import '../../config/router/app_router_constants.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   // print('Title: ${message.notification?.title}');
@@ -20,15 +16,15 @@ class FirebaseApi {
     'high_importance_channel',
     'High Importance Notification',
     description: 'This channel is used for important notifications',
-    importance: Importance.defaultImportance,
+    importance: Importance.high,
   );
   final _localNotifications = FlutterLocalNotificationsPlugin();
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
-    rootNavigatorKey.currentState?.context
-        .pushNamed(AppRoutConstants.notificationView.name, queryParameters: {
-      'message': message.notification?.body,
-    });
+    // rootNavigatorKey.currentState?.context
+    //     .pushNamed(AppRoutConstants.notificationView.name, queryParameters: {
+    //   'message': message.notification?.body,
+    // });
   }
 
   Future initPushNotifications() async {

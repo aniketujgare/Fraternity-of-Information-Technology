@@ -78,7 +78,7 @@ class FitLinks extends StatelessWidget {
                                 }
                               },
                               child: const Text(
-                                'Whatsapp group link',
+                                'Whatsapp group',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
@@ -110,7 +110,7 @@ class FitLinks extends StatelessWidget {
                                 }
                               },
                               child: const Text(
-                                'Instagram page link',
+                                'Instagram page',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,

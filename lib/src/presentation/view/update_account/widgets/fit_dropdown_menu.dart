@@ -47,8 +47,8 @@ class _FitDropDownMenuState extends State<FitDropDownMenu> {
                         widget.items[i],
                         style: const TextStyle(
                           fontSize: 16,
-                          // fontWeight: FontWeight.bold,
-                          color: kPrimaryColor,
+                          fontWeight: FontWeight.normal,
+                          // color: kPrimaryColor,
                         ),
                         // overflow: TextOverflow.ellipsis,
                       ),

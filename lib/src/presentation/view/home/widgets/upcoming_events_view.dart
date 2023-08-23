@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/domain/models/event_model.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../utils/constants/constants.dart';
@@ -19,7 +20,7 @@ class UpcomingEventsView extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 20),
+          margin: const EdgeInsets.only(top: 5),
           padding: const EdgeInsets.only(left: 28),
           width: double.infinity,
           height: 31,
@@ -42,6 +43,12 @@ class UpcomingEventsView extends StatelessWidget {
                     bottom: 1,
                     child: BlocBuilder<MySliderBloc, MySliderState>(
                       builder: (context, pos) {
+                        if (state.upcomingEvents.isEmpty) {
+                          return UpcomingEventsCard(
+                              event: EventModel(
+                                  eventTitle: 'Stay Tuned!!',
+                                  eventOrganizers: ['FIT']));
+                        }
                         if (pos is MySliderOnChanged ||
                             pos is MySliderInitial) {
                           return DotsIndicator(
@@ -56,6 +63,7 @@ class UpcomingEventsView extends StatelessWidget {
                       },
                     ),
                   ),
+                  // if (state.upcomingEvents.length <= 0)
                   CarouselSlider(
                     items: state.upcomingEvents
                         .map(

@@ -107,7 +107,7 @@ class PastEventCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 34),
+            const SizedBox(width: 15),
             Flexible(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

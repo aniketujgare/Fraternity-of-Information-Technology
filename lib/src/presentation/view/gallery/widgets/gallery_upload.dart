@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -22,13 +23,23 @@ class GalleryUploadView extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            const SliverAppBar(
-              toolbarHeight: 100,
+            SliverAppBar(
+              toolbarHeight: 70,
               centerTitle: true,
-              title: Text(
+              leadingWidth: 50,
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 25),
+                child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: SvgPicture.asset(
+                      'assets/images/back_button.svg',
+                      // height: 18,
+                    )),
+              ),
+              title: const Text(
                 'Pick Images',
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: kHeading2FontSize,
                 ),
               ),
             ),
@@ -147,6 +158,8 @@ class GalleryUploadView extends StatelessWidget {
                             width: 3.0,
                           ),
                         ),
+                        child: Icon(Icons.image,
+                            color: Colors.grey.shade300, size: 200),
                       );
                     },
                   ),
@@ -268,61 +281,66 @@ class GalleryUploadView extends StatelessWidget {
 Padding dateField(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          height: 58,
-          width: MediaQuery.of(context).size.width * 0.6,
-          decoration: BoxDecoration(
-            color: const Color(0XFFF7F8F9),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              width: 1,
-              color: const Color(0XFFECEFF5),
+    child: GestureDetector(
+      onTap: () => context.read<DatePickerCubit>().pickDate(context),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: 58,
+            width: MediaQuery.of(context).size.width * 0.6,
+            decoration: BoxDecoration(
+              color: const Color(0XFFF7F8F9),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                width: 1,
+                color: const Color(0XFFECEFF5),
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              const SizedBox(width: 12),
-              const Icon(Icons.calendar_month, color: Color(0XFFADB6C1)),
-              const SizedBox(width: 12),
-              BlocBuilder<DatePickerCubit, DatePickerState>(
-                builder: (context, state) {
-                  if (state is DateSelectedState) {
-                    selectedDate = DateFormat('yyyy-MM-dd')
-                        .format(DateTime.parse(state.date));
-                    return Text(selectedDate,
-                        style: const TextStyle(
+            child: Row(
+              children: [
+                const SizedBox(width: 12),
+                const Icon(Icons.calendar_month, color: Color(0XFFADB6C1)),
+                const SizedBox(width: 12),
+                BlocBuilder<DatePickerCubit, DatePickerState>(
+                  builder: (context, state) {
+                    if (state is DateSelectedState) {
+                      selectedDate = DateFormat('yyyy-MM-dd')
+                          .format(DateTime.parse(state.date));
+                      return Text(
+                          DateFormat('MMM yyyy')
+                              .format(DateTime.parse(state.date)),
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ));
+                    }
+                    return const Text('Event Date',
+                        style: TextStyle(
+                          color: Color(0XFFADB6C1),
                           fontSize: 16,
                         ));
-                  }
-                  return const Text('Event Date',
-                      style: TextStyle(
-                        color: Color(0XFFADB6C1),
-                        fontSize: 16,
-                      ));
-                },
-              )
-            ],
-          ),
-        ),
-        IconButton(
-          onPressed: () => context.read<DatePickerCubit>().pickDate(context),
-          icon: const CircleAvatar(
-            backgroundColor: kPrimaryColor,
-            radius: 23,
-            child: Icon(
-              Icons.calendar_month_rounded,
-              color: Colors.white,
+                  },
+                )
+              ],
             ),
           ),
-          splashRadius: 25,
-          iconSize: 35,
-          highlightColor: kPrimaryColor.withOpacity(0.3),
-          splashColor: kPrimaryColor.withOpacity(0.3),
-        ),
-      ],
+          IconButton(
+            onPressed: () => context.read<DatePickerCubit>().pickDate(context),
+            icon: const CircleAvatar(
+              backgroundColor: kPrimaryColor,
+              radius: 23,
+              child: Icon(
+                Icons.calendar_month_rounded,
+                color: Colors.white,
+              ),
+            ),
+            splashRadius: 25,
+            iconSize: 35,
+            highlightColor: kPrimaryColor.withOpacity(0.3),
+            splashColor: kPrimaryColor.withOpacity(0.3),
+          ),
+        ],
+      ),
     ),
   );
 }

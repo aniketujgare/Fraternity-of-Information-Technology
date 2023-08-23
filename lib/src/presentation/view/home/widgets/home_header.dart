@@ -80,7 +80,7 @@ class HomeHeader extends StatelessWidget {
                         alignment: Alignment.bottomLeft,
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          state.userModel.name == ''
+                          state.userModel.name == null
                               ? 'Fitian'
                               : state.userModel.name!,
                           overflow: TextOverflow.ellipsis,

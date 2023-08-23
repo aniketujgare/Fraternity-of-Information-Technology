@@ -23,9 +23,9 @@ class PastEventFullView extends StatelessWidget {
           slivers: [
             if (allEventModel.bannerImage != null)
               DynamicSliverAppBar(
-                leadingWidth: 45,
+                leadingWidth: 50,
                 leading: Padding(
-                  padding: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.only(left: 25),
                   child: GestureDetector(
                       onTap: () => context.pop(),
                       child: SvgPicture.asset(
@@ -115,22 +115,28 @@ class PastEventFullView extends StatelessWidget {
                       builder: (context, pos) {
                         if (pos is MySliderOnChanged ||
                             pos is MySliderInitial) {
-                          return DotsIndicator(
-                            dotsCount: allEventModel.eventImages!.length,
-                            position: pos.value,
-                            decorator: const DotsDecorator(
-                                color: Colors.grey, // Inactive color
-                                activeColor: kPrimaryColor),
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: DotsIndicator(
+                              dotsCount: allEventModel.eventImages!.length,
+                              position: pos.value,
+                              decorator: const DotsDecorator(
+                                  color: Colors.grey, // Inactive color
+                                  activeColor: kPrimaryColor),
+                            ),
                           );
                         }
                         return const SizedBox();
                       },
                     ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 10),
                   if (allEventModel.eventOrganizers!.isNotEmpty)
                     const Padding(
                       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Text('Organizer:'),
+                      child: Text(
+                        'Organizer\'s:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   const SizedBox(height: 10),
                   if (allEventModel.eventOrganizers != null)

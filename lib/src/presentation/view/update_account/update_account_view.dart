@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fraternity_of_information_technology/src/presentation/widgets/fit_circular_loading_indicator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +11,6 @@ import '../../blocs/date_picker_cubit/date_picker_cubit.dart';
 import '../../blocs/update_account_bloc/update_account_bloc.dart';
 import '../../widgets/fit_button.dart';
 import 'widgets/agreement_text.dart';
-import 'widgets/fit_back_button.dart';
 import 'widgets/fit_dropdown_menu.dart';
 import 'widgets/fit_textform_field.dart';
 
@@ -31,7 +31,7 @@ class _UpdateAccountViewState extends State<UpdateAccountView> {
   var prnController = TextEditingController();
   var branchController = TextEditingController();
   var yearController = TextEditingController();
-  var admissionYearController = TextEditingController();
+  // var admissionYearController = TextEditingController();
   @override
   void initState() {
     nameController.text = widget.userModel.name ?? '';
@@ -40,8 +40,20 @@ class _UpdateAccountViewState extends State<UpdateAccountView> {
     prnController.text = widget.userModel.prnNumber ?? '';
     branchController.text = widget.userModel.branch ?? 'null';
     yearController.text = widget.userModel.year ?? 'null';
-    admissionYearController.text = widget.userModel.admissionYear ?? '';
+    // admissionYearController.text = widget.userModel.admissionYear ?? '';
+    selectedDate = widget.userModel.admissionYear ?? '';
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    prnController.dispose();
+    branchController.dispose();
+    yearController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,120 +66,133 @@ class _UpdateAccountViewState extends State<UpdateAccountView> {
       ),
       child: Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const FitBackButton(),
-                const Text(
-                  'Update account',
-                  style: TextStyle(fontSize: 36),
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverAppBar(
+                toolbarHeight: 70,
+                leadingWidth: 50,
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 25),
+                  child: GestureDetector(
+                      onTap: () => context.pop(),
+                      child: SvgPicture.asset(
+                        'assets/images/back_button.svg',
+                      )),
                 ),
-                FitTextFormField(
-                  label: 'Full Name',
-                  icon: Icons.person_outline,
-                  topPad: 70,
-                  keyboardType: TextInputType.name,
-                  textFieldController: nameController,
+                centerTitle: true,
+                floating: true,
+                title: const Text(
+                  'Update Account',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: kHeading2FontSize,
+                  ),
                 ),
-                // FitTextFormField(
-                //   label: 'Email',
-                //   icon: Icons.alternate_email,
-                //   topPad: 25,
-                //   keyboardType: TextInputType.emailAddress,
-                //   textFieldController: emailController,
-                // ),
-                FitTextFormField(
-                  label: 'Phone',
-                  icon: Icons.phone,
-                  topPad: 25,
-                  keyboardType: TextInputType.phone,
-                  textFieldController: phoneController,
-                ),
-                FitTextFormField(
-                  label: 'PRN',
-                  icon: Icons.format_list_numbered_rtl,
-                  topPad: 25,
-                  keyboardType: TextInputType.number,
-                  textFieldController: prnController,
-                ),
-                dateField(context),
-                Row(
-                  children: [
-                    const Spacer(),
-                    BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
-                      builder: (context, state) {
-                        return FitDropDownMenu(
-                          label: 'Branch',
-                          icon: Icons.book_outlined,
-                          items: state.branhItems,
-                          selectedValue: branchController,
-                        );
-                      },
-                    ),
-                    const Spacer(),
-                    BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
-                      builder: (context, state) {
-                        return FitDropDownMenu(
-                          label: 'Year',
-                          icon: Icons.badge,
-                          items: state.yearItems,
-                          selectedValue: yearController,
-                        );
-                      },
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-                BlocConsumer<UpdateAccountBloc, UpdateAccountState>(
-                  listener: (context, state) {
-                    if (state is UpdatedSuccesFully) {
-                      context.pop();
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is UpdateAccountLoading) {
-                      return const SizedBox(
-                          height: 185, child: FITCircularLoadingIndicator());
-                    }
-                    return FitButton(
-                      onTap: () {
-                        var updatedUserModel = widget.userModel.copyWith(
-                          name: nameController.text == ''
-                              ? null
-                              : nameController.text,
-                          email: emailController.text == ''
-                              ? null
-                              : emailController.text,
-                          branch: branchController.text == 'null'
-                              ? null
-                              : branchController.text,
-                          phone: phoneController.text == ''
-                              ? null
-                              : phoneController.text,
-                          prnNumber: prnController.text == ''
-                              ? null
-                              : prnController.text,
-                          year: yearController.text == 'null'
-                              ? null
-                              : yearController.text,
-                          admissionYear:
-                              selectedDate == '' ? null : selectedDate,
-                        );
-                        context
-                            .read<UpdateAccountBloc>()
-                            .add(UpdateUserEvent(userModel: updatedUserModel));
-                      },
-                      text: 'Save',
-                      height: 55,
-                      tMargin: 65,
-                      bMargin: 55,
-                      showArrow: false,
-                    );
-                  },
-                ),
-                const AgreementText(),
-                const SizedBox(height: 25),
-              ],
+              ),
+            ],
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  FitTextFormField(
+                    label: 'Full Name',
+                    icon: Icons.person_outline,
+                    topPad: 30,
+                    keyboardType: TextInputType.name,
+                    textFieldController: nameController,
+                  ),
+                  FitTextFormField(
+                    label: 'Phone',
+                    icon: Icons.phone,
+                    topPad: 25,
+                    keyboardType: TextInputType.phone,
+                    textFieldController: phoneController,
+                  ),
+                  FitTextFormField(
+                    label: 'PRN',
+                    icon: Icons.format_list_numbered_rtl,
+                    topPad: 25,
+                    keyboardType: TextInputType.number,
+                    textFieldController: prnController,
+                  ),
+                  dateField(context),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
+                        builder: (context, state) {
+                          return FitDropDownMenu(
+                            label: 'Branch',
+                            icon: Icons.book_outlined,
+                            items: state.branhItems,
+                            selectedValue: branchController,
+                          );
+                        },
+                      ),
+                      const Spacer(),
+                      BlocBuilder<UpdateAccountBloc, UpdateAccountState>(
+                        builder: (context, state) {
+                          return FitDropDownMenu(
+                            label: 'Year',
+                            icon: Icons.badge,
+                            items: state.yearItems,
+                            selectedValue: yearController,
+                          );
+                        },
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                  BlocConsumer<UpdateAccountBloc, UpdateAccountState>(
+                    listener: (context, state) {
+                      if (state is UpdatedSuccesFully) {
+                        context.pop();
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is UpdateAccountLoading) {
+                        return const SizedBox(
+                            height: 185, child: FITCircularLoadingIndicator());
+                      }
+                      return FitButton(
+                        onTap: () {
+                          var updatedUserModel = widget.userModel.copyWith(
+                            name: nameController.text == ''
+                                ? null
+                                : nameController.text,
+                            email: emailController.text == ''
+                                ? null
+                                : emailController.text,
+                            branch: branchController.text == 'null'
+                                ? null
+                                : branchController.text,
+                            phone: phoneController.text == ''
+                                ? null
+                                : phoneController.text,
+                            prnNumber: prnController.text == ''
+                                ? null
+                                : prnController.text,
+                            year: yearController.text == 'null'
+                                ? null
+                                : yearController.text,
+                            admissionYear:
+                                selectedDate == '' ? null : selectedDate,
+                          );
+                          context.read<UpdateAccountBloc>().add(
+                              UpdateUserEvent(userModel: updatedUserModel));
+                        },
+                        text: 'Save',
+                        height: 55,
+                        tMargin: 65,
+                        bMargin: 55,
+                        showArrow: false,
+                      );
+                    },
+                  ),
+                  const AgreementText(),
+                  const SizedBox(height: 25),
+                ],
+              ),
             ),
           ),
         ),
@@ -182,39 +207,49 @@ Padding dateField(BuildContext context) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-          height: 58,
-          width: MediaQuery.of(context).size.width * 0.6,
-          decoration: BoxDecoration(
-            color: const Color(0XFFF7F8F9),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              width: 1,
-              color: const Color(0XFFECEFF5),
+        GestureDetector(
+          onTap: () =>
+              context.read<DatePickerCubit>().pickYear(context: context),
+          child: Container(
+            height: 58,
+            width: MediaQuery.of(context).size.width * 0.6,
+            decoration: BoxDecoration(
+              color: const Color(0XFFF7F8F9),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                width: 1,
+                color: const Color(0XFFECEFF5),
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              const SizedBox(width: 12),
-              const Icon(Icons.calendar_month, color: Color(0XFFADB6C1)),
-              const SizedBox(width: 12),
-              BlocBuilder<DatePickerCubit, DatePickerState>(
-                builder: (context, state) {
-                  if (state is DateSelectedState) {
-                    selectedDate = state.date;
-                    return Text('${state.date} - Admission Year',
-                        style: const TextStyle(
+            child: Row(
+              children: [
+                const SizedBox(width: 12),
+                const Icon(Icons.calendar_month, color: Color(0XFFADB6C1)),
+                const SizedBox(width: 12),
+                BlocBuilder<DatePickerCubit, DatePickerState>(
+                  builder: (context, state) {
+                    if (state is DateSelectedState) {
+                      selectedDate = state.date;
+                      return Text('${state.date} - Admission Year',
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ));
+                    }
+                    if (selectedDate != '') {
+                      return Text('$selectedDate - Admission Year',
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ));
+                    }
+                    return const Text('Admission Year',
+                        style: TextStyle(
+                          color: Color(0XFFADB6C1),
                           fontSize: 16,
                         ));
-                  }
-                  return const Text('Admission Year',
-                      style: TextStyle(
-                        color: Color(0XFFADB6C1),
-                        fontSize: 16,
-                      ));
-                },
-              )
-            ],
+                  },
+                )
+              ],
+            ),
           ),
         ),
         IconButton(

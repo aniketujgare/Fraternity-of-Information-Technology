@@ -18,7 +18,7 @@ class FitCommitteeView extends StatelessWidget {
             floatHeaderSlivers: true,
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   const SliverAppBar(
-                    toolbarHeight: 100,
+                    toolbarHeight: 70,
                     leading: SizedBox(),
                     centerTitle: true,
                     floating: true,
@@ -26,7 +26,7 @@ class FitCommitteeView extends StatelessWidget {
                       'FIT Committee',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 36,
+                        fontSize: kHeading2FontSize,
                       ),
                     ),
                   ),

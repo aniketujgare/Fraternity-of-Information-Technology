@@ -139,7 +139,6 @@ class AppRouter {
               BlocProvider.value(
                 value: _newsBloc..add(LoadNewsEvent()),
               ),
-              //TODO: everytime fetching data do something to stop it
               BlocProvider.value(
                 value: _galleryBloc..add(LoadGalleryEvent()),
               ),

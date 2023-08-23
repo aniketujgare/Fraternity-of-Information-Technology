@@ -2,22 +2,27 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:intl/intl.dart';
+import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
 part 'date_picker_state.dart';
 
 class DatePickerCubit extends Cubit<DatePickerState> {
   DatePickerCubit() : super(DatePickerInitial());
 
   void pickDate(BuildContext context) async {
-    DateTime? selctedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(
-        const Duration(days: 365),
-      ),
-    );
-
+    final selctedDate = await showMonthPicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+    // DateTime? selctedDate = await showDatePicker(
+    //   context: context,
+    //   initialDate: DateTime.now(),
+    //   firstDate: DateTime.now(),
+    //   lastDate: DateTime.now().add(
+    //     const Duration(days: 365),
+    //   ),
+    // );
     if (selctedDate != null) {
       emit(DateSelectedState(date: selctedDate.toString()));
     }

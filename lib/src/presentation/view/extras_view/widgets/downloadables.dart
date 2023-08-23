@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../utils/constants/constants.dart';
 import '../../../blocs/extras_bloc/extras_bloc.dart';
@@ -91,16 +94,30 @@ BlocBuilder downloadableItem(BuildContext context) {
             Column(
               children: [
                 OutlinedButton.icon(
-                  onPressed: () async => await FlutterDownloader.enqueue(
-                    url: state.extrasModel.fitLogo!.jpg!,
-                    fileName: 'FIT_Logo_JPG_${UniqueKey()}.jpg',
-                    savedDir: Directory('/storage/emulated/0/Download').path,
-                    saveInPublicStorage: true,
-                    showNotification:
-                        true, // show download progress in status bar (for Android)
-                    openFileFromNotification:
-                        true, // click on notification to open downloaded file (for Android)
-                  ),
+                  onPressed: () async =>
+                      SchedulerBinding.instance.addPostFrameCallback((_) async {
+                    await FlutterDownloader.enqueue(
+                      url: state.extrasModel.fitLogo!.jpg!,
+                      fileName: 'FIT_Logo_JPG_${UniqueKey()}.jpg',
+                      savedDir: Directory('/storage/emulated/0/Download').path,
+                      saveInPublicStorage: true,
+                      showNotification:
+                          true, // show download progress in status bar (for Android)
+                      openFileFromNotification:
+                          true, // click on notification to open downloaded file (for Android)
+                    );
+                  }),
+
+                  // await FlutterDownloader.enqueue(
+                  //   url: state.extrasModel.fitLogo!.jpg!,
+                  //   fileName: 'FIT_Logo_JPG_${UniqueKey()}.jpg',
+                  //   savedDir: Directory('/storage/emulated/0/Download').path,
+                  //   saveInPublicStorage: true,
+                  //   showNotification:
+                  //       true, // show download progress in status bar (for Android)
+                  //   openFileFromNotification:
+                  //       true, // click on notification to open downloaded file (for Android)
+                  // ),
                   icon: const Icon(
                     Icons.download,
                     size: 24.0,
@@ -108,21 +125,36 @@ BlocBuilder downloadableItem(BuildContext context) {
                   label: const Text('JPG'),
                 ),
                 OutlinedButton.icon(
-                  onPressed: () async => await FlutterDownloader.enqueue(
-                    url: state.extrasModel.fitLogo!.png!,
-                    fileName: 'FIT_Logo_PNG_${UniqueKey()}.png',
-                    savedDir: Directory('/storage/emulated/0/Download').path,
-                    saveInPublicStorage: true,
-                    showNotification:
-                        true, // show download progress in status bar (for Android)
-                    openFileFromNotification:
-                        true, // click on notification to open downloaded file (for Android)
-                  ),
+                  onPressed: () async =>
+                      SchedulerBinding.instance.addPostFrameCallback((_) async {
+                    await FlutterDownloader.enqueue(
+                      url: state.extrasModel.fitLogo!.png!,
+                      fileName: 'FIT_Logo_PNG_${UniqueKey()}.png',
+                      savedDir: Directory('/storage/emulated/0/Download').path,
+                      saveInPublicStorage: true,
+                      showNotification:
+                          true, // show download progress in status bar (for Android)
+                      openFileFromNotification:
+                          true, // click on notification to open downloaded file (for Android)
+                    );
+                  }),
                   icon: const Icon(
                     Icons.download,
                     size: 24.0,
                   ),
                   label: const Text('PNG'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () async =>
+                      SchedulerBinding.instance.addPostFrameCallback((_) async {
+                    await launchUrlString(state.extrasModel.fitLogo!.png!,
+                        mode: LaunchMode.externalApplication);
+                  }),
+                  icon: const Icon(
+                    CupertinoIcons.globe,
+                    size: 24.0,
+                  ),
+                  label: const Text('Web'),
                 ),
               ],
             ),

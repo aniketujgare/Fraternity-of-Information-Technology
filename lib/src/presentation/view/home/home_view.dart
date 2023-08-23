@@ -87,7 +87,7 @@ class AllEvents extends StatelessWidget {
             width: 337,
             height: 234,
             decoration: BoxDecoration(
-              color: const Color(0XFFBA68C8),
+              color: const Color(0XFFA07EE9),
               borderRadius: BorderRadius.circular(28),
               boxShadow: const [
                 BoxShadow(

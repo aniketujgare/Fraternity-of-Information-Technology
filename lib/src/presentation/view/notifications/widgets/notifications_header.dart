@@ -29,7 +29,7 @@ class NotificationsHeader extends StatelessWidget {
             child: Text(
               'Notifications',
               style: TextStyle(
-                fontSize: kHeadingFontSize,
+                fontSize: kHeading1FontSize,
                 fontWeight: FontWeight.w400,
                 height: 1.26,
               ),

@@ -16,17 +16,12 @@ class NewsView extends StatelessWidget {
         child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   const SliverAppBar(
-                    toolbarHeight: 100,
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'News',
-                          style: TextStyle(
-                            fontSize: 36,
-                          ),
-                        ),
-                      ],
+                    toolbarHeight: 80,
+                    title: Text(
+                      'News',
+                      style: TextStyle(
+                        fontSize: kHeading1FontSize,
+                      ),
                     ),
                   )
                 ],
@@ -40,10 +35,12 @@ class NewsView extends StatelessWidget {
               builder: (context, state) {
                 if (state is NewsLoadedState) {
                   return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.fromLTRB(15, 0, 15, 75),
                     itemCount: state.newsList.length,
-                    itemBuilder: (context, index) =>
-                        NewsCard(newsModel: state.newsList[index]),
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: NewsCard(newsModel: state.newsList[index]),
+                    ),
                   );
                 }
                 return const Center(child: FITCircularLoadingIndicator());

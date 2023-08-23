@@ -171,35 +171,39 @@ class StudentAchievement extends StatelessWidget {
                     BlocBuilder<HonourBoardBloc, HonourBoardState>(
                       builder: (context, state) {
                         if (state is HonourBoardLoaded) {
-                          return ListView.separated(
-                            itemCount:
-                                state.honourBoard.first.achievements.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              final achievements =
-                                  state.honourBoard.first.achievements;
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 28, right: 28, top: 6, bottom: 6),
-                                child: Text(
-                                  '${index + 1}. ${achievements[index]}',
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                          return SizedBox(
+                            height: 110,
+                            // width: 50,
+                            child: ListView.separated(
+                              itemCount:
+                                  state.honourBoard.first.achievements.length,
+                              // physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final achievements =
+                                    state.honourBoard.first.achievements;
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 28, right: 28, top: 6, bottom: 6),
+                                  child: Text(
+                                    '${index + 1}. ${achievements[index]}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 28, right: 28),
-                                child: Divider(
-                                  color: Colors.white.withOpacity(0.5),
-                                  thickness: 1,
-                                ),
-                              );
-                            },
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 28, right: 28),
+                                  child: Divider(
+                                    color: Colors.white.withOpacity(0.5),
+                                    thickness: 1,
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         } else {
                           return const FITTextShimmer(

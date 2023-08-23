@@ -22,24 +22,26 @@ class EventRegistrationView extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            DynamicSliverAppBar(
-              leadingWidth: 55,
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 25),
-                child: GestureDetector(
-                    onTap: () => context.pop(),
-                    child: SvgPicture.asset(
-                      'assets/images/back_button.svg',
-                      // height: 18,
-                    )),
+            if (event.bannerImage != null)
+              DynamicSliverAppBar(
+                leadingWidth: 50,
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 25),
+                  child: GestureDetector(
+                      onTap: () => context.pop(),
+                      child: SvgPicture.asset(
+                        'assets/images/back_button.svg',
+                        // height: 18,
+                      )),
+                ),
+                flexibleSpace: CachedNetworkImage(
+                  width: double.maxFinite,
+                  imageUrl: event.bannerImage ??
+                      'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/downloadables%2Ffit_logo_png.png?alt=media&token=8fdf744e-6670-4f69-9b82-8c224f5f93f2',
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  fit: BoxFit.fitWidth,
+                ),
               ),
-              flexibleSpace: CachedNetworkImage(
-                width: double.maxFinite,
-                imageUrl: event.bannerImage!,
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-                fit: BoxFit.fitWidth,
-              ),
-            ),
             SliverList(
               delegate: SliverChildListDelegate(
                 [

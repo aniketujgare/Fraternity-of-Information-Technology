@@ -4,7 +4,8 @@ import '../../../utils/constants/constants.dart';
 import '../../widgets/all_set_animation.dart';
 
 class YourAllSetview extends StatelessWidget {
-  const YourAllSetview({super.key});
+  final String text;
+  const YourAllSetview({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +21,21 @@ class YourAllSetview extends StatelessWidget {
           tileMode: TileMode.clamp,
         ),
       ),
-      child: const Column(
+      child: Column(
         children: [
-          Spacer(flex: 2),
-          AllSetAnimation(),
-          Spacer(flex: 1),
-          Text(
-            'You\'re all set!',
-            style: TextStyle(fontSize: 36, color: Colors.white),
-          ),
-          Spacer(flex: 4),
+          const Spacer(flex: 2),
+          const AllSetAnimation(),
+          const Spacer(flex: 1),
+          text != ''
+              ? Text(
+                  text,
+                  style: const TextStyle(fontSize: 36, color: Colors.white),
+                )
+              : const Text(
+                  'You\'re all set!',
+                  style: TextStyle(fontSize: 36, color: Colors.white),
+                ),
+          const Spacer(flex: 4),
         ],
       ),
     );

@@ -130,10 +130,11 @@ class EventWinnersCard extends StatelessWidget {
                             return Container(
                               padding: const EdgeInsets.only(left: 5),
                               child: WinnerTile(
-                                name: winner![index].name ?? ' ',
-                                department: winner[index].department ?? ' ',
-                                year: winner[index].year ?? ' ',
                                 index: index,
+                                name: winner![index].name ?? ' ',
+                                year: winner[index].year ?? ' ',
+                                department: winner[index].department ?? ' ',
+                                profilePic: winner[index].picture,
                               ),
                             );
                           },
@@ -261,7 +262,10 @@ class WinnerTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(avatars[0]),
+                    image: NetworkImage(
+                      profilePic ??
+                          'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/avatar_placeholder_smile.png?alt=media&token=a9fec672-08e8-4c68-99be-095153155d2b',
+                    ),
                   ),
                 ),
               ),

@@ -43,7 +43,7 @@ class _VerifyEmailBottomSheet extends State<VerifyEmailBottomSheet> {
             ),
             child: const FittedBox(
               child: Text(
-                'Verify \nyour Email',
+                'Verify \nyour email',
               ),
             ),
           ),

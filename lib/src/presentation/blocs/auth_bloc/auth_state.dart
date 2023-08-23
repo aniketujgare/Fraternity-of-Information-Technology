@@ -26,7 +26,11 @@ class VerifyEmail extends AuthState {
 
 class UserLoggedIn extends AuthState {}
 
-class YouRAllSetState extends AuthState {}
+class YouRAllSetState extends AuthState {
+  final String text;
+
+  const YouRAllSetState({required this.text});
+}
 
 class EmailAuthError extends AuthState {
   final String error;

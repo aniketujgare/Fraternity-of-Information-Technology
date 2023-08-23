@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../blocs/honour_board_bloc/honour_board_bloc.dart';
@@ -19,15 +20,15 @@ class HonoursBoardView extends StatelessWidget {
             floatHeaderSlivers: true,
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               const SliverAppBar(
-                toolbarHeight: 100,
+                toolbarHeight: 70,
                 leading: SizedBox(),
                 centerTitle: true,
                 floating: true,
                 title: Text(
-                  'Honours board',
+                  'Honours Board',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 36,
+                    fontSize: kHeading2FontSize,
                   ),
                 ),
               ),
@@ -42,12 +43,15 @@ class HonoursBoardView extends StatelessWidget {
                     itemCount: state.honourBoard.length,
                     itemBuilder: (context, index) {
                       final honorStudent = state.honourBoard[index];
-                      return HonourCard(
-                        profilePic: honorStudent.profilePic,
-                        achievents: honorStudent.achievements,
-                        name: honorStudent.name,
-                        department: honorStudent.department,
-                        year: honorStudent.year,
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: HonourCard(
+                          profilePic: honorStudent.profilePic,
+                          achievents: honorStudent.achievements,
+                          name: honorStudent.name,
+                          department: honorStudent.department,
+                          year: honorStudent.year,
+                        ),
                       );
                     },
                   );
