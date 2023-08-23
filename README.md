@@ -4,6 +4,10 @@
 
 Welcome to the FIT App, a dynamic mobile application developed for the student organization of the Department of Information Technology at Dr Babasaheb Ambedkar Technological University. The app serves as a comprehensive platform to connect, engage, and empower the FIT community.
 
+<a  href="https://play.google.com/store/apps/details?id=com.aniketujgare.fitdbatu" target="_blank"><img alt="PlayStore" src="https://PlayBadges.pavi2410.me/badge/full?id=com.aniketujgare.fitdbatu" /></a>
+
+![alt text](https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/github_cover%20(1).png?alt=media&token=eec30f4d-7a96-4cc2-923d-717fccb3aed5)
+
 ## Features
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/mit/)
 - **Upcoming Events**: Stay updated with information about upcoming events organized by FIT. 
@@ -49,8 +53,8 @@ Contributions to the FIT App are encouraged and welcomed from fellow students an
 
 To explore and run the FIT App locally, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/FIT-App.git`
-2. Navigate to the project directory: `cd FIT-App`
+1. Clone the repository: `https://github.com/aniketujgare/Fraternity-of-Information-Technology.git`
+2. Navigate to the project directory: `cd Fraternity-of-Information-Technology`
 3. Install dependencies: `flutter pub get`
 4. Run the app: `flutter run`
 
