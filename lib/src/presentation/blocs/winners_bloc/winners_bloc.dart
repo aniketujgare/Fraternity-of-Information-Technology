@@ -14,7 +14,7 @@ class WinnersBloc extends Bloc<WinnersEvent, WinnersState> {
       : super(WinnersLoadingState()) {
     on<FetchWinnersEvent>((event, emit) async {
       try {
-        winnersList = await databaseRepository.getAllWinners();
+        winnersList ??= await databaseRepository.getAllWinners();
         if (winnersList != null) {
           emit(WinnersLoadedState(winners: winnersList ?? []));
         }
