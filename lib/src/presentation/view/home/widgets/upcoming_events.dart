@@ -8,9 +8,9 @@ import '../../../../utils/constants/constants.dart';
 class UpcomingEventsCard extends StatelessWidget {
   final EventModel event;
   const UpcomingEventsCard({
-    Key? key,
+    super.key,
     required this.event,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

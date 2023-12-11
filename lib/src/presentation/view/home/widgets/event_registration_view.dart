@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fraternity_of_information_technology/src/utils/constants/constants.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../domain/models/event_model.dart';
-import '../../../widgets/fit_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../../domain/models/event_model.dart';
+import '../../../../utils/constants/constants.dart';
+import '../../../widgets/fit_button.dart';
 
 class EventRegistrationView extends StatelessWidget {
   final EventModel event;
@@ -114,8 +115,10 @@ class EventRegistrationView extends StatelessWidget {
                         await launchUrlString(event.registrationUrl!,
                             mode: LaunchMode.externalApplication);
                       } catch (e) {
-                        kShowSnackBar(
-                            context, SnackType.error, 'Link does not found!');
+                        if (context.mounted) {
+                          kShowSnackBar(
+                              context, SnackType.error, 'Link does not found!');
+                        }
                       }
                     },
                     text: 'Register',

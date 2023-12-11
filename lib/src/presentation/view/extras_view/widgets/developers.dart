@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../utils/constants/constants.dart';
-import '../../../blocs/extras_bloc/extras_bloc.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
+import '../bloc/extras_bloc.dart';
 import 'developer_card.dart';
 
 Container developers() {
@@ -44,32 +44,35 @@ Container developers() {
       children: [
         BlocBuilder<ExtrasBloc, ExtrasState>(
           builder: (context, state) {
-            if (state is ExtrasLoaded) {
-              return ListView.builder(
-                  itemCount: state.extrasModel.developers?.length ?? 0,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.only(top: 0, bottom: 25),
-                  itemBuilder: (context, index) {
-                    final developer = state.extrasModel.developers![index];
-                    return DeveloperCard(
-                      name: developer.name ?? '',
-                      contribution:
-                          'Cotribution : ${developer.contribution ?? ''}',
-                      description: developer.description ?? '',
-                      email: developer.email ?? '',
-                      instagram: developer.instagram ?? '',
-                      linkedin: developer.linkedin ?? '',
-                      phoneNumber: developer.phone ?? '',
-                      profilePic: developer.picture,
+            switch (state.status) {
+              case ExtrasStatus.loading:
+                return const FITCircularLoadingIndicator();
+              case ExtrasStatus.loaded:
+                return ListView.builder(
+                    itemCount: state.extrasModel?.developers?.length ?? 0,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(top: 0, bottom: 25),
+                    itemBuilder: (context, index) {
+                      final developer = state.extrasModel?.developers![index];
+                      return DeveloperCard(
+                        name: developer?.name ?? '',
+                        contribution:
+                            'Cotribution : ${developer?.contribution ?? ''}',
+                        description: developer?.description ?? '',
+                        email: developer?.email ?? '',
+                        instagram: developer?.instagram ?? '',
+                        linkedin: developer?.linkedin ?? '',
+                        phoneNumber: developer?.phone ?? '',
+                        profilePic: developer?.picture,
+                      );
+                    }
+                    // separatorBuilder: (context, index) =>
+                    //     const SizedBox(height: 45, child: Divider()),
                     );
-                  }
-                  // separatorBuilder: (context, index) =>
-                  //     const SizedBox(height: 45, child: Divider()),
-                  );
+              default:
+                return Center(child: Text(state.errorMessage));
             }
-
-            return const FITCircularLoadingIndicator();
           },
         ),
       ],

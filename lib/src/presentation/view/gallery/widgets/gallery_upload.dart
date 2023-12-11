@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../utils/constants/constants.dart';
 import '../../../blocs/date_picker_cubit/date_picker_cubit.dart';
-import '../../../blocs/gallery_bloc/gallery_bloc.dart';
 import '../../../blocs/gallery_upload_bloc/gallery_upload_bloc.dart';
 import '../../../widgets/uploading_images_animation.dart';
+import '../bloc/gallery_bloc.dart';
 
 String selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
@@ -57,7 +57,7 @@ class GalleryUploadView extends StatelessWidget {
                             'Images Uploaded Succesfully 🎉');
                         context
                             .read<GalleryBloc>()
-                            .add(LoadGalleryOnNewPicAddedEvent());
+                            .add(const LoadGalleryOnNewPicAddedEvent());
                         context.pop();
                       }
                     },

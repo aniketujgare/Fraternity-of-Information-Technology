@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/random_winner_bloc/random_winner_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/widgets/text_shimmer.dart';
+import '../../../blocs/random_winner_bloc/random_winner_bloc.dart';
+import '../../../widgets/text_shimmer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -15,10 +16,10 @@ class EventWinnersCard extends StatelessWidget {
   final double topMargin;
 
   const EventWinnersCard({
-    Key? key,
+    super.key,
     this.topMargin = 20,
     required this.headTitle,
-  }) : super(key: key);
+  });
 
   @override
   @override
@@ -262,7 +263,7 @@ class WinnerTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(
+                    image: CachedNetworkImageProvider(
                       profilePic ??
                           'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/avatar_placeholder_smile.png?alt=media&token=a9fec672-08e8-4c68-99be-095153155d2b',
                     ),

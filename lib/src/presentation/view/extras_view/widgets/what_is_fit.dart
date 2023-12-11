@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../utils/constants/constants.dart';
-import '../../../blocs/extras_bloc/extras_bloc.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
+import '../bloc/extras_bloc.dart';
 
 Container whatIsFIT() {
   return Container(
@@ -43,18 +43,23 @@ Container whatIsFIT() {
       children: [
         BlocBuilder<ExtrasBloc, ExtrasState>(
           builder: (context, state) {
-            if (state is ExtrasLoaded) {
-              return Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text.rich(
-                  textAlign: TextAlign.justify,
-                  kRich(
-                    kConvertNewLine(state.extrasModel.whatIsFit ?? ''),
+            switch (state.status) {
+              case ExtrasStatus.loading:
+                return const FITCircularLoadingIndicator();
+              case ExtrasStatus.loaded:
+                return Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Text.rich(
+                    textAlign: TextAlign.justify,
+                    kRich(
+                      kConvertNewLine(state.extrasModel!.whatIsFit ?? ''),
+                    ),
                   ),
-                ),
-              );
+                );
+
+              default:
+                return Center(child: Text(state.errorMessage));
             }
-            return const FITCircularLoadingIndicator();
           },
         )
       ],

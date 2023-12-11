@@ -42,10 +42,10 @@ class PastEventCard extends StatelessWidget {
   final EventModel eventModel;
 
   const PastEventCard({
-    Key? key,
+    super.key,
     required this.eventType,
     required this.eventModel,
-  }) : super(key: key);
+  });
   String trim(String eventTypeString) {
     String eventTypeValue = eventTypeString.split('.')[1];
     String formattedEventType =

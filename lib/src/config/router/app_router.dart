@@ -1,41 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../presentation/blocs/extras_bloc/extras_bloc.dart';
-import '../../presentation/view/extras_view/extras_view.dart';
+import 'package:fraternity_of_information_technology/src/presentation/view/news/bloc/news_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/repositories/database_repository.dart';
 import '../../domain/models/event_model.dart';
 import '../../domain/models/news_model.dart';
 import '../../domain/models/user_model.dart';
-import '../../presentation/blocs/all_past_events_bloc/all_past_events_bloc.dart';
 import '../../presentation/blocs/app_navigator_cubit/app_navigator_cubit.dart';
 import '../../presentation/blocs/auth_bloc/auth_bloc.dart';
 import '../../presentation/blocs/date_picker_cubit/date_picker_cubit.dart';
-import '../../presentation/blocs/fit_committee_bloc/fit_committee_bloc.dart';
-import '../../presentation/blocs/gallery_bloc/gallery_bloc.dart';
 import '../../presentation/blocs/gallery_upload_bloc/gallery_upload_bloc.dart';
-import '../../presentation/blocs/honour_board_bloc/honour_board_bloc.dart';
 import '../../presentation/blocs/my_slider/my_slider_bloc.dart';
-import '../../presentation/blocs/news_bloc/news_bloc.dart';
 import '../../presentation/blocs/random_winner_bloc/random_winner_bloc.dart';
 import '../../presentation/blocs/upcoming_events/upcoming_events_bloc.dart';
 import '../../presentation/blocs/update_account_bloc/update_account_bloc.dart';
-import '../../presentation/blocs/winners_bloc/winners_bloc.dart';
-import '../../presentation/view/all_past_events/all_past_events.dart';
+import '../../presentation/view/all_past_events/bloc/all_past_events_bloc.dart';
+import '../../presentation/view/all_past_events/pages/all_past_events.dart';
 import '../../presentation/view/all_past_events/widgets/past_event_full_view.dart';
 import '../../presentation/view/authentication/auth_flow.dart';
-import '../../presentation/view/fit_committee/fit_committee_view.dart';
+import '../../presentation/view/extras_view/bloc/extras_bloc.dart';
+import '../../presentation/view/extras_view/pages/extras_view.dart';
+import '../../presentation/view/fit_committee/bloc/fit_committee_bloc.dart';
+import '../../presentation/view/fit_committee/pages/fit_committee_view.dart';
 import '../../presentation/view/fit_ui_navigator.dart';
-import '../../presentation/view/gallery/gallery_view.dart';
+import '../../presentation/view/gallery/bloc/gallery_bloc.dart';
+import '../../presentation/view/gallery/pages/gallery_view.dart';
 import '../../presentation/view/gallery/widgets/gallery_upload.dart';
 import '../../presentation/view/home/widgets/event_registration_view.dart';
-import '../../presentation/view/honours_board_view.dart';
-import '../../presentation/view/news/news_view.dart';
+import '../../presentation/view/honour_board/bloc/honour_board_bloc.dart';
+import '../../presentation/view/honour_board/pages/honours_board_view.dart';
+import '../../presentation/view/news/pages/news_view.dart';
 import '../../presentation/view/news/widgets/news_full_view.dart';
 import '../../presentation/view/notifications/notifications_view.dart';
 import '../../presentation/view/update_account/update_account_view.dart';
-import '../../presentation/view/winners/winners_view.dart';
+import '../../presentation/view/winners/bloc/winners_bloc/winners_bloc.dart';
+import '../../presentation/view/winners/pages/winners_view.dart';
 import 'app_router_constants.dart';
 
 // final _authrepository = AuthRepository();
@@ -44,9 +44,8 @@ final _emailAuthBloc = AuthBloc();
 final _updateAccountBloc =
     UpdateAccountBloc(dataRepository: _databaseRepository);
 final _appNavigatorCubit = AppNavigatorCubit();
-final _winnersBloc = WinnersBloc(databaseRepository: _databaseRepository);
-final _fitCommitteeBloc =
-    FitCommitteeBloc(databaseRepository: _databaseRepository);
+// final _winnersBloc = WinnersBloc(databaseRepository: _databaseRepository);
+final _fitCommitteeBloc = FitCommitteeBloc(_databaseRepository);
 final _upcomingEventsBloc =
     UpcomingEventsBloc(databaseRepository: _databaseRepository);
 final _upcomingEventsSliderBloc = MySliderBloc();
@@ -54,14 +53,16 @@ final _allEvetsImagesSliderBloc = MySliderBloc();
 final _newsImagesSliderBloc = MySliderBloc();
 final _randomWinnerBloc =
     RandomWinnerBloc(databaseRepository: _databaseRepository);
-final _honourBoardBloc =
-    HonourBoardBloc(databaseRepository: _databaseRepository);
-final _allPastEventsBloc =
-    AllPastEventsBloc(databaseRepository: _databaseRepository);
-final _newsBloc = NewsBloc(databaseRepository: _databaseRepository);
-final _galleryBloc = GalleryBloc(databaseRepository: _databaseRepository);
-final _extrasBloc = ExtrasBloc(databaseRepository: _databaseRepository);
+final _honourBoardBloc = HonourBoardBloc(_databaseRepository);
+final _allPastEventsBloc = AllPastEventsBloc(_databaseRepository);
+final _newsBloc = NewsBloc(_databaseRepository);
+final _galleryBloc = GalleryBloc(_databaseRepository);
+final _extrasBloc = ExtrasBloc(_databaseRepository);
 final _admissionYrCubit = DatePickerCubit();
+
+////////////////////////////////
+
+final _winnersNewBloc = WinnersBloc(_databaseRepository);
 final GlobalKey<NavigatorState> rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -130,17 +131,17 @@ class AppRouter {
                 value: _randomWinnerBloc..add(FetchRandomWinnerEvent()),
               ),
               BlocProvider.value(
-                value: _honourBoardBloc..add(LoadHonourBoardEvent()),
+                value: _honourBoardBloc..add(const LoadHonourBoard()),
               ),
               BlocProvider.value(
                 value: _honourBoardBloc,
                 child: const HonoursBoardView(),
               ),
               BlocProvider.value(
-                value: _newsBloc..add(LoadNewsEvent()),
+                value: _newsBloc..add(const LoadNews()),
               ),
               BlocProvider.value(
-                value: _galleryBloc..add(LoadGalleryEvent()),
+                value: _galleryBloc..add(const LoadGallery()),
               ),
               BlocProvider.value(
                 value: DatePickerCubit(),
@@ -155,7 +156,7 @@ class AppRouter {
         path: AppRoutConstants.fitCommittee.path,
         pageBuilder: (context, state) => MaterialPage(
           child: BlocProvider.value(
-            value: _fitCommitteeBloc..add(FetchFitCommitteeEvent()),
+            value: _fitCommitteeBloc..add(const LoadFitCommittee()),
             child: const FitCommitteeView(),
           ),
         ),
@@ -165,7 +166,7 @@ class AppRouter {
         path: AppRoutConstants.winnersView.path,
         pageBuilder: (context, state) => MaterialPage(
           child: BlocProvider.value(
-            value: _winnersBloc..add(FetchWinnersEvent()),
+            value: _winnersNewBloc..add(const LoadWinners()),
             child: const WinnersView(),
           ),
         ),
@@ -192,7 +193,7 @@ class AppRouter {
         path: AppRoutConstants.allPastEventsView.path,
         pageBuilder: (context, state) => MaterialPage(
           child: BlocProvider.value(
-            value: _allPastEventsBloc..add(FetchAllPastEvents()),
+            value: _allPastEventsBloc..add(const LoadAllPastEvents()),
             child: const AllPastEventsView(),
           ),
         ),
@@ -204,7 +205,7 @@ class AppRouter {
           child: MultiBlocProvider(
             providers: [
               BlocProvider.value(
-                value: _allPastEventsBloc..add(FetchAllPastEvents()),
+                value: _allPastEventsBloc..add(const LoadAllPastEvents()),
               ),
               BlocProvider.value(
                 value: _allEvetsImagesSliderBloc
@@ -279,7 +280,7 @@ class AppRouter {
           pageBuilder: (context, state) {
             return MaterialPage(
                 child: BlocProvider.value(
-              value: _extrasBloc..add(LoadExtrasEvent()),
+              value: _extrasBloc..add(const LoadExtras()),
               child: const ExtrasView(),
             ));
           }),

@@ -119,8 +119,10 @@ class DeveloperCard extends StatelessWidget {
                           try {
                             await launchUrl(lPhoneNumber);
                           } catch (e) {
-                            kShowSnackBar(context, SnackType.error,
-                                'Dialer is not installed!');
+                            if (context.mounted) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'Dialer is not installed!');
+                            }
                           }
                         },
                       ),
@@ -130,8 +132,10 @@ class DeveloperCard extends StatelessWidget {
                           try {
                             await launchUrl(lWhatsapp);
                           } catch (e) {
-                            kShowSnackBar(context, SnackType.error,
-                                'Whatsapp is not installed!');
+                            if (context.mounted) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'Whatsapp is not installed!');
+                            }
                           }
                         },
                       ),
@@ -141,8 +145,10 @@ class DeveloperCard extends StatelessWidget {
                           try {
                             await launchUrl(lLinkedin);
                           } catch (e) {
-                            kShowSnackBar(context, SnackType.error,
-                                'LinkedIn is not installed!');
+                            if (context.mounted) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'LinkedIn is not installed!');
+                            }
                           }
                         },
                       ),
@@ -154,8 +160,10 @@ class DeveloperCard extends StatelessWidget {
                               lInstagram,
                             );
                           } catch (e) {
-                            kShowSnackBar(context, SnackType.error,
-                                'Instagram is not installed!');
+                            if (context.mounted) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'Instagram is not installed!');
+                            }
                           }
                         },
                       ),
@@ -165,8 +173,10 @@ class DeveloperCard extends StatelessWidget {
                           try {
                             await launchUrl(lEmail);
                           } catch (e) {
-                            kShowSnackBar(context, SnackType.error,
-                                'G-Mail is not installed!');
+                            if (context.mounted) {
+                              kShowSnackBar(context, SnackType.error,
+                                  'G-Mail is not installed!');
+                            }
                           }
                         },
                       ),

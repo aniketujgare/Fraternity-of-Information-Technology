@@ -10,8 +10,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../utils/constants/constants.dart';
-import '../../../blocs/extras_bloc/extras_bloc.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
+import '../bloc/extras_bloc.dart';
 
 Container downloadables() {
   return Container(
@@ -66,102 +66,97 @@ Container downloadables() {
 BlocBuilder downloadableItem(BuildContext context) {
   return BlocBuilder<ExtrasBloc, ExtrasState>(
     builder: (context, state) {
-      if (state is ExtrasLoaded) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: CachedNetworkImage(
-                imageUrl: state.extrasModel.fitLogo!.png!,
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.width * 0.4,
-                placeholder: (context, url) => Shimmer.fromColors(
-                  baseColor: Colors.grey.shade300,
-                  highlightColor: Colors.grey.shade100,
-                  child: Container(
-                    height: MediaQuery.of(context).size.width * 0.4,
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(28)),
-                    margin: const EdgeInsets.only(right: 15),
+      switch (state.status) {
+        case ExtrasStatus.loading:
+          return const FITCircularLoadingIndicator();
+        case ExtrasStatus.loaded:
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  imageUrl: state.extrasModel!.fitLogo!.png!,
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.width * 0.4,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      height: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(28)),
+                      margin: const EdgeInsets.only(right: 15),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                OutlinedButton.icon(
-                  onPressed: () async =>
-                      SchedulerBinding.instance.addPostFrameCallback((_) async {
-                    await FlutterDownloader.enqueue(
-                      url: state.extrasModel.fitLogo!.jpg!,
-                      fileName: 'FIT_Logo_JPG_${UniqueKey()}.jpg',
-                      savedDir: Directory('/storage/emulated/0/Download').path,
-                      saveInPublicStorage: true,
-                      showNotification:
-                          true, // show download progress in status bar (for Android)
-                      openFileFromNotification:
-                          true, // click on notification to open downloaded file (for Android)
-                    );
-                  }),
-
-                  // await FlutterDownloader.enqueue(
-                  //   url: state.extrasModel.fitLogo!.jpg!,
-                  //   fileName: 'FIT_Logo_JPG_${UniqueKey()}.jpg',
-                  //   savedDir: Directory('/storage/emulated/0/Download').path,
-                  //   saveInPublicStorage: true,
-                  //   showNotification:
-                  //       true, // show download progress in status bar (for Android)
-                  //   openFileFromNotification:
-                  //       true, // click on notification to open downloaded file (for Android)
-                  // ),
-                  icon: const Icon(
-                    Icons.download,
-                    size: 24.0,
+              Column(
+                children: [
+                  OutlinedButton.icon(
+                    onPressed: () async => SchedulerBinding.instance
+                        .addPostFrameCallback((_) async {
+                      await FlutterDownloader.enqueue(
+                        url: state.extrasModel!.fitLogo!.jpg!,
+                        fileName: 'FIT_Logo_JPG_${UniqueKey()}.jpg',
+                        savedDir:
+                            Directory('/storage/emulated/0/Download').path,
+                        saveInPublicStorage: true,
+                        showNotification:
+                            true, // show download progress in status bar (for Android)
+                        openFileFromNotification:
+                            true, // click on notification to open downloaded file (for Android)
+                      );
+                    }),
+                    icon: const Icon(
+                      Icons.download,
+                      size: 24.0,
+                    ),
+                    label: const Text('JPG'),
                   ),
-                  label: const Text('JPG'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () async =>
-                      SchedulerBinding.instance.addPostFrameCallback((_) async {
-                    await FlutterDownloader.enqueue(
-                      url: state.extrasModel.fitLogo!.png!,
-                      fileName: 'FIT_Logo_PNG_${UniqueKey()}.png',
-                      savedDir: Directory('/storage/emulated/0/Download').path,
-                      saveInPublicStorage: true,
-                      showNotification:
-                          true, // show download progress in status bar (for Android)
-                      openFileFromNotification:
-                          true, // click on notification to open downloaded file (for Android)
-                    );
-                  }),
-                  icon: const Icon(
-                    Icons.download,
-                    size: 24.0,
+                  OutlinedButton.icon(
+                    onPressed: () async => SchedulerBinding.instance
+                        .addPostFrameCallback((_) async {
+                      await FlutterDownloader.enqueue(
+                        url: state.extrasModel!.fitLogo!.png!,
+                        fileName: 'FIT_Logo_PNG_${UniqueKey()}.png',
+                        savedDir:
+                            Directory('/storage/emulated/0/Download').path,
+                        saveInPublicStorage: true,
+                        showNotification:
+                            true, // show download progress in status bar (for Android)
+                        openFileFromNotification:
+                            true, // click on notification to open downloaded file (for Android)
+                      );
+                    }),
+                    icon: const Icon(
+                      Icons.download,
+                      size: 24.0,
+                    ),
+                    label: const Text('PNG'),
                   ),
-                  label: const Text('PNG'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () async =>
-                      SchedulerBinding.instance.addPostFrameCallback((_) async {
-                    await launchUrlString(state.extrasModel.fitLogo!.png!,
-                        mode: LaunchMode.externalApplication);
-                  }),
-                  icon: const Icon(
-                    CupertinoIcons.globe,
-                    size: 24.0,
+                  OutlinedButton.icon(
+                    onPressed: () async => SchedulerBinding.instance
+                        .addPostFrameCallback((_) async {
+                      await launchUrlString(state.extrasModel!.fitLogo!.png!,
+                          mode: LaunchMode.externalApplication);
+                    }),
+                    icon: const Icon(
+                      CupertinoIcons.globe,
+                      size: 24.0,
+                    ),
+                    label: const Text('Web'),
                   ),
-                  label: const Text('Web'),
-                ),
-              ],
-            ),
-          ],
-        );
+                ],
+              ),
+            ],
+          );
+        default:
+          return Center(child: Text(state.errorMessage));
       }
-      return const FITCircularLoadingIndicator();
     },
   );
 }

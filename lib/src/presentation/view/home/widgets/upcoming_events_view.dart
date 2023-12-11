@@ -2,9 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/domain/models/event_model.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../domain/models/event_model.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../blocs/my_slider/my_slider_bloc.dart';
 import '../../../blocs/upcoming_events/upcoming_events_bloc.dart';

@@ -4,8 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../utils/constants/constants.dart';
-import '../../../blocs/extras_bloc/extras_bloc.dart';
 import '../../../widgets/fit_circular_loading_indicator.dart';
+import '../bloc/extras_bloc.dart';
 
 Container gitHub() {
   return Container(
@@ -50,44 +50,47 @@ Container gitHub() {
           ),
           child: BlocBuilder<ExtrasBloc, ExtrasState>(
             builder: (context, state) {
-              if (state is ExtrasLoaded) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'The project is open source on GitHub. If you\'d like to contribute, you are always welcome to do so. ',
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/images/github-mark-white.svg',
-                          height: 25,
-                          width: 25,
-                          colorFilter: const ColorFilter.mode(
-                              Colors.black, BlendMode.srcIn),
-                        ),
-                        TextButton(
-                          onPressed: () => launchUrlString(
-                            state.extrasModel.github ?? '',
-                            mode: LaunchMode.externalApplication,
+              switch (state.status) {
+                case ExtrasStatus.loading:
+                  return const FITCircularLoadingIndicator();
+                case ExtrasStatus.loaded:
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'The project is open source on GitHub. If you\'d like to contribute, you are always welcome to do so. ',
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/images/github-mark-white.svg',
+                            height: 25,
+                            width: 25,
+                            colorFilter: const ColorFilter.mode(
+                                Colors.black, BlendMode.srcIn),
                           ),
-                          child: const Text(
-                            'GitHub',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
+                          TextButton(
+                            onPressed: () => launchUrlString(
+                              state.extrasModel!.github ?? '',
+                              mode: LaunchMode.externalApplication,
+                            ),
+                            child: const Text(
+                              'GitHub',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
+                        ],
+                      ),
+                    ],
+                  );
+                default:
+                  return Center(child: Text(state.errorMessage));
               }
-
-              return const FITCircularLoadingIndicator();
             },
           ),
         ),

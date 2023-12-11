@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fraternity_of_information_technology/src/config/router/app_router_constants.dart';
-import 'package:fraternity_of_information_technology/src/presentation/blocs/honour_board_bloc/honour_board_bloc.dart';
-import 'package:fraternity_of_information_technology/src/presentation/widgets/text_shimmer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../../config/router/app_router_constants.dart';
+import '../../../widgets/text_shimmer.dart';
+import '../../honour_board/bloc/honour_board_bloc.dart';
 
 class StudentAchievement extends StatelessWidget {
   final String headTitle;
@@ -77,34 +79,38 @@ class StudentAchievement extends StatelessWidget {
                         children: [
                           BlocBuilder<HonourBoardBloc, HonourBoardState>(
                             builder: (context, state) {
-                              if (state is HonourBoardLoaded) {
-                                return Container(
-                                  margin: const EdgeInsets.only(right: 20),
-                                  width: 49,
-                                  height: 49,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                          state.honourBoard.first.profilePic),
+                              switch (state.status) {
+                                case HonourBoardStatus.loading:
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade300,
+                                    highlightColor: Colors.grey.shade100,
+                                    child: Container(
+                                      height: 49,
+                                      width: 49,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      margin: const EdgeInsets.only(right: 20),
                                     ),
-                                  ),
-                                );
-                              } else {
-                                return Shimmer.fromColors(
-                                  baseColor: Colors.grey.shade300,
-                                  highlightColor: Colors.grey.shade100,
-                                  child: Container(
-                                    height: 49,
-                                    width: 49,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
+                                  );
+                                case HonourBoardStatus.loaded:
+                                  return Container(
                                     margin: const EdgeInsets.only(right: 20),
-                                  ),
-                                );
+                                    width: 49,
+                                    height: 49,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: CachedNetworkImageProvider(
+                                            state.honourBoard.first.profilePic),
+                                      ),
+                                    ),
+                                  );
+                                default:
+                                  return Center(
+                                      child: Text(state.errorMessage));
                               }
                             },
                           ),
@@ -126,38 +132,47 @@ class StudentAchievement extends StatelessWidget {
                               children: [
                                 BlocBuilder<HonourBoardBloc, HonourBoardState>(
                                   builder: (context, state) {
-                                    if (state is HonourBoardLoaded) {
-                                      return Text(
-                                        state.honourBoard.first.name,
-                                        maxLines: 1,
-                                        style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w600,
-                                          height: 1.26,
-                                          color: Color(0xffffffff),
-                                        ),
-                                      );
-                                    } else {
-                                      return const FITTextShimmer(
-                                          text: 'Loading...', fontSize: 17);
+                                    switch (state.status) {
+                                      case HonourBoardStatus.loading:
+                                        return const FITTextShimmer(
+                                            text: 'Loading...', fontSize: 17);
+                                      case HonourBoardStatus.loaded:
+                                        return Text(
+                                          state.honourBoard.first.name,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w600,
+                                            height: 1.26,
+                                            color: Color(0xffffffff),
+                                          ),
+                                        );
+
+                                      default:
+                                        return Center(
+                                            child: Text(state.errorMessage));
                                     }
                                   },
                                 ),
                                 BlocBuilder<HonourBoardBloc, HonourBoardState>(
                                   builder: (context, state) {
-                                    if (state is HonourBoardLoaded) {
-                                      return const Text(
-                                        'IT - Final Year',
-                                        style: TextStyle(
-                                          fontSize: 13.3,
-                                          fontWeight: FontWeight.w500,
-                                          height: 1.26,
-                                          color: Color(0xffffffff),
-                                        ),
-                                      );
-                                    } else {
-                                      return const FITTextShimmer(
-                                          text: 'Loading...', fontSize: 17);
+                                    switch (state.status) {
+                                      case HonourBoardStatus.loading:
+                                        return const FITTextShimmer(
+                                            text: 'Loading...', fontSize: 17);
+                                      case HonourBoardStatus.loaded:
+                                        return const Text(
+                                          'IT - Final Year',
+                                          style: TextStyle(
+                                            fontSize: 13.3,
+                                            fontWeight: FontWeight.w500,
+                                            height: 1.26,
+                                            color: Color(0xffffffff),
+                                          ),
+                                        );
+                                      default:
+                                        return Center(
+                                            child: Text(state.errorMessage));
                                     }
                                   },
                                 ),
@@ -170,44 +185,48 @@ class StudentAchievement extends StatelessWidget {
                     const SizedBox(height: 18),
                     BlocBuilder<HonourBoardBloc, HonourBoardState>(
                       builder: (context, state) {
-                        if (state is HonourBoardLoaded) {
-                          return SizedBox(
-                            height: 110,
-                            // width: 50,
-                            child: ListView.separated(
-                              itemCount:
-                                  state.honourBoard.first.achievements.length,
-                              // physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                final achievements =
-                                    state.honourBoard.first.achievements;
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 28, right: 28, top: 6, bottom: 6),
-                                  child: Text(
-                                    '${index + 1}. ${achievements[index]}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                        switch (state.status) {
+                          case HonourBoardStatus.loading:
+                            return const FITTextShimmer(
+                                text: 'Loading...', fontSize: 17);
+                          case HonourBoardStatus.loaded:
+                            return SizedBox(
+                              height: 110,
+                              // width: 50,
+                              child: ListView.separated(
+                                itemCount:
+                                    state.honourBoard.first.achievements.length,
+                                // physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  final achievements =
+                                      state.honourBoard.first.achievements;
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 28, right: 28, top: 6, bottom: 6),
+                                    child: Text(
+                                      '${index + 1}. ${achievements[index]}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 28, right: 28),
-                                  child: Divider(
-                                    color: Colors.white.withOpacity(0.5),
-                                    thickness: 1,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        } else {
-                          return const FITTextShimmer(
-                              text: 'Loading...', fontSize: 17);
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 28, right: 28),
+                                    child: Divider(
+                                      color: Colors.white.withOpacity(0.5),
+                                      thickness: 1,
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+
+                          default:
+                            return Center(child: Text(state.errorMessage));
                         }
                       },
                     ),

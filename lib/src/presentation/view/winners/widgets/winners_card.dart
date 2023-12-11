@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/event_winners_model.dart';
@@ -12,13 +13,13 @@ class WinnersCard extends StatelessWidget {
   final double topMargin;
 
   const WinnersCard({
-    Key? key,
+    super.key,
     this.topMargin = 20,
     required this.eventName,
     required this.organizers,
     required this.winners,
     required this.date,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +135,7 @@ class WinnersCard extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(50),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage(
+                                    image: CachedNetworkImageProvider(
                                       winners[index].picture ??
                                           'https://firebasestorage.googleapis.com/v0/b/fit-2022-23.appspot.com/o/avatar_placeholder_smile.png?alt=media&token=a9fec672-08e8-4c68-99be-095153155d2b',
                                     ),

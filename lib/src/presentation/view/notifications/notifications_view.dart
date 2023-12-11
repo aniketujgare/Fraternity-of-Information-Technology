@@ -7,9 +7,9 @@ import 'widgets/notifications_header.dart';
 class NotificationView extends StatelessWidget {
   final String? message;
   const NotificationView({
-    Key? key,
+    super.key,
     this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

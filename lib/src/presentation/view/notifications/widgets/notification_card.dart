@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 enum AlertType { like, comment }
@@ -39,7 +40,7 @@ class NotificationCard extends StatelessWidget {
             child: CircleAvatar(
                 radius: 26.5,
                 //ToDo: assign custom image for users without
-                backgroundImage: NetworkImage(avatarUrl ??
+                backgroundImage: CachedNetworkImageProvider(avatarUrl ??
                     'https://w0.peakpx.com/wallpaper/368/441/HD-wallpaper-cute-anime-girl-anime-cat-girl-anime-girl-cartoon-cat-girl-cute-anime-thumbnail.jpg')),
           ),
           const SizedBox(width: 33),

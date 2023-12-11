@@ -6,9 +6,9 @@ import 'package:fraternity_of_information_technology/src/utils/constants/constan
 
 import '../blocs/app_navigator_cubit/app_navigator_cubit.dart';
 import '../widgets/fit_app_bar.dart';
-import 'gallery/gallery_view.dart';
-import 'home/home_view.dart';
-import 'news/news_view.dart';
+import 'gallery/pages/gallery_view.dart';
+import 'home/pages/home_view.dart';
+import 'news/pages/news_view.dart';
 import 'user_profile/user_profile_view.dart';
 
 class FITUINavigator extends StatelessWidget {
